@@ -13,19 +13,22 @@
                     <table id="students-table" class="table table-striped table-hover table-responsive-sm">
                         <thead>
                         <tr>
-                            <th>Ім'я</th>
-                            <th>Прізвище</th>
-                            <th>По-батькові</th>
-                            <th>Курс</th>
+                            <th># Заліковки</th>
+                            <td>Ім'я</td>
+                            <td>Прізвище</td>
+                            <td>По-батькові</td>
+                            <td>Курс</td>
                         </tr>
                         </thead>
 
                         <tbody>
                         <tr :key="student.id" v-for="student in students"
                             @click="showStudentDetails(student)" style="cursor: pointer;">
-
-                            <th>{{ student.first_name }}</th>
-                            <th>{{ student.last_name }}</th>
+                            <th>{{ student.studentRecordBook }}</th>
+                            <td>{{ student.studentName }}</td>
+                            <td>{{ student.studentSurname }}</td>
+                            <td>{{ student.studentPatronymic }}</td>
+                            <td>{{ student.studentRecordBook }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -41,7 +44,7 @@
         ></students-filter-fields>
         <sort-by slot="sorting"
                  :sort-by-default="sortBy" :sort-by-options="sortByOptions"
-                 @sortBy="onSortBy" @sortDesc="sortDesc"></sort-by>
+                 @sortBy="onSortBy" @sortDesc="onSortDesc"></sort-by>
     </queries>
 </template>
 
@@ -59,15 +62,16 @@ export default {
         return {
             apiURl: 'http://localhost:8000/api',
             tabIndex: 0,
-            sortBy: 'За рейтингом',
+            sortBy: 'rating',
             sortByOptions: [
-                'За рейтингом',
-                'За прізвищем',
+                {value: "rating", text: 'За рейтингом'},
+                {value: "surname", text: 'За прізвищем'}
             ],
+            sortDesc: true,
             students: [],
             totalElements: -1,
             currentPage: 1,
-            perPage: 20,
+            perPage: 10,
             courseOptions: [1, 2, 3, 4],
             yearOptions: [],
             semesterOptions: ['Осінь', 'Весна', 'Літо']
@@ -98,25 +102,28 @@ export default {
         //     }
         // }
         onSortBy(byWhat) {
-            console.log(byWhat)
-            console.log(this.$refs)
+            this.sortBy = byWhat
+            this.getStudents()
         },
-        sortDesc(desc) {
-            console.log(desc)
+        onSortDesc(desc) {
+            this.sortDesc = desc
+            this.getStudents()
         },
-        getStudents(){
+        getStudents() {
             const config = {
                 params: {
                     page: this.currentPage,
-                    numberPerPage: this.perPage
+                    numberPerPage: this.perPage,
+                    sortBy: this.sortBy,
+                    sortDesc: this.sortDesc
                 }
             }
             this.$http
                 .get(this.apiURl + '/students', config)
                 .then(response => {
                     this.students = []
-                    response.data.content.forEach(user => this.students.push(user))
-                    this.totalElements = response.data.totalElements
+                    response.data.forEach(user => this.students.push(user))
+                    this.totalElements = this.students.length
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
