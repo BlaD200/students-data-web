@@ -66,43 +66,32 @@ export default {
     },
     methods: {
         onSubmit() {
-            this.$root.currentUser = {
-                id: -1,
-                username: 'test user',
-                userAuthorities: []
-            }
-            this.$root.currentUser.userAuthorities = []
-            localStorage.setItem("currentUser", JSON.stringify(this.$root.currentUser))
+            this.$http.post('http://localhost:8000/login', {
+                "username": this.form.username,
+                "password": this.form.password
+            }).then(response => {
+                let authorizationToken = 'Bearer ' + response.headers['authorization']
+                localStorage.setItem("authorizationToken", authorizationToken)
 
-            this.$root.messageBoxOk("Updated", "Successful login!")
-            this.$bvModal.hide('loginModal')
+                let userAuthorities = []
+                this.$root.currentUser = response.data
+                response.data.authorities.forEach(authority => {
+                    userAuthorities.push(authority.name)
+                })
+                this.$root.currentUser.userAuthorities = userAuthorities
+                localStorage.setItem("currentUser", JSON.stringify(this.$root.currentUser))
 
-            // axios.post('http://localhost:8080/login', {
-            //     "username": this.form.username,
-            //     "password": this.form.password
-            // }).then(response => {
-            //     let authorizationToken = 'Barrier ' + response.headers['authorization']
-            //     localStorage.setItem("authorizationToken", authorizationToken)
-            //
-            //     let userAuthorities = []
-            //     this.$root.currentUser = response.data
-            //     response.data.userAuthorities.forEach(authority => {
-            //         userAuthorities.push(authority.name)
-            //     })
-            //     this.$root.currentUser.userAuthorities = userAuthorities
-            //     localStorage.setItem("currentUser", JSON.stringify(this.$root.currentUser))
-            //
-            //     this.$root.messageBoxOk("Updated", "Successful login!")
-            //     this.$bvModal.hide('loginModal')
-            //
-            //     if (this.$route.path !== '/') {
-            //         this.$router.push('/')
-            //         this.$router.go(0)
-            //     } else this.$router.go(0)
-            // }).catch(error => {
-            //     this.$root.messageBoxOk("Updated",
-            //         "Login unsuccessfully. ( " + error + ')', 'danger')
-            // });
+                this.$root.messageBoxOk("Updated", "Successful login!")
+                this.$bvModal.hide('loginModal')
+
+                if (this.$route.path !== '/') {
+                    this.$router.push('/')
+                    this.$router.go(0)
+                } else this.$router.go(0)
+            }).catch(error => {
+                this.$root.messageBoxOk("Updated",
+                    "Login unsuccessfully. ( " + error + ')', 'danger')
+            });
         },
     }
 }

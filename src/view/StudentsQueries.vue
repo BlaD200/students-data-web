@@ -2,10 +2,10 @@
     <queries title="Студенти"
              show-pagination
              :current-page="currentPage"
-             :rows="rows"
+             :rows="totalElements"
              :per-page="perPage"
              controls="my-table"
-             @change="changePage">
+             @change="onChangePage">
         }
         <b-card slot="content" no-body class="border-0">
             <b-tabs v-model="tabIndex" justified card pills>
@@ -14,14 +14,14 @@
                         <thead>
                         <tr>
                             <th>Ім'я</th>
-                            <th> Прізвище</th>
-                            <th> По-батькові</th>
+                            <th>Прізвище</th>
+                            <th>По-батькові</th>
                             <th>Курс</th>
                         </tr>
                         </thead>
 
                         <tbody>
-                        <tr :key="student.id" v-for="student in items"
+                        <tr :key="student.id" v-for="student in students"
                             @click="showStudentDetails(student)" style="cursor: pointer;">
 
                             <th>{{ student.first_name }}</th>
@@ -57,19 +57,36 @@ export default {
     },
     data: () => {
         return {
+            apiURl: 'http://localhost:8000/api',
             tabIndex: 0,
             sortBy: 'За рейтингом',
             sortByOptions: [
                 'За рейтингом',
                 'За прізвищем',
             ],
-            perPage: 3,
+            students: [],
+            totalElements: -1,
             currentPage: 1,
-            items: [],
+            perPage: 20,
             courseOptions: [1, 2, 3, 4],
-            yearOptions: [2020, 2021],
+            yearOptions: [],
             semesterOptions: ['Осінь', 'Весна', 'Літо']
         }
+    }
+    ,
+    created() {
+        this.onChangePage(1)
+
+        this.$http
+            .get(this.apiURl + '/info/years')
+            .then(response => {
+                this.yearOptions = response.data
+            })
+            .catch(error => {
+                // this.$root.defaultRequestErrorHandler(error)
+                console.log(error)
+                this.yearOptions = [new Date().getFullYear()]
+            })
     },
     methods: {
         // :title-link-class="linkClass(1)"
@@ -87,41 +104,30 @@ export default {
         sortDesc(desc) {
             console.log(desc)
         },
-        changePage(page) {
+        getStudents(){
+            const config = {
+                params: {
+                    page: this.currentPage,
+                    numberPerPage: this.perPage
+                }
+            }
+            this.$http
+                .get(this.apiURl + '/students', config)
+                .then(response => {
+                    this.students = []
+                    response.data.content.forEach(user => this.students.push(user))
+                    this.totalElements = response.data.totalElements
+                })
+                .catch(error => {
+                    this.$root.defaultRequestErrorHandler(error)
+                })
+        },
+        onChangePage(page) {
             this.currentPage = page
-
-            this.items = [
-                {id: 1, first_name: 'Fred', last_name: 'Flintstone'},
-                {id: 2, first_name: 'Wilma', last_name: 'Flintstone'},
-                {id: 3, first_name: 'Barney', last_name: 'Rubble'},
-                {id: 4, first_name: 'Betty', last_name: 'Rubble'},
-                {id: 5, first_name: 'Pebbles', last_name: 'Flintstone'},
-                {id: 6, first_name: 'Bamm Bamm', last_name: 'Rubble'},
-                {id: 7, first_name: 'The Great', last_name: 'Gazzoo'},
-                {id: 8, first_name: 'Rockhead', last_name: 'Slate'},
-                {id: 9, first_name: 'Pearl', last_name: 'Slaghoople'}
-            ].slice((page - 1) * this.perPage, page * this.perPage)
+            this.getStudents()
         },
         showStudentDetails(student) {
             console.log(student)
-        }
-    },
-    created() {
-        this.changePage(1)
-    },
-    computed: {
-        rows() {
-            return [
-                {id: 1, first_name: 'Fred', last_name: 'Flintstone'},
-                {id: 2, first_name: 'Wilma', last_name: 'Flintstone'},
-                {id: 3, first_name: 'Barney', last_name: 'Rubble'},
-                {id: 4, first_name: 'Betty', last_name: 'Rubble'},
-                {id: 5, first_name: 'Pebbles', last_name: 'Flintstone'},
-                {id: 6, first_name: 'Bamm Bamm', last_name: 'Rubble'},
-                {id: 7, first_name: 'The Great', last_name: 'Gazzoo'},
-                {id: 8, first_name: 'Rockhead', last_name: 'Slate'},
-                {id: 9, first_name: 'Pearl', last_name: 'Slaghoople'}
-            ].length
         }
     }
 }

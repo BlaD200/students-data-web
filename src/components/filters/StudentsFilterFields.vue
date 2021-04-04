@@ -11,11 +11,11 @@
         <b-form-input class="mt-2" type="text" v-model="tutorInput"
                       placeholder="Викладач"
         ></b-form-input>
-        <span class="d-flex" tabindex="0"
+        <span class="d-flex mt-2" tabindex="0"
               v-b-tooltip.top
               :title='!canSearchByGroup ? "Введіть назву передмету або ім`я викладача" : ""'
         >
-            <b-form-input class="mt-2" type="text"
+            <b-form-input type="text"
                           v-model="groupInput"
                           placeholder="Група"
                           :disabled="!canSearchByGroup"
@@ -42,10 +42,7 @@ export default {
     props: {
         yearOptions: {
             type: Array,
-            required: true,
-            validator: (val) => {
-                return val && val.length > 0
-            }
+            required: true
         },
         semesterOptions: {
             type: Array,
