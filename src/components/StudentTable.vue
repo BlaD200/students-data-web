@@ -1,5 +1,7 @@
 <template>
     <div>
+        <loader v-if="loading" class="text-center mb-0"/>
+
         <table v-if="students.length > 0" id="students-table"
                class="table table-striped table-hover table-responsive-sm">
             <thead>
@@ -24,18 +26,25 @@
             </tbody>
         </table>
 
-        <div v-else>
+        <div v-else-if="!loading">
             <h2 class="text-center mt-3 text-muted mb-0"> Дані відсутні </h2>
         </div>
     </div>
 </template>
 
 <script>
+import Loader from "@/components/Loader";
+
 export default {
     name: "student-table",
+    components: {Loader},
     props: {
         students: {
             type: Array,
+            required: true
+        },
+        loading: {
+            type: Boolean,
             required: true
         }
     }

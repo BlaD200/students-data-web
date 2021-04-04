@@ -12,10 +12,10 @@
         <b-card slot="content" no-body class="border-0">
             <b-tabs @input="onChangeTab" justified card pills>
                 <b-tab title="Студенти">
-                    <student-table :students="students"></student-table>
+                    <student-table :students="students" :loading="loading"></student-table>
                 </b-tab>
                 <b-tab title="Боржники">
-                    <student-table :students="debtors"></student-table>
+                    <student-table :students="debtors" :loading="loading"></student-table>
                 </b-tab>
             </b-tabs>
         </b-card>
@@ -52,6 +52,7 @@ export default {
         return {
             apiURl: 'http://localhost:8000/api',
             tabIndex: 0,
+            loading: false,
 
             sortBy: 'rating',
             sortByOptions: [
@@ -129,6 +130,7 @@ export default {
                 this.getDebtors()
         },
         getStudents() {
+            this.loading = true
             const config = {
                 params: this.params
             }
@@ -138,12 +140,15 @@ export default {
                     this.students = []
                     response.data.forEach(user => this.students.push(user))
                     this.totalElements = this.students.length
+                    this.loading = false
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
+                    this.loading = false
                 })
         },
         getDebtors() {
+            this.loading = true
             const config = {
                 params: this.params
             }
@@ -153,9 +158,11 @@ export default {
                     this.debtors = []
                     response.data.forEach(user => this.debtors.push(user))
                     this.totalElements = this.debtors.length
+                    this.loading = false
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
+                    this.loading = false
                 })
         },
         showStudentDetails(student) {
