@@ -47,15 +47,16 @@ new Vue({
                     this.messageBoxOk('Помилка отримання даних',
                         "Ви не маєте достатньо прав, щоб переглянути цю сторінку або виконати дану дію.")
                 else
-                    this.messageBoxOk('Error while loading users user',
-                        error.response.statusText + '' + error.response.status)
+                    this.messageBoxOk('Помилка отримання даних',
+                        error.response.statusText + '' + error.response.status +
+                        ". Будь ласка, зв'яжіться з адміністратором сайту.")
             } else if (error.request) {
                 console.log(error.request)
                 this.messageBoxOk('Помилка отримання даних',
                     "Помилка з'єднання з сервером")
             } else {
                 this.messageBoxOk('Помилка отримання даних',
-                    "Будь ласка, зв'яжіться з адміністратором сайту.\n<p> " + error + "</p>")
+                    "Будь ласка, зв'яжіться з адміністратором сайту." + error)
             }
         }
     },

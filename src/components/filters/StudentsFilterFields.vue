@@ -1,34 +1,42 @@
 <template>
     <div>
-        <b-form-select class="" v-model="yearSelected" :options="yearOptions">
+        <b-form-select v-model="yearSelected"
+                       v-on:input="$emit('yearChanged', yearSelected)"
+                       :options="yearOptions">
             <template #first>
                 <b-form-select-option :value="null">-- Рік навчання --</b-form-select-option>
             </template>
         </b-form-select>
 
         <b-form-input class="mt-2" type="text" v-model="subjectInput"
+                      v-on:input="$emit('subjectInput', subjectInput)"
                       placeholder="Предмет"></b-form-input>
         <b-form-input class="mt-2" type="text" v-model="tutorInput"
+                      v-on:input="$emit('tutorInput', tutorInput)"
                       placeholder="Викладач"
         ></b-form-input>
-        <span class="d-flex mt-2" tabindex="0"
+        <span class="d-flex mt-2"
               v-b-tooltip.top
               :title='!canSearchByGroup ? "Введіть назву передмету або ім`я викладача" : ""'
+              :disabled="canSearchByGroup"
         >
             <b-form-input type="text"
                           v-model="groupInput"
+                          v-on:input="$emit('groupInput', groupInput)"
                           placeholder="Група"
                           :disabled="!canSearchByGroup"
             ></b-form-input>
         </span>
 
 
-        <b-form-select class="mt-2" v-model="semesterSelected" :options="semesterOptions">
+        <b-form-select class="mt-2" v-model="semesterSelected" :options="semesterOptions"
+                       v-on:input="$emit('semesterChanged', semesterSelected)">
             <template #first>
                 <b-form-select-option :value="''">-- Семестр --</b-form-select-option>
             </template>
         </b-form-select>
-        <b-form-select class="mt-2" v-model="courseSelected" :options="courseOptions">
+        <b-form-select class="mt-2" v-model="courseSelected" :options="courseOptions"
+                       v-on:input="$emit('courseChanged', courseSelected)">
             <template #first>
                 <b-form-select-option :value="''">-- Курс --</b-form-select-option>
             </template>

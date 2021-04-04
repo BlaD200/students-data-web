@@ -40,11 +40,11 @@
             <b-col class="mx-3 p-0 border-top">
                 <b-row>
                     <b-col md="auto" class="pr-0">
-                        <filter-params class="">
+                        <filter-layout class="" @applyFilters="$emit('applyFilters')">
                             <div slot="filters">
                                 <slot name="filters"></slot>
                             </div>
-                        </filter-params>
+                        </filter-layout>
                     </b-col>
 
                     <b-col class="pl-md-0">
@@ -74,12 +74,12 @@
 </template>
 
 <script>
-import FilterParams from "@/components/filters/FilterLayout";
+import FilterLayout from "@/components/filters/FilterLayout";
 
 export default {
     name: "Queries",
     components: {
-        FilterParams
+        FilterLayout
     },
     props: {
         title: {

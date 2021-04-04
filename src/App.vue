@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <navbar></navbar>
+        <navbar @signOut="signOut"></navbar>
 
         <b-container class="pt-4 mt-5">
             <router-view></router-view>
@@ -17,6 +17,19 @@ export default {
     components: {
         navbar
         // HelloWorld
+    },
+    methods: {
+        signOut() {
+            localStorage.setItem("currentUser", "")
+            localStorage.setItem("authorizationToken", "")
+            console.log()
+            if (this.$route.path === '/')
+                this.$router.go(0)
+            else {
+                this.$router.push('/')
+                this.$router.go(0)
+            }
+        },
     }
 }
 </script>

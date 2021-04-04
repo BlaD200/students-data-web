@@ -12,7 +12,7 @@
 
                 <slot name="filters"></slot>
 
-                <apply-filters-button class="mt-4"></apply-filters-button>
+                <apply-filters-button @applyFilters="onApplyFilters" class="mt-4"></apply-filters-button>
             </div>
         </b-sidebar>
 
@@ -22,7 +22,7 @@
             </div>
 
             <apply-filters-button class="mt-2 mr-2 p-2"
-                                  @click="$emit('applyFilters')"></apply-filters-button>
+                                  @applyFilters="onApplyFilters"></apply-filters-button>
 
         </div>
     </div>
@@ -32,12 +32,16 @@
 import ApplyFiltersButton from "@/components/ApplyFiltersButton";
 
 export default {
-    name: "filter-params",
+    name: "filter-layout",
     components: {
         ApplyFiltersButton
     },
-    props: {
-
+    methods: {
+        onApplyFilters(){
+            console.log("hire2")
+            this.$emit('applyFilters')
+            // this.$emit('sortBy2')
+        }
     }
 }
 </script>
