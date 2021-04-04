@@ -1,62 +1,21 @@
 <template>
     <queries title="Студенти"
-             show-pagination
+             :show-pagination="students.length > perPage"
              :current-page="currentPage"
              :rows="totalElements"
              :per-page="perPage"
              controls="my-table"
              @change="onChangePage"
-             @applyFilters="applyFilters">
+             @applyFilters="applyFilters"
+             @refresh="onRefresh">
         }
         <b-card slot="content" no-body class="border-0">
             <b-tabs @input="onChangeTab" justified card pills>
                 <b-tab title="Студенти">
-                    <table id="students-table" class="table table-striped table-hover table-responsive-sm">
-                        <thead>
-                        <tr>
-                            <th># Заліковки</th>
-                            <td>Ім'я</td>
-                            <td>Прізвище</td>
-                            <td>По-батькові</td>
-                            <td>Курс</td>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        <tr :key="student.id" v-for="student in students"
-                            @click="showStudentDetails(student)" style="cursor: pointer;">
-                            <th>{{ student.studentRecordBook }}</th>
-                            <td>{{ student.studentName }}</td>
-                            <td>{{ student.studentSurname }}</td>
-                            <td>{{ student.studentPatronymic }}</td>
-                            <td>{{ student.studentRecordBook }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <student-table :students="students"></student-table>
                 </b-tab>
                 <b-tab title="Боржники">
-                    <table id="debtors-table" class="table table-striped table-hover table-responsive-sm">
-                        <thead>
-                        <tr>
-                            <th># Заліковки</th>
-                            <td>Ім'я</td>
-                            <td>Прізвище</td>
-                            <td>По-батькові</td>
-                            <td>Курс</td>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        <tr :key="student.id" v-for="student in students"
-                            @click="showStudentDetails(student)" style="cursor: pointer;">
-                            <th>{{ student.studentRecordBook }}</th>
-                            <td>{{ student.studentName }}</td>
-                            <td>{{ student.studentSurname }}</td>
-                            <td>{{ student.studentPatronymic }}</td>
-                            <td>{{ student.studentRecordBook }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <student-table :students="debtors"></student-table>
                 </b-tab>
             </b-tabs>
         </b-card>
@@ -82,11 +41,12 @@
 import Queries from "@/view/Queries";
 import StudentsFilterFields from "@/components/filters/StudentsFilterFields"
 import SortBy from "@/components/SortBy";
+import StudentTable from "@/components/StudentTable";
 
 export default {
     name: "Students",
     components: {
-        Queries, StudentsFilterFields, SortBy
+        Queries, StudentsFilterFields, SortBy, StudentTable
     },
     data: () => {
         return {
@@ -152,12 +112,15 @@ export default {
             this.currentPage = page
             this.getStudents()
         },
-        onChangeTab(tabIndex){
+        onChangeTab(tabIndex) {
             this.tabIndex = tabIndex
             if (this.tabIndex === 0) {
                 this.getStudents()
             } else
                 this.getDebtors()
+        },
+        onRefresh(){
+            this.onChangeTab(this.tabIndex)
         },
         applyFilters() {
             if (this.tabIndex === 0) {
@@ -200,7 +163,7 @@ export default {
         }
     },
     computed: {
-        params(){
+        params() {
             return {
                 page: this.currentPage,
                 numberPerPage: this.perPage,
