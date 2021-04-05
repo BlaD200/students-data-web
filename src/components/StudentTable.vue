@@ -1,27 +1,25 @@
 <template>
     <div>
-        <loader v-if="loading" class="text-center mb-0"/>
+        <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
-        <table v-if="students.length > 0" id="students-table"
+        <table v-if="students.length > 0 & !loading" id="students-table"
                class="table table-striped table-hover table-responsive-sm">
             <thead>
             <tr>
                 <th>№</th>
-                <td>Ім'я</td>
                 <td>Прізвище</td>
+                <td>Ім'я</td>
                 <td>По-батькові</td>
-                <td>Курс</td>
             </tr>
             </thead>
 
             <tbody>
             <tr :key="student.studentCode" v-for="student in students"
-                @click="showStudentDetails(student)" style="cursor: pointer;">
+                @click="$emit('showStudentDetails', student)" style="cursor: pointer;">
                 <th>{{ student.studentRecordBook }}</th>
-                <td>{{ student.studentName }}</td>
                 <td>{{ student.studentSurname }}</td>
+                <td>{{ student.studentName }}</td>
                 <td>{{ student.studentPatronymic }}</td>
-                <td>{{ student.studentRecordBook }}</td>
             </tr>
             </tbody>
         </table>

@@ -1,6 +1,6 @@
 <template>
     <queries title="Студенти"
-             :show-pagination="students.length > perPage"
+             :show-pagination="true"
              :current-page="currentPage"
              :rows="totalElements"
              :per-page="perPage"
@@ -12,10 +12,12 @@
         <b-card slot="content" no-body class="border-0">
             <b-tabs @input="onChangeTab" justified card pills>
                 <b-tab title="Студенти">
-                    <student-table :students="students" :loading="loading"></student-table>
+                    <student-table :students="students" :loading="loading"
+                                   @showStudentDetails="showStudentDetails"></student-table>
                 </b-tab>
                 <b-tab title="Боржники">
-                    <student-table :students="debtors" :loading="loading"></student-table>
+                    <student-table :students="debtors" :loading="loading"
+                                   @showStudentDetails="showStudentDetails"></student-table>
                 </b-tab>
             </b-tabs>
         </b-card>
@@ -65,11 +67,15 @@ export default {
             debtors: [],
             totalElements: -1,
             currentPage: 1,
-            perPage: 10,
+            perPage: 5,
 
             yearOptions: [],
             courseOptions: [1, 2, 3, 4],
-            semesterOptions: ['Осінь', 'Весна', 'Літо'],
+            semesterOptions: [
+                {value: 1, text: 'Осінь'},
+                {value: 2, text: 'Весна'},
+                {value: 3, text: 'Літо'}
+            ],
             yearSelected: null,
             courseSelected: null,
             semesterSelected: null,
@@ -120,7 +126,7 @@ export default {
             } else
                 this.getDebtors()
         },
-        onRefresh(){
+        onRefresh() {
             this.onChangeTab(this.tabIndex)
         },
         applyFilters() {
@@ -138,8 +144,8 @@ export default {
                 .get(this.apiURl + '/students', config)
                 .then(response => {
                     this.students = []
-                    response.data.forEach(user => this.students.push(user))
-                    this.totalElements = this.students.length
+                    response.data.data.forEach(user => this.students.push(user))
+                    this.totalElements = response.data.totalElements
                     this.loading = false
                 })
                 .catch(error => {
@@ -156,8 +162,8 @@ export default {
                 .get(this.apiURl + '/debtors', config)
                 .then(response => {
                     this.debtors = []
-                    response.data.forEach(user => this.debtors.push(user))
-                    this.totalElements = this.debtors.length
+                    response.data.data.forEach(user => this.debtors.push(user))
+                    this.totalElements = response.data.totalElements
                     this.loading = false
                 })
                 .catch(error => {

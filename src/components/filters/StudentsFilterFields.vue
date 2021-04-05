@@ -4,7 +4,7 @@
                        v-on:input="$emit('yearChanged', yearSelected)"
                        :options="yearOptions">
             <template #first>
-                <b-form-select-option :value="null">-- Рік навчання --</b-form-select-option>
+                <b-form-select-option :value="null" class="text-muted">-- Рік навчання --</b-form-select-option>
             </template>
         </b-form-select>
 
@@ -32,13 +32,13 @@
         <b-form-select class="mt-2" v-model="semesterSelected" :options="semesterOptions"
                        v-on:input="$emit('semesterChanged', semesterSelected)">
             <template #first>
-                <b-form-select-option :value="''">-- Семестр --</b-form-select-option>
+                <b-form-select-option :value="''" class="text-muted">-- Семестр --</b-form-select-option>
             </template>
         </b-form-select>
         <b-form-select class="mt-2" v-model="courseSelected" :options="courseOptions"
                        v-on:input="$emit('courseChanged', courseSelected)">
             <template #first>
-                <b-form-select-option :value="''">-- Курс --</b-form-select-option>
+                <b-form-select-option :value="''" class="text-muted">-- Курс --</b-form-select-option>
             </template>
         </b-form-select>
     </div>
