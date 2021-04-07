@@ -10,12 +10,19 @@
             <div class="px-2">
                 <b-row class="mt-4">
                     <b-col>
-                        <h4>
-                        <span v-b-tooltip.right
-                              title='Всі відомості, в яких є даний студент'>
-                        Відомості
-                        </span>
-                        </h4>
+                        <div class="mb-2">
+                            <h4 class="d-inline-block align-middle mb-0">
+                                <span v-b-tooltip.right
+                                      title='Всі відомості, в яких є даний студент'>
+                                Відомості
+                                </span>
+                            </h4>
+                            <b-button v-show="loadStatements"
+                                      @click="loadStatements = false"
+                                      size="sm" class="float-right" variant="outline-secondary">
+                                Сховати
+                            </b-button>
+                        </div>
 
                         <b-row v-if="!loadStatements" class="text-center m-2">
                             <b-col>
@@ -44,12 +51,18 @@
 
                 <b-row class="mt-4">
                     <b-col>
-                        <h4>
-                        <span v-b-tooltip.right
-                              title='Всі бігунці, в яких є даний студент'>
-                        Бігунці
-                        </span>
-                        </h4>
+                        <div class="mb-2">
+                            <h4 class="d-inline-block align-middle mb-0">
+                                <span v-b-tooltip.right
+                                      title='Всі бігунці, в яких є даний студент'>
+                                Бігунці
+                                </span>
+                            </h4>
+                            <b-button v-show="loadBiguntsi"
+                                      @click="loadBiguntsi = false"
+                                      size="sm" class="float-right" variant="outline-secondary">Сховати
+                            </b-button>
+                        </div>
 
                         <b-row v-if="!loadBiguntsi" class="text-center mt-2">
                             <b-col>
@@ -162,7 +175,11 @@ export default {
         },
         onLoadStatements() {
             this.loadStatements = true
+            if (this.statements.length > 0)
+                return
+
             this.loadingStatements = true
+
             setTimeout(() => {
                 this.loadingStatements = false
             }, 500)
@@ -182,6 +199,9 @@ export default {
         },
         onLoadBiguntsi() {
             this.loadBiguntsi = true
+            if (this.biguntsi.length > 0)
+                return
+
             this.loadingBiguntsi = true
             setTimeout(() => this.loadingBiguntsi = false, 500)
 
