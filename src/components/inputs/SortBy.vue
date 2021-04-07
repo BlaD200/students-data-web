@@ -4,14 +4,14 @@
         <b-input-group-append>
             <b-button-group>
                 <b-button size="sm" variant="secondary"
-                          v-bind:class="{'btn-success': desc}"
-                          @click="onClick(true)">
+                          v-bind:class="{'btn-success': !desc}"
+                          @click="onClick(false)">
                     <b-icon icon="chevron-down" aria-hidden="true"
                             v-bind:class="{'btn-outline-success': false}"></b-icon>
                 </b-button>
                 <b-button size="sm" variant="secondary"
-                          v-bind:class="{'btn-success': !desc}"
-                          @click="onClick(false)">
+                          v-bind:class="{'btn-success': desc}"
+                          @click="onClick(true)">
                     <b-icon icon="chevron-up" aria-hidden="true"
                             v-bind:class="{'btn-outline-success': false}"></b-icon>
                 </b-button>
@@ -36,7 +36,7 @@ export default {
     data() {
         return {
             sortBy: '',
-            desc: true
+            desc: false
         }
     },
     methods: {
