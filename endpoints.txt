@@ -1,0 +1,21 @@
+/api/student/?{studentRecordBook}
+    => student
+
+/api/biguntsi?studentRecordBook=?
+    => {
+        data: [...biguntsi],
+        totalPages: int
+    }
+/api/statements?studentRecordBook=?
+    => {
+        data: [...statements],
+        totalPages: int
+    }
+
+/api/statement/?{statement_no}
+    => statement
+/api/statement/?{statement_no}/students
+    => {
+       data: [...StatementStudents],
+       totalPages: int
+   }

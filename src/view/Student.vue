@@ -82,7 +82,7 @@
     </b-row>
 </template>
 
-<script lang="ts">
+<script>
 import StatementsTable from "/src/components/tables/StatementsTable";
 import BigunetsTable from "../components/tables/BigunetsTable.vue";
 
@@ -147,7 +147,7 @@ export default {
     methods: {
         getStudentInfo() {
             const config = {
-                params: this.params
+                params: {}
             }
             this.$http
                 .get(`${this.apiURl}/student/${this.$route.params.id}`, config)
@@ -164,15 +164,44 @@ export default {
             this.loadStatements = true
             this.loadingStatements = true
             setTimeout(() => {
-                console.log("Loaded vidomosti")
                 this.loadingStatements = false
-                console.log(this.loadingStatements)
             }, 500)
+
+            this.$http
+                .get(`${this.apiURl}/statements`, this.config)
+                .then(response => {
+                    this.statements = []
+                    response.data.data.forEach(statement => this.statements.push(statement))
+                    this.statementsPagination.totalElements = response.data.totalElements // TODO Use pageable
+                    this.loading = false
+                })
+                .catch(error => {
+                    this.$root.defaultRequestErrorHandler(error)
+                    this.loading = false
+                })
         },
         onLoadBiguntsi() {
             this.loadBiguntsi = true
             this.loadingBiguntsi = true
             setTimeout(() => this.loadingBiguntsi = false, 500)
+
+            this.$http
+                .get(`${this.apiURl}/biguntsi`, this.config)
+                .then(response => {
+                    this.biguntsi = []
+                    response.data.data.forEach(bigunets => this.biguntsi.push(bigunets))
+                    this.biguntsiPagination.totalElements = response.data.totalElements // TODO Use pageable
+                    this.loading = false
+                })
+                .catch(error => {
+                    this.$root.defaultRequestErrorHandler(error)
+                    this.loading = false
+                })
+        }
+    },
+    computed: {
+        config() {
+            return {params: {studentRecordBook: this.student.studentRecordBook}}
         }
     }
 }
