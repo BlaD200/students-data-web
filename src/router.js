@@ -29,7 +29,7 @@ export default new Router({
         {
             path: '/queries/student',
             name: 'StudentQueries',
-            component: () => import("@/view/Queries")
+            component: () => import("@/layouts/Queries")
         },
         {
             path: '/student/:id',

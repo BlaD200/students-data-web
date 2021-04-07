@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import BVSelect from "@/components/BVSelect";
+import BVSelect from "@/components/inputs/BVSelect";
 
 export default {
     name: "students-filter-fields",

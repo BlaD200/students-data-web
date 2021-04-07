@@ -78,7 +78,9 @@ export default {
 }
 </script>
 
+<!--suppress CssUnusedSymbol -->
 <style>
+/*noinspection CssInvalidPropertyValue*/
 .style-chooser {
     width: 100%;
     width: -moz-available; /* WebKit игнор. */

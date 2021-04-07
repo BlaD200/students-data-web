@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import ApplyFiltersButton from "@/components/ApplyFiltersButton";
+import ApplyFiltersButton from "@/components/inputs/ApplyFiltersButton";
 
 export default {
     name: "filter-layout",
@@ -46,6 +46,7 @@ export default {
 }
 </script>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
 .sidebar-border-dark {
     border-color: #2A2E33 !important;

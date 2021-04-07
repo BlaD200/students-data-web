@@ -43,10 +43,10 @@
 </template>
 
 <script>
-import Queries from "@/view/Queries";
+import Queries from "@/layouts/Queries";
 import StudentsFilterFields from "@/components/filters/StudentsFilterFields"
-import SortBy from "@/components/SortBy";
-import StudentTable from "@/components/StudentTable";
+import SortBy from "@/components/inputs/SortBy";
+import StudentTable from "@/components/tables/StudentTable";
 
 export default {
     name: "Students",

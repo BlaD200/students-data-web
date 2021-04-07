@@ -148,6 +148,7 @@ export default {
 }
 </script>
 
+<!--suppress CssUnusedSymbol -->
 <style scoped>
 /*Extra small devices (portrait phones, less than 576px)*/
 @media (max-width: 575.98px) {
@@ -211,7 +212,7 @@ export default {
     width: 50px;
     height: 50px;
     border-radius: 25px;
-    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
     padding: 13px 0 0 13px
 }
 

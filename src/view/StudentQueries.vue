@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Queries from "@/view/Queries";
+import Queries from "@/layouts/Queries";
 import StudentsFilterFields from "@/components/filters/StudentsFilterFields";
 
 export default {
