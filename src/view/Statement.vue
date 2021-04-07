@@ -8,7 +8,7 @@
                     </b-col>
                 </b-row>
 
-                <b-row class="justify-content-center">
+                <b-row class="justify-content-center px-2">
                     <b-col lg="10">
                         <h6 class="statement-header-common">
                             Освітній рівень
@@ -53,7 +53,9 @@
 
                 <b-row class="justify-content-center mt-3 mb-5">
                     <b-col lg="10">
-                        <student-table :students="students" :loading="studentsLoading"></student-table>
+                        <statement-students-table
+                            :statement-students="students" :loading="studentsLoading">
+                        </statement-students-table>
                     </b-col>
                 </b-row>
             </b-col>
@@ -62,11 +64,11 @@
 </template>
 
 <script>
-import StudentTable from "@/components/tables/StudentTable";
+import StatementStudentsTable from "@/components/tables/StatementStudentsTable";
 
 export default {
     name: "Statement",
-    components: {StudentTable},
+    components: {StatementStudentsTable},
     data() {
         return {
             statementHeader: {
@@ -87,11 +89,13 @@ export default {
 
             students: [
                 {
-                    "studentCode": 4,
-                    "studentSurname": "Бойко",
-                    "studentName": "Данило",
-                    "studentPatronymic": "Романович",
-                    "studentRecordBook": "37452"
+                    studentPIB: "Бойчук Олег Романович",
+                    studentNo: "І 303/10бп",
+                    semesterGrade: 60,
+                    controlGrade: 30,
+                    totalGrade: 90,
+                    nationalGrade: "Добре",
+                    ectsGrade: 'B'
                 }, {
                     "studentCode": 3,
                     "studentSurname": "Євтушенко",
