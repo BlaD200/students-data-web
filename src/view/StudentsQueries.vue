@@ -11,7 +11,7 @@
         }
         <b-card slot="content" no-body class="border-0">
             <b-tabs @input="onChangeTab" justified card pills>
-                <b-tab title="Студенти">
+                <b-tab title="Студенти" class="px-2">
                     <student-table :students="students" :loading="loading"
                                    @showStudentDetails="showStudentDetails"></student-table>
                 </b-tab>

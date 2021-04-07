@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row class="p-2 justify-content-center">
-            <b-col class="bg-white shadow" sm="12" lg="10">
+            <b-col class="bg-white shadow rounded-lg" sm="12" lg="10">
                 <b-row class="mt-4 mb-3">
                     <b-col>
                         <h4 class="text-center">ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{ $route.params.id }}</h4>

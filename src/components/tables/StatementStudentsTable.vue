@@ -3,7 +3,7 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="statementStudents.length > 0 & !loading"
-               class="text-wrap table table-hover table-bordered table-responsive-sm b-table-no-border-collapse"
+               class="text-wrap text-break table table-hover table-bordered table-responsive-sm b-table-no-border-collapse"
         >
             <thead class="thead-light">
             <tr class="text-center">
