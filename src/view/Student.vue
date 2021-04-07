@@ -17,18 +17,18 @@
                         </span>
                         </h4>
 
-                        <b-row v-if="!loadVidomosti" class="text-center m-2">
+                        <b-row v-if="!loadStatements" class="text-center m-2">
                             <b-col>
                                 <b-button variant="outline-secondary"
-                                          @click="onLoadVidomosty">
+                                          @click="onLoadStatements">
                                     Завантажити відомості
                                 </b-button>
                             </b-col>
                         </b-row>
-                        <student-table v-else
-                                       :students="vidomosty" :loading="loadingVidomosti"></student-table>
+                        <statements-table v-else
+                                       :statements="statements" :loading="loadingStatements"></statements-table>
                         <b-pagination
-                            v-if="loadVidomosti && !loadingVidomosti"
+                            v-if="loadStatements && !loadingStatements"
                             v-model="vidomostiPagination.currentPage"
                             :total-rows="vidomostiPagination.totalElements"
                             :per-page="vidomostiPagination.perPage"
@@ -70,52 +70,32 @@
     </b-row>
 </template>
 
-<script>
-import StudentTable from "@/components/tables/StudentTable";
+<script lang="ts">
+import StudentTable from "/src/components/tables/StudentTable";
+import StatementsTable from "/src/components/tables/StatementsTable";
 
 export default {
     name: "Student",
     components: {
-        StudentTable
+        StudentTable, StatementsTable
     },
     data() {
         return {
             apiURl: 'http://localhost:8000/api',
             student: {},
 
-            loadVidomosti: false,
-            loadingVidomosti: false,
-            vidomosty: [
+            loadStatements: false,
+            loadingStatements: false,
+            statements: [
                 {
-                    "studentCode": 2,
-                    "studentSurname": "Синицин",
-                    "studentName": "Владислав",
-                    "studentPatronymic": "Олександрович",
-                    "studentRecordBook": "32432"
-                }, {
-                    "studentCode": 2,
-                    "studentSurname": "Синицин",
-                    "studentName": "Владислав",
-                    "studentPatronymic": "Олександрович",
-                    "studentRecordBook": "32432"
-                }, {
-                    "studentCode": 5,
-                    "studentSurname": "Ландяк",
-                    "studentName": "Андрій",
-                    "studentPatronymic": "Петрович",
-                    "studentRecordBook": "22113"
-                }, {
-                    "studentCode": 1,
-                    "studentSurname": "Кучерявий",
-                    "studentName": "Вадим",
-                    "studentPatronymic": "Юрійович",
-                    "studentRecordBook": "13113"
-                }, {
-                    "studentCode": 6,
-                    "studentSurname": "Крейдун",
-                    "studentName": "Андрій",
-                    "studentPatronymic": "Миколайович",
-                    "studentRecordBook": "33122"
+                    statement_no: 2222222,
+                    tutor: "Черкасов Дмитро Іванович",
+                    group: "1",
+                    control_type: "екзамен",
+                    present_count: 30,
+                    absent_count: 2,
+                    rejected_count: 0,
+                    exam_date: "2021-05-25"
                 }],
             vidomostiPagination: {
                 currentPage: 1,
@@ -147,13 +127,13 @@ export default {
                     this.loading = false
                 })
         },
-        onLoadVidomosty() {
-            this.loadVidomosti = true
-            this.loadingVidomosti = true
+        onLoadStatements() {
+            this.loadStatements = true
+            this.loadingStatements = true
             setTimeout(() => {
                 console.log("Loaded vidomosti")
-                this.loadingVidomosti = false
-                console.log(this.loadingVidomosti)
+                this.loadingStatements = false
+                console.log(this.loadingStatements)
             }, 500)
         },
         onLoadBiguntsi() {

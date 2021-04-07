@@ -26,7 +26,7 @@
         </table>
 
         <div v-else-if="!loading">
-            <h2 class="text-center mt-3 text-muted mb-0"> Дані відсутні </h2>
+            <h3 class="text-center mt-3 text-muted mb-0"> Дані відсутні </h3>
         </div>
     </div>
 </template>

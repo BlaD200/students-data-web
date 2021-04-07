@@ -35,6 +35,11 @@ export default new Router({
             path: '/student/:id',
             name: 'Student',
             component: () => import("@/view/Student")
+        },
+        {
+            path: '/statement/:id',
+            name: 'Statement',
+            component: () => import("@/view/Statement")
         }
     ]
 })
