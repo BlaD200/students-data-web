@@ -14,12 +14,13 @@
             </thead>
 
             <tbody>
+
             <tr :key="student.studentCode" v-for="student in students"
-                @click="$emit('showStudentDetails', student)" style="cursor: pointer;">
-                <th>{{ student.studentRecordBook }}</th>
-                <td>{{ student.studentSurname }}</td>
-                <td>{{ student.studentName }}</td>
-                <td>{{ student.studentPatronymic }}</td>
+                @click="$router.push({name: 'Student', params: {id: student.studentRecordBook}})" style="cursor: pointer;">
+                    <th>{{ student.studentRecordBook }}</th>
+                    <td>{{ student.studentSurname }}</td>
+                    <td>{{ student.studentName }}</td>
+                    <td>{{ student.studentPatronymic }}</td>
             </tr>
             </tbody>
         </table>

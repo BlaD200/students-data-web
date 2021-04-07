@@ -38,7 +38,7 @@
         <b-row id="row1">
             <b-col class="mx-md-3 p-md-0 border-top">
                 <b-row>
-                    <b-col md="auto" class="pr-0">
+                    <b-col md="auto" lg="4" class="pr-0">
                         <filter-layout class="" @applyFilters="$emit('applyFilters')">
                             <div slot="filters">
                                 <slot name="filters"></slot>

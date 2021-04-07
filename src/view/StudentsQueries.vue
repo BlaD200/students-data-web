@@ -15,7 +15,7 @@
                     <student-table :students="students" :loading="loading"
                                    @showStudentDetails="showStudentDetails"></student-table>
                 </b-tab>
-                <b-tab title="Боржники">
+                <b-tab title="Боржники" lazy>
                     <student-table :students="debtors" :loading="loading"
                                    @showStudentDetails="showStudentDetails"></student-table>
                 </b-tab>
@@ -26,6 +26,9 @@
                                 :course-options="courseOptions"
                                 :year-options="yearOptions"
                                 :semester-options="semesterOptions"
+                                :subject-options="subjectOptions"
+                                :tutor-options="tutorOptions"
+                                :group-options="groupOptions"
                                 @yearChanged="yearSelected = $event"
                                 @semesterChanged="semesterSelected = $event"
                                 @courseChanged="courseSelected = $event"
@@ -56,10 +59,10 @@ export default {
             tabIndex: 0,
             loading: false,
 
-            sortBy: 'rating',
+            sortBy: 'student_surname',
             sortByOptions: [
-                {value: "rating", text: 'За рейтингом'},
-                {value: "surname", text: 'За прізвищем'}
+                {value: "complete_mark", text: 'За рейтингом'},
+                {value: "student_surname", text: 'За прізвищем'}
             ],
             sortDesc: true,
 
@@ -76,6 +79,9 @@ export default {
                 {value: 2, text: 'Весна'},
                 {value: 3, text: 'Літо'}
             ],
+            subjectOptions: [],
+            tutorOptions: [],
+            groupOptions: [],
             yearSelected: null,
             courseSelected: null,
             semesterSelected: null,
@@ -96,6 +102,26 @@ export default {
                 // this.$root.defaultRequestErrorHandler(error)
                 console.log(error)
                 this.yearOptions = [new Date().getFullYear()]
+            })
+
+        this.$http
+            .get(this.apiURl + '/subjects')
+            .then(response => {
+                this.subjectOptions = response.data.flatmap(subject => subject.name)
+            })
+            .catch(error => {
+                // this.$root.defaultRequestErrorHandler(error)
+                console.log(error)
+            })
+
+        this.$http
+            .get(this.apiURl + '/tutorNames')
+            .then(response => {
+                this.tutorOptions = response.data//.flatmap(tutor => tutor.fullname)
+            })
+            .catch(error => {
+                // this.$root.defaultRequestErrorHandler(error)
+                console.log(error)
             })
     },
     methods: {
@@ -145,7 +171,7 @@ export default {
                 .then(response => {
                     this.students = []
                     response.data.data.forEach(user => this.students.push(user))
-                    this.totalElements = response.data.totalElements
+                    this.totalElements = response.data.totalElements // TODO Use pageable
                     this.loading = false
                 })
                 .catch(error => {

@@ -16,7 +16,8 @@
     "filepond-plugin-image-preview": "^4.6.5",
     "vue": "^2.6.11",
     "vue-filepond": "^6.0.0",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "vue-select": "^3.11.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
