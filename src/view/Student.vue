@@ -26,12 +26,12 @@
                             </b-col>
                         </b-row>
                         <statements-table v-else
-                                       :statements="statements" :loading="loadingStatements"></statements-table>
+                                          :statements="statements" :loading="loadingStatements"></statements-table>
                         <b-pagination
                             v-if="loadStatements && !loadingStatements"
-                            v-model="vidomostiPagination.currentPage"
-                            :total-rows="vidomostiPagination.totalElements"
-                            :per-page="vidomostiPagination.perPage"
+                            v-model="statementsPagination.currentPage"
+                            :total-rows="statementsPagination.totalElements"
+                            :per-page="statementsPagination.perPage"
                             first-number
                             last-number
                             align="center"
@@ -59,10 +59,22 @@
                                 </b-button>
                             </b-col>
                         </b-row>
-                        <student-table v-else
-                                       :students="biguntsi" :loading="loadingBiguntsi"></student-table>
+                        <bigunets-table v-else
+                                        :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
+                        <b-pagination
+                            v-if="loadBiguntsi && !loadingBiguntsi"
+                            v-model="biguntsiPagination.currentPage"
+                            :total-rows="biguntsiPagination.totalElements"
+                            :per-page="biguntsiPagination.perPage"
+                            first-number
+                            last-number
+                            align="center"
+                            @change="(e) => $emit('change', e)"
+                        ></b-pagination>
                     </b-col>
                 </b-row>
+
+                <hr>
             </div>
 
         </b-col>
@@ -71,13 +83,13 @@
 </template>
 
 <script lang="ts">
-import StudentTable from "/src/components/tables/StudentTable";
 import StatementsTable from "/src/components/tables/StatementsTable";
+import BigunetsTable from "../components/tables/BigunetsTable.vue";
 
 export default {
     name: "Student",
     components: {
-        StudentTable, StatementsTable
+        StatementsTable, BigunetsTable
     },
     data() {
         return {
@@ -97,7 +109,7 @@ export default {
                     rejected_count: 0,
                     exam_date: "2021-05-25"
                 }],
-            vidomostiPagination: {
+            statementsPagination: {
                 currentPage: 1,
                 totalElements: 5,
                 perPage: 4
@@ -105,7 +117,28 @@ export default {
 
             loadBiguntsi: false,
             loadingBiguntsi: false,
-            biguntsi: [],
+            biguntsi: [
+                {
+                    statement_no: 2222222,
+                    tutor: "Черкасов Дмитро Іванович",
+                    control_type: "екзамен",
+                    postp_reason: "хвороба",
+                    exam_date: "2021-05-25",
+                    valid_until: "2021-05-24"
+                }, {
+                    statement_no: 2222222,
+                    tutor: "Черкасов Дмитро Іванович",
+                    control_type: "екзамен",
+                    postp_reason: "",
+                    exam_date: "2021-05-25",
+                    valid_until: null
+                }
+            ],
+            biguntsiPagination: {
+                currentPage: 1,
+                totalElements: 5,
+                perPage: 4
+            },
         }
     },
     created() {
