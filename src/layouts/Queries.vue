@@ -1,74 +1,76 @@
 <template>
     <div>
-        <h2 class="text-center mb-3">{{ title }}</h2>
+        <div class="p-2 mb-3 bg-white shadow-sm">
+            <h2 class="text-center">{{ title }}</h2>
+        </div>
 
-        <div v-show="isShowSort">
-            <hr>
+        <div class=" p-2 p-lg-3 mb-3 bg-white shadow">
+            <div v-show="isShowSort">
+                <b-row>
+                    <b-col cols="5" md="6">
+                        <b-row>
+                            <b-col cols="12" md="10" lg="4">
+                                <div>
+                                    <b-button size="sm" v-b-toggle.sidebar-filters
+                                              id="filter-btn" ref="filterBtn"
+                                              class="btn-secondary btn-block filter-side-toggle"
+                                              variant="primary">
+                                        <b-icon icon="filter" class="mr-2" aria-hidden="true"></b-icon>
+                                        Фільтри
+                                    </b-button>
+                                </div>
+                            </b-col>
+                        </b-row>
 
-            <b-row>
-                <b-col cols="5" md="6">
+
+                    </b-col>
+                    <b-col cols="7" md="6">
+                        <b-row class="justify-content-end">
+                            <b-col cols="12" md="10" lg="8">
+                                <slot name="sorting"></slot>
+                            </b-col>
+                        </b-row>
+                    </b-col>
+                </b-row>
+
+                <hr>
+            </div>
+
+            <b-row id="row1">
+                <b-col class="mx-md-3 p-md-0 border-top">
                     <b-row>
-                        <b-col cols="12" md="10" lg="4">
-                            <div>
-                                <b-button size="sm" v-b-toggle.sidebar-filters
-                                          id="filter-btn" ref="filterBtn"
-                                          class="btn-secondary btn-block filter-side-toggle"
-                                          variant="primary">
-                                    <b-icon icon="filter" class="mr-2" aria-hidden="true"></b-icon>
-                                    Фільтри
-                                </b-button>
-                            </div>
+                        <b-col md="auto" lg="4" class="pr-0">
+                            <filter-layout class="" @applyFilters="$emit('applyFilters')">
+                                <div slot="filters">
+                                    <slot name="filters"></slot>
+                                </div>
+                            </filter-layout>
                         </b-col>
-                    </b-row>
 
+                        <b-col class="pl-md-0">
+                            <div>
+                                <slot name="content"></slot>
+                            </div>
 
-                </b-col>
-                <b-col cols="7" md="6">
-                    <b-row class="justify-content-end">
-                        <b-col cols="12" md="10" lg="8">
-                            <slot name="sorting"></slot>
+                            <hr>
+
+                            <div v-show="showPagination">
+                                <b-pagination
+                                    v-model="pagination.currentPage"
+                                    :total-rows="rows"
+                                    :per-page="perPage"
+                                    :aria-controls="controls"
+                                    first-number
+                                    last-number
+                                    align="center"
+                                    @change="(e) => $emit('change', e)"
+                                ></b-pagination>
+                            </div>
                         </b-col>
                     </b-row>
                 </b-col>
             </b-row>
-
-            <hr>
         </div>
-
-        <b-row id="row1">
-            <b-col class="mx-md-3 p-md-0 border-top">
-                <b-row>
-                    <b-col md="auto" lg="4" class="pr-0">
-                        <filter-layout class="" @applyFilters="$emit('applyFilters')">
-                            <div slot="filters">
-                                <slot name="filters"></slot>
-                            </div>
-                        </filter-layout>
-                    </b-col>
-
-                    <b-col class="pl-md-0">
-                        <div>
-                            <slot name="content"></slot>
-                        </div>
-
-                        <hr>
-
-                        <div v-show="showPagination">
-                            <b-pagination
-                                v-model="pagination.currentPage"
-                                :total-rows="rows"
-                                :per-page="perPage"
-                                :aria-controls="controls"
-                                first-number
-                                last-number
-                                align="center"
-                                @change="(e) => $emit('change', e)"
-                            ></b-pagination>
-                        </div>
-                    </b-col>
-                </b-row>
-            </b-col>
-        </b-row>
 
         <b-button @click="$emit('refresh')" id="refresh" class="shadow d-flex border-0">
             <svg class="refreshicon" id="Capa_1" x="0px" y="0px" width="25px" height="25px"
@@ -135,7 +137,7 @@ export default {
         }
     },
     created() {
-    // console.log('created, ', this.$refs['filterBtn'])
+        // console.log('created, ', this.$refs['filterBtn'])
     },
     mounted() {
         this.isMounted = true

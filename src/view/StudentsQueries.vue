@@ -91,8 +91,6 @@ export default {
         }
     },
     created() {
-        this.onChangePage(1)
-
         this.$http
             .get(this.apiURl + '/info/years')
             .then(response => {
@@ -175,7 +173,8 @@ export default {
                     this.loading = false
                 })
                 .catch(error => {
-                    this.$root.defaultRequestErrorHandler(error)
+                    // this.$root.defaultRequestErrorHandler(error)
+                    console.log(error, "179")
                     this.loading = false
                 })
         },
@@ -193,8 +192,9 @@ export default {
                     this.loading = false
                 })
                 .catch(error => {
-                    this.$root.defaultRequestErrorHandler(error)
+                    // this.$root.defaultRequestErrorHandler(error)
                     this.loading = false
+                    console.log(error, "199")
                 })
         },
         showStudentDetails(student) {
