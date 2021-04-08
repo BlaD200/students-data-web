@@ -14,8 +14,7 @@
                             Освітній рівень
                             <span class="statement-info-uncommon"
                                   :class="headerErrors.eduLevelErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='headerErrors.eduLevelErrorText'
                                   :disabled='!headerErrors.eduLevelErrorText'
                             ><u>{{ statementHeader.eduLevel || "&#95;&#95;&#95;&#95;" }}</u></span>
@@ -31,7 +30,6 @@
                             Рік навчання
                             <span class="statement-info-uncommon"
                                   :class="String(headerErrors.courseErrorText) ? 'text-danger' : ''"
-                                  v-b-tooltip.top
                                   v-b-tooltip.v-danger
                                   :title='String(headerErrors.courseErrorText)'
                                   :disabled='!String(headerErrors.courseErrorText)'
@@ -39,7 +37,6 @@
                             Група
                             <span class="statement-info-uncommon font"
                                   :class="String(headerErrors.groupErrorText) ? 'text-danger' : ''"
-                                  v-b-tooltip.top
                                   v-b-tooltip.v-danger
                                   :title='String(headerErrors.groupErrorText)'
                                   :disabled='!String(headerErrors.groupErrorText)'
@@ -49,8 +46,7 @@
                             Дисципліна
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.subjectNameErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.bottom
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='headerErrors.subjectNameErrorText'
                                   :disabled='!headerErrors.subjectNameErrorText'
                             ><u>{{ statementHeader.subjectName || "&#95;&#95;&#95;&#95;" }}</u></span>
@@ -59,7 +55,6 @@
                             Семестр
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.semesterErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.semesterErrorText'
                                   :disabled='!headerErrors.semesterErrorText'
@@ -67,8 +62,7 @@
                             Залікові бали
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.creditNumberErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='headerErrors.creditNumberErrorText'
                                   :disabled='!headerErrors.creditNumberErrorText'
                             ><u>{{ statementHeader.creditNumber || "&#95;&#95;&#95;&#95;" }}</u></span>
@@ -77,16 +71,14 @@
                             Форма контролю:
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.controlTypeErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.top
                                   :title='headerErrors.controlTypeErrorText'
                                   :disabled='!headerErrors.controlTypeErrorText'
                             ><u>{{ statementHeader.controlType || "&#95;&#95;&#95;&#95;" }}</u></span>.
                             Дата
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.examDateErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='headerErrors.examDateErrorText'
                                   :disabled='!headerErrors.examDateErrorText'
                             ><u>{{ statementHeader.examDate || "&#95;&#95;&#95;&#95;" }}</u></span>
@@ -99,21 +91,18 @@
                         <h6 class=" text-center">
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.tutorFullNameErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.tutorFullNameErrorText'
                                   :disabled='!headerErrors.tutorFullNameErrorText'
                             ><u>{{statementHeader.tutorFullName || "&#95;&#95;&#95;&#95;" }}, </u></span>
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.tutorAcademicStatusErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.tutorAcademicStatusErrorText'
                                   :disabled='!headerErrors.tutorAcademicStatusErrorText'
                             ><u>{{ statementHeader.tutorAcademicStatus || "&#95;&#95;&#95;&#95;" }}, </u></span>
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.tutorPositionErrorText ? 'text-danger' : ''"
-                                  v-b-tooltip.top
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.tutorPositionErrorText'
                                   :disabled='!headerErrors.tutorPositionErrorText'
@@ -136,8 +125,7 @@
                             Кількість студентів на екзамені / тезі / заліку
                             <span class="statement-info-uncommon font"
                                   :class="String(footerErrors.presentCountErrorText) ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='String(footerErrors.presentCountErrorText)'
                                   :disabled='!String(footerErrors.presentCountErrorText)'
                             ><u>{{ String(statementFooter.presentCount) || "&#95;&#95;&#95;&#95;" }}</u></span>
@@ -146,8 +134,7 @@
                             Кількість студентів, які не з’явились на екзамен / тезу / залік
                             <span class="statement-info-uncommon font"
                                   :class="String(footerErrors.absentCountErrorText) ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='String(footerErrors.absentCountErrorText)'
                                   :disabled='!String(footerErrors.absentCountErrorText)'
                             ><u>{{ String(statementFooter.absentCount) || "&#95;&#95;&#95;&#95;" }}</u></span>
@@ -156,8 +143,7 @@
                             Кількість студентів, недопущених до екзамену / тези / заліку
                             <span class="statement-info-uncommon font"
                                   :class="String(footerErrors.rejectedCountErrorText) ? 'text-danger' : ''"
-                                  v-b-tooltip.top
-                                  v-b-tooltip.v-danger
+                                  v-b-tooltip.v-danger.right
                                   :title='String(footerErrors.rejectedCountErrorText)'
                                   :disabled='!String(footerErrors.rejectedCountErrorText)'
                             ><u>{{ String(statementFooter.rejectedCount) || "&#95;&#95;&#95;&#95;" }}</u></span>
