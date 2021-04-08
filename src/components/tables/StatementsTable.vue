@@ -3,20 +3,20 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="statements.length > 0 & !loading" id="students-table"
-               class="table table-striped table-hover table-responsive-sm">
-            <thead>
+               class="table table-hover table-responsive-sm b-table-no-border-collapse">
+            <thead class="thead-light">
             <tr class="text-center">
                 <th>№</th>
-                <td>Викладач</td>
-                <td>Група</td>
-                <td>Тип контролю</td>
-                <td>
+                <th>Викладач</th>
+                <th>Група</th>
+                <th>Тип контролю</th>
+                <th>
                     <span v-b-tooltip.top
                           title='Кількість студентів, які були присутні/відсутні/недопущені'>
                         Кількість студентів
                     </span>
-                </td>
-                <td class="text-center">Дата</td>
+                </th>
+                <th class="text-center">Дата</th>
             </tr>
             </thead>
 

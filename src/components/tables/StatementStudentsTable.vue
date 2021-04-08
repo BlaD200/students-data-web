@@ -3,8 +3,8 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="statementStudents.length > 0 & !loading"
-               class="text-wrap text-break table table-hover table-bordered table-responsive-sm b-table-no-border-collapse"
-        >
+               class="text-wrap text-break
+               table table-hover table-bordered table-responsive-sm b-table-no-border-collapse">
             <thead class="thead-light">
             <tr class="text-center">
                 <th>№</th>
@@ -32,7 +32,7 @@
 
             <tr class="text-center align-middle"
                 :key="student.statement_no" v-for="student in statementStudents"
-                @click="$router.push({name: 'Student', params: {id: `${student.studentNo}`}})"
+                @click="$router.push({name: 'Student', params: {id: `'${student.studentNo}'`}})"
                 style="cursor: pointer;">
                 <th class="align-middle">{{ statementStudents.indexOf(student) + 1 }}</th>
                 <td class="align-middle">{{ student.studentPIB }}</td>

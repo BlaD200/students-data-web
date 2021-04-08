@@ -3,15 +3,15 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="statements.length > 0 & !loading" id="students-table"
-               class="table table-striped table-hover table-responsive-sm">
-            <thead>
+               class="table table-hover table-responsive-sm b-table-no-border-collapse">
+            <thead class="thead-light">
             <tr class="text-center">
                 <th>№</th>
-                <td>Викладач</td>
-                <td>Тип контролю</td>
-                <td>Причина перенесення</td>
-                <td>Дата</td>
-                <td>Дійсний до</td>
+                <th>Викладач</th>
+                <th>Тип контролю</th>
+                <th>Причина перенесення</th>
+                <th>Дата</th>
+                <th>Дійсний до</th>
             </tr>
             </thead>
 
