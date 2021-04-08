@@ -54,7 +54,7 @@
                 <b-row class="justify-content-center mt-3">
                     <b-col lg="10">
                         <statement-students-table
-                            :statement-students="students" :loading="studentsLoading">
+                            :statement-students="students" :loading="studentsLoading" :errors="errors">
                         </statement-students-table>
                     </b-col>
                 </b-row>
@@ -117,8 +117,19 @@ export default {
 
             students: [
                 {
+                    studentId: 23,
                     studentPIB: "Бойчук Олег Романович",
-                    studentNo: "І 303/10бп",
+                    studentRecordBook: "І 303/10 бп",
+                    semesterGrade: 60,
+                    controlGrade: 30,
+                    totalGrade: null,
+                    nationalGrade: "Добре",
+                    ectsGrade: 'B'
+                },
+                {
+                    studentId: 24,
+                    studentPIB: "Бойчук Олег Романович",
+                    studentRecordBook: "І 303/10бп",
                     semesterGrade: 60,
                     controlGrade: 30,
                     totalGrade: 90,
@@ -126,25 +137,27 @@ export default {
                     ectsGrade: 'B'
                 },
                 {
+                    studentId: 25,
                     studentPIB: "Бойчук Олег Романович",
-                    studentNo: "І 303/10бп",
+                    studentRecordBook: null,
                     semesterGrade: 60,
                     controlGrade: 30,
-                    totalGrade: 90,
-                    nationalGrade: "Добре",
-                    ectsGrade: 'B'
-                },
-                {
-                    studentPIB: "Бойчук Олег Романович",
-                    studentNo: "І 303/10бп",
-                    semesterGrade: 60,
-                    controlGrade: 30,
-                    totalGrade: 90,
+                    totalGrade: null,
                     nationalGrade: "Добре",
                     ectsGrade: 'B'
                 },
             ],
-            studentsLoading: false
+            studentsLoading: false,
+
+            errors: {
+                23: {
+                    totalGradeError: 'Не вказано суму балів'
+                },
+                25: {
+                    studentRecordBookError: 'Відсутній номер залікової книжки',
+                    totalGradeError: 'Не вказано суму балів'
+                }
+            }
         }
     },
     computed: {
@@ -159,16 +172,15 @@ export default {
 }
 </script>
 
-<style>
-body {
-    background-color: #f8f9fa !important;
-}
-
+<style scoped>
 .statement-info-common {
     font-weight: 400;
 }
 
 .statement-info-uncommon {
     font-weight: 500;
+    /*color: #ffc107;*/
+    /*color: #dc3545;*/
+    /*border: 2px solid #dc3545;*/
 }
 </style>

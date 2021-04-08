@@ -10,17 +10,13 @@
                 <th>№</th>
                 <th>ПІБ студента</th>
                 <th>№ залікової книжки</th>
-                <th>
-                    <span v-b-tooltip.top
-                          title='Форма контролю: теза/залік/екзамен'>
-                        Триместр
-                    </span>
+                <th v-b-tooltip.top
+                    title='За роботу в триместрі'>
+                    Триместр
                 </th>
-                <th>
-                    <span v-b-tooltip.top
-                          title='Форма контролю: теза/залік/екзамен'>
-                        Контроль
-                    </span>
+                <th v-b-tooltip.top
+                    title='За тезу / залік / екзамен'>
+                    Контроль
                 </th>
                 <th>Разом</th>
                 <th>Нац. оцінка</th>
@@ -31,17 +27,72 @@
             <tbody>
 
             <tr class="text-center align-middle"
-                :key="student.statement_no" v-for="student in statementStudents"
-                @click="$router.push({name: 'Student', params: {id: `'${student.studentNo}'`}})"
-                style="cursor: pointer;">
+                :key="student.studentId" v-for="student in statementStudents"
+            >
                 <th class="align-middle">{{ statementStudents.indexOf(student) + 1 }}</th>
-                <td class="align-middle">{{ student.studentPIB }}</td>
-                <td class="align-middle">{{ student.studentNo }}</td>
-                <td class="align-middle">{{ student.semesterGrade }}</td>
-                <td class="align-middle">{{ student.controlGrade }}</td>
-                <td class="align-middle">{{ student.totalGrade }}</td>
-                <td class="align-middle">{{ student.nationalGrade }}</td>
-                <td class="align-middle">{{ student.ectsGrade }}</td>
+                <td class="align-middle"
+                    :class="pibErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='pibErrorText(student)'
+                    :disabled='!pibErrorText(student)'
+                >
+                    {{ student.studentPIB || "&#8212;" }}
+                </td>
+                <td class="align-middle"
+                    :class="studentRecordBookErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='studentRecordBookErrorText(student)'
+                    :disabled='!studentRecordBookErrorText(student)'
+                >
+                    {{ student.studentRecordBook || "&#8212;" }}
+                </td>
+                <td class="align-middle"
+                    :class="semesterGradeErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='semesterGradeErrorText(student)'
+                    :disabled='!semesterGradeErrorText(student)'
+                >
+                    {{ student.semesterGrade || "&#8212;" }}
+                </td>
+                <td class="align-middle"
+                    :class="controlGradeErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='controlGradeErrorText(student)'
+                    :disabled='!controlGradeErrorText(student)'
+                >
+                    {{ student.controlGrade || "&#8212;" }}
+                </td>
+                <td class="align-middle"
+                    :class="totalGradeErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='totalGradeErrorText(student)'
+                    :disabled='!totalGradeErrorText(student)'
+                >
+                    {{ student.totalGrade || "&#8212;" }}
+                </td>
+                <td class="align-middle"
+                    :class="nationalGradeErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='nationalGradeErrorText(student)'
+                    :disabled='!nationalGradeErrorText(student)'
+                >
+                    {{ student.nationalGrade || "&#8212;" }}
+                </td>
+                <td class="align-middle"
+                    :class="ectsGradeErrorText(student) ? 'text-danger' : ''"
+                    v-b-tooltip.top
+                    v-b-tooltip.v-danger
+                    :title='ectsGradeErrorText(student)'
+                    :disabled='!ectsGradeErrorText(student)'
+                >
+                    {{ student.ectsGrade || "&#8212;" }}
+                </td>
             </tr>
             </tbody>
         </table>
@@ -68,12 +119,59 @@ export default {
         loading: {
             type: Boolean,
             required: true
+        },
+        errors: {
+            required: true,
+            type: Object,
+        },
+        studentId: {
+            pibError: String,
+            studentRecordBookError: String,
+            semesterGradeError: String,
+            controlGradeError: String,
+            totalGradeError: String,
+            nationalGradeError: String,
+            ectsGradeError: String
         }
     },
-    methods: {}
+    methods: {
+        errorsForStudentExists(student) {
+            return Boolean(this.errors[student.studentId])
+        },
+        pibErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].pibError : ''
+        },
+        studentRecordBookErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].studentRecordBookError : ''
+        },
+        semesterGradeErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].semesterGradeError : ''
+        },
+        controlGradeErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].controlGradeError : ''
+        },
+        totalGradeErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].totalGradeError : ''
+        },
+        nationalGradeErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].nationalGradeError : ''
+        },
+        ectsGradeErrorText(student) {
+            return this.errorsForStudentExists(student) ?
+                this.errors[student.studentId].ectsGradeError : ''
+        },
+    }
 }
 </script>
 
 <style scoped>
-
+td {
+    /*color: #dc3545;*/
+}
 </style>
