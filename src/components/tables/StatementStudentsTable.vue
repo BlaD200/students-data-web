@@ -120,7 +120,7 @@ export default {
             type: Boolean,
             required: true
         },
-        errors: {
+        studentErrors: {
             required: true,
             type: Object,
         },
@@ -136,35 +136,35 @@ export default {
     },
     methods: {
         errorsForStudentExists(student) {
-            return Boolean(this.errors[student.studentId])
+            return Boolean(this.studentErrors[student.studentId])
         },
         pibErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].pibError : ''
+                this.studentErrors[student.studentId].pibError : ''
         },
         studentRecordBookErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].studentRecordBookError : ''
+                this.studentErrors[student.studentId].studentRecordBookError : ''
         },
         semesterGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].semesterGradeError : ''
+                this.studentErrors[student.studentId].semesterGradeError : ''
         },
         controlGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].controlGradeError : ''
+                this.studentErrors[student.studentId].controlGradeError : ''
         },
         totalGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].totalGradeError : ''
+                this.studentErrors[student.studentId].totalGradeError : ''
         },
         nationalGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].nationalGradeError : ''
+                this.studentErrors[student.studentId].nationalGradeError : ''
         },
         ectsGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.errors[student.studentId].ectsGradeError : ''
+                this.studentErrors[student.studentId].ectsGradeError : ''
         },
     }
 }
