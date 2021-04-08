@@ -3,11 +3,12 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="statements.length > 0 & !loading" id="students-table"
-               class="table table-hover table-responsive-sm b-table-no-border-collapse">
+               class="table tab table-hover table-responsive-sm b-table-no-border-collapse">
             <thead class="thead-light">
             <tr class="text-center">
                 <th>№</th>
                 <th>Викладач</th>
+                <th>Предмет</th>
                 <th>Тип контролю</th>
                 <th>Причина перенесення</th>
                 <th>Дата</th>
@@ -23,6 +24,7 @@
                 style="cursor: pointer;">
                 <th>{{ statement.statement_no }}</th>
                 <td>{{ statement.tutor }}</td>
+                <td>{{ statement.subject }}</td>
                 <td>{{ statement.control_type }}</td>
                 <td>{{ statement.postp_reason ? statement.postp_reason : "&#8212;" }}</td>
                 <td>{{ statement.exam_date }}</td>

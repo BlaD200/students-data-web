@@ -23,7 +23,7 @@
             </b-col>
         </b-row>
 
-        <statement v-show="false" class="mt-2" id="22222"></statement>
+        <statement v-show="loadedExample" class="mt-2" id="22222"></statement>
 
         <b-row class="justify-content-center" v-show="loadedExample">
             <b-col cols="12" md="8">

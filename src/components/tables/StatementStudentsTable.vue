@@ -174,4 +174,11 @@ export default {
 td {
     /*color: #dc3545;*/
 }
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (max-width: 576px) {
+    table {
+        word-break: normal!important;
+    }
+}
 </style>

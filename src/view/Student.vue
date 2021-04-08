@@ -1,103 +1,103 @@
 <template>
     <div class="m-2">
         <b-row>
-            <b-col class="shadow p-2 p-lg-3 bg-white rounded-lg">
-                <h2 class="">
+            <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                <h2 class="mb-0 m-1">
                     {{ student.studentSurname }} {{ student.studentName }} {{ student.studentPatronymic }}
                 </h2>
+            </b-col>
+        </b-row>
 
-                <hr>
+<!--        <hr>-->
 
-                <div class="px-2">
-                    <b-row class="mt-4">
-                        <b-col>
-                            <div class="mb-2">
-                                <h4 class="d-inline-block align-middle mb-0">
-                                <span v-b-tooltip.right
-                                      title='Всі відомості, в яких є даний студент'>
-                                Відомості
-                                </span>
-                                </h4>
-                                <div class="d-in float-right mb-1">
+        <!--        <div class="px-2 mt-4 ">-->
+        <b-row class="mt-3">
+            <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
+                    <h4 class=" align-middle mb-0">
+                                    <span v-b-tooltip.right
+                                          title='Всі відомості, в яких є даний студент'>
+                                    Відомості
+                                    </span>
+                    </h4>
 
-                                    <b-button v-show="loadStatements"
-                                              @click="loadStatements = false"
-                                              size="sm" class=" mb-n1" variant="outline-secondary">
-                                        Сховати
-                                    </b-button>
-                                </div>
-                            </div>
+                    <div>
+                        <b-button v-if="!loadStatements"
+                                  class=""
+                                  size="sm" variant="outline-secondary"
+                                  @click="onLoadStatements">
+                            Завантажити відомості
+                        </b-button>
 
-                            <b-row v-if="!loadStatements" class="text-center m-2">
-                                <b-col>
-                                    <b-button variant="outline-secondary"
-                                              @click="onLoadStatements">
-                                        Завантажити відомості
-                                    </b-button>
-                                </b-col>
-                            </b-row>
+                        <b-button v-else
+                                  @click="loadStatements = false"
+                                  size="sm" class=" mb-n1" variant="outline-secondary">
+                            Сховати
+                        </b-button>
+                    </div>
+                </div>
 
-                            <div v-else class="py-2">
-                                <statements-table :statements="statements"
-                                                  :loading="loadingStatements"></statements-table>
-                            </div>
-                            <b-pagination
-                                v-if="loadStatements && !loadingStatements"
-                                v-model="statementsPagination.currentPage"
-                                :total-rows="statementsPagination.totalElements"
-                                :per-page="statementsPagination.perPage"
-                                first-number
-                                last-number
-                                align="center"
-                                @change="(e) => $emit('change', e)"
-                            ></b-pagination>
-                        </b-col>
-                    </b-row>
+                <div v-show="loadStatements" class="py-2">
+                    <statements-table :statements="statements"
+                                      :loading="loadingStatements"></statements-table>
+                    <b-pagination
+                        v-if="loadStatements && !loadingStatements"
+                        v-model="statementsPagination.currentPage"
+                        :total-rows="statementsPagination.totalElements"
+                        :per-page="statementsPagination.perPage"
+                        first-number
+                        last-number
+                        align="center"
+                        @change="(e) => $emit('change', e)"
+                    ></b-pagination>
+                </div>
 
-                    <hr>
+            </b-col>
+        </b-row>
 
-                    <b-row class="mt-4">
-                        <b-col>
-                            <div class="mb-2">
-                                <h4 class="d-inline-block align-middle mb-0">
-                                <span v-b-tooltip.right
-                                      title='Всі бігунці, в яких є даний студент'>
-                                Бігунці
-                                </span>
-                                </h4>
-                                <b-button v-show="loadBiguntsi"
-                                          @click="loadBiguntsi = false"
-                                          size="sm" class="float-right" variant="outline-secondary">Сховати
-                                </b-button>
-                            </div>
+<!--        <hr>-->
 
-                            <b-row v-if="!loadBiguntsi" class="text-center mt-2">
-                                <b-col>
-                                    <b-button variant="outline-secondary"
-                                              @click="onLoadBiguntsi">
-                                        Завантажити бігунці
-                                    </b-button>
-                                </b-col>
-                            </b-row>
-                            <bigunets-table v-else
-                                            :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
-                            <b-pagination
-                                v-if="loadBiguntsi && !loadingBiguntsi"
-                                v-model="biguntsiPagination.currentPage"
-                                :total-rows="biguntsiPagination.totalElements"
-                                :per-page="biguntsiPagination.perPage"
-                                first-number
-                                last-number
-                                align="center"
-                                @change="(e) => $emit('change', e)"
-                            ></b-pagination>
-                        </b-col>
-                    </b-row>
+        <b-row class="mt-3">
+            <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
+                    <h4 class="d-inline-block align-middle mb-0">
+                                    <span v-b-tooltip.right
+                                          title='Всі бігунці, в яких є даний студент'>
+                                    Бігунці
+                                    </span>
+                    </h4>
 
-                    <hr>
+                    <b-button v-if="!loadBiguntsi"
+                              size="sm" variant="outline-secondary"
+                              @click="onLoadBiguntsi">
+                        Завантажити бігунці
+                    </b-button>
+                    <b-button v-else
+                              @click="loadBiguntsi = false"
+                              size="sm" class="float-right" variant="outline-secondary">Сховати
+                    </b-button>
+                </div>
+
+                <div v-show="loadBiguntsi">
+                    <bigunets-table v-show="loadBiguntsi"
+                                    :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
+                    <b-pagination
+                        v-if="loadBiguntsi && !loadingBiguntsi"
+                        v-model="biguntsiPagination.currentPage"
+                        :total-rows="biguntsiPagination.totalElements"
+                        :per-page="biguntsiPagination.perPage"
+                        first-number
+                        last-number
+                        align="center"
+                        @change="(e) => $emit('change', e)"
+                    ></b-pagination>
                 </div>
             </b-col>
         </b-row>
+
+        <hr>
+        <!--        </div>-->
+
     </div>
 </template>
 
@@ -121,6 +121,7 @@ export default {
                 {
                     statement_no: 2222222,
                     tutor: "Черкасов Дмитро Іванович",
+                    subject: 'Технології сучасних дата - центрів',
                     group: "1",
                     control_type: "екзамен",
                     present_count: 30,

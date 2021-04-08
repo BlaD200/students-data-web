@@ -32,42 +32,43 @@
                         </b-row>
                     </b-col>
                 </b-row>
-
-                <hr>
             </div>
 
-            <b-row>
-                <b-col class="mx-md-3 p-md-0 border-top">
-                    <b-row>
-                        <b-col md="auto" lg="4" class="pr-0">
-                            <filter-layout class="" @applyFilters="$emit('applyFilters')">
-                                <div slot="filters">
-                                    <slot name="filters"></slot>
+            <b-row class="mt-3">
+                <b-col class="mx-md-3 p-md-0">
+                    <div class="border-top">
+                        <b-row>
+                            <b-col md="auto" lg="4" class="pr-0">
+                                <filter-layout class="" @applyFilters="$emit('applyFilters')">
+                                    <div slot="filters">
+                                        <slot name="filters"></slot>
+                                    </div>
+                                </filter-layout>
+                            </b-col>
+
+                            <b-col class="pl-md-0">
+                                <div>
+                                    <slot name="content"></slot>
                                 </div>
-                            </filter-layout>
-                        </b-col>
 
-                        <b-col class="pl-md-0">
-                            <div>
-                                <slot name="content"></slot>
-                            </div>
+                                <hr>
 
-                            <hr>
+                                <div v-show="showPagination">
+                                    <b-pagination
+                                        v-model="pagination.currentPage"
+                                        :total-rows="rows"
+                                        :per-page="perPage"
+                                        :aria-controls="controls"
+                                        first-number
+                                        last-number
+                                        align="center"
+                                        @change="(e) => $emit('change', e)"
+                                    ></b-pagination>
+                                </div>
+                            </b-col>
+                        </b-row>
+                    </div>
 
-                            <div v-show="showPagination">
-                                <b-pagination
-                                    v-model="pagination.currentPage"
-                                    :total-rows="rows"
-                                    :per-page="perPage"
-                                    :aria-controls="controls"
-                                    first-number
-                                    last-number
-                                    align="center"
-                                    @change="(e) => $emit('change', e)"
-                                ></b-pagination>
-                            </div>
-                        </b-col>
-                    </b-row>
                 </b-col>
             </b-row>
         </div>
