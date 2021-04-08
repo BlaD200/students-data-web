@@ -29,17 +29,17 @@
                             ><u>{{ statementHeader.faculty || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Рік навчання
                             <span class="statement-info-uncommon"
-                                  :class="String(headerErrors.courseErrorText) ? 'text-danger' : ''"
+                                  :class="headerErrors.courseErrorText  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='String(headerErrors.courseErrorText)'
-                                  :disabled='!String(headerErrors.courseErrorText)'
+                                  :title='headerErrors.courseErrorText'
+                                  :disabled='(headerErrors.courseErrorText === null)'
                             ><u>{{ statementHeader.course || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Група
                             <span class="statement-info-uncommon font"
-                                  :class="String(headerErrors.groupErrorText) ? 'text-danger' : ''"
+                                  :class="headerErrors.groupErrorText  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='String(headerErrors.groupErrorText)'
-                                  :disabled='!String(headerErrors.groupErrorText)'
+                                  :title='headerErrors.groupErrorText'
+                                  :disabled='headerErrors.groupErrorText === null'
                             ><b>{{ statementHeader.group || "&#95;&#95;&#95;&#95;" }}</b></span>
                         </h6>
                         <h6 class="statement-info-common">
@@ -124,29 +124,29 @@
                         <h6 class="statement-info-common">
                             Кількість студентів на екзамені / тезі / заліку
                             <span class="statement-info-uncommon font"
-                                  :class="String(footerErrors.presentCountErrorText) ? 'text-danger' : ''"
+                                  :class="footerErrors.presentCountErrorText  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='String(footerErrors.presentCountErrorText)'
-                                  :disabled='!String(footerErrors.presentCountErrorText)'
-                            ><u>{{ String(statementFooter.presentCount) || "&#95;&#95;&#95;&#95;" }}</u></span>
+                                  :title='footerErrors.presentCountErrorText'
+                                  :disabled='footerErrors.presentCountErrorText === null'
+                            ><u>{{ statementFooter.presentCount || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Кількість студентів, які не з’явились на екзамен / тезу / залік
                             <span class="statement-info-uncommon font"
-                                  :class="String(footerErrors.absentCountErrorText) ? 'text-danger' : ''"
+                                  :class="footerErrors.absentCountErrorText  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='String(footerErrors.absentCountErrorText)'
-                                  :disabled='!String(footerErrors.absentCountErrorText)'
-                            ><u>{{ String(statementFooter.absentCount) || "&#95;&#95;&#95;&#95;" }}</u></span>
+                                  :title='footerErrors.absentCountErrorText'
+                                  :disabled='footerErrors.absentCountErrorText === null'
+                            ><u>{{ statementFooter.absentCount || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Кількість студентів, недопущених до екзамену / тези / заліку
                             <span class="statement-info-uncommon font"
-                                  :class="String(footerErrors.rejectedCountErrorText) ? 'text-danger' : ''"
+                                  :class="footerErrors.rejectedCountErrorText  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='String(footerErrors.rejectedCountErrorText)'
-                                  :disabled='!String(footerErrors.rejectedCountErrorText)'
-                            ><u>{{ String(statementFooter.rejectedCount) || "&#95;&#95;&#95;&#95;" }}</u></span>
+                                  :title='footerErrors.rejectedCountErrorText'
+                                  :disabled='footerErrors.rejectedCountErrorText === null'
+                            ><u>{{ statementFooter.rejectedCount || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                     </b-col>
                 </b-row>
@@ -225,32 +225,32 @@ export default {
             studentsLoading: false,
 
             headerErrors: {
-                eduLevelErrorText: 'Відсутній освітній рівень',
-                facultyErrorText: 'Факультет інформатики',
-                courseErrorText: 0,
-                groupErrorText: 0,
-                subjectNameErrorText: 'Технології сучасних дата - центрів',
-                semesterErrorText: '6д',
-                creditNumberErrorText: '?',
-                controlTypeErrorText: 'екзамен',
-                examDateErrorText: '2021-05-24',
-                tutorFullNameErrorText: 'Черкасов Дмитро Іванович',
-                tutorPositionErrorText: 'старший викладач',
-                tutorAcademicStatusErrorText: 'кандидат технічних наук'
+                eduLevelErrorText: null,//'Відсутній освітній рівень',
+                facultyErrorText: null,//'Факультет інформатики',
+                courseErrorText: null,//0,
+                groupErrorText: null,//0,
+                subjectNameErrorText: null,//'Технології сучасних дата - центрів',
+                semesterErrorText: null,//'6д',
+                creditNumberErrorText: null,//'?',
+                controlTypeErrorText: null,//'екзамен',
+                examDateErrorText: null,//'2021-05-24',
+                tutorFullNameErrorText: null,//'Черкасов Дмитро Іванович',
+                tutorPositionErrorText: null,//'старший викладач',
+                tutorAcademicStatusErrorText: null,//'кандидат технічних наук'
             },
             studentErrors: {
-                23: {
-                    totalGradeError: 'Не вказано суму балів'
-                },
-                25: {
-                    studentRecordBookError: 'Відсутній номер залікової книжки',
-                    totalGradeError: 'Не вказано суму балів'
-                }
+                // 23: {
+                //     totalGradeError: 'Не вказано суму балів'
+                // },
+                // 25: {
+                //     studentRecordBookError: 'Відсутній номер залікової книжки',
+                //     totalGradeError: 'Не вказано суму балів'
+                // }
             },
             footerErrors: {
-                presentCountErrorText: 6,
-                absentCountErrorText: 0,
-                rejectedCountErrorText: 0
+                presentCountErrorText: null, //6,
+                absentCountErrorText: null, //0,
+                rejectedCountErrorText: null, //0
             }
         }
     },

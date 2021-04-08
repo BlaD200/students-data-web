@@ -40,7 +40,6 @@
                     >
                         <b-button
                             variant="outline-success"
-                            size="lg"
                             :disabled="myFiles.length === 0"
                             @click="loadData"
                         >

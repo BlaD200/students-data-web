@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-navbar class="fixed-top" toggleable="lg" type="dark" variant="dark">
-            <router-link :to="{name: 'Home'}" class="navbar-brand">Students data</router-link>
+            <router-link :to="{name: 'Home'}" class="navbar-brand">Менеджер відомостей</router-link>
 
             <b-navbar-nav class="ml-auto float-right" v-if="!$root.currentUser.username">
                 <b-nav-item class="ml-auto"

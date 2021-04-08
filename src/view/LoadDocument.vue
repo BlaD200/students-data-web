@@ -25,64 +25,50 @@
 
         <statement v-show="loadedExample" class="mt-2" id="22222"></statement>
 
-        <b-row class="justify-content-center" v-show="loadedExample">
-            <b-col cols="12" md="8">
-                <b-row v-show="handledErrors.length > 0">
-                    <b-col>
-                        <div class="py-2 pl-1 border border-warning rounded">
-                            <ul class="m-0">
-                                <li
-                                    v-for="error in handledErrors"
-                                    :key="handledErrors.indexOf(error)">
-                                    <document-error
-                                        :error-text="error"
-                                    ></document-error>
-                                </li>
-                            </ul>
-                        </div>
-                    </b-col>
-                </b-row>
-
-                <br>
-
-                <b-row v-show="unhandledErrors.length > 0">
-                    <b-col>
-                        <div class="py-2 pl-1 border border-danger rounded">
-                            <ul class="m-0">
-                                <li
-                                    v-for="error in unhandledErrors"
-                                    :key="unhandledErrors.indexOf(error)">
-                                    <document-error
-                                        :error-text="error"
-                                    ></document-error>
-                                </li>
-                            </ul>
-                        </div>
-                    </b-col>
-                </b-row>
-
-                <b-row class="float-right" v-show="errors">
-                    <b-col>
+        <b-row class="mt-2 mb-5 justify-content-center" v-show="loadedExample">
+            <b-col cols="12" lg="10" class="bg-white shadow rounded-lg">
+                <b-row class="text-center" v-show="loadedExample">
+                    <b-col class="p-2 mt-2">
                         <div>
-                            <span class="d-inline-block" tabindex="0"
-                                  v-b-tooltip.left
-                                  title="There're some errors, that couldn't be fixed automatically.">
+                            <span tabindex="0"
+                                  v-b-tooltip.v-warning.right
+                                  :title="saveButtonTooltipTitle">
                                 <b-button
                                     id="fix-button"
-                                    class="m-2"
-                                    :disabled="unhandledErrors.length > 0"
-                                    @click="fixErrors"
+                                    size="lg"
+                                    variant="success"
+                                    :disabled="isErrors || !dataAccepted"
+                                    @click="saveData"
                                 >
-                                Fix automatically
+                                Зберегти відомість
                                 </b-button>
                             </span>
                         </div>
                     </b-col>
                 </b-row>
 
+                <b-row class="justify-content-center" v-show="loadedExample">
+                    <b-col lg="10" class="px-2 pt-0 mb-2">
+                        <div class="text-center">
+                            <b-form-checkbox
+                                id="checkbox-1"
+                                v-model="dataAccepted"
+                                :disabled="isErrors"
+                                name="checkbox-1"
+                            >
+                                <span v-if="isErrors"
+                                      class="d-block" tabindex="0"
+                                      v-b-tooltip.top
+                                      :title="fixErrorsMessage"
+                                >
+                                  Дані мною перевірені, їх коректність підтверджую
+                                </span>
+                                <span v-else>Дані мною перевірені, їх коректність підтверджую</span>
+                            </b-form-checkbox>
+                        </div>
+                    </b-col>
+                </b-row>
             </b-col>
-
-
         </b-row>
     </div>
 
@@ -90,42 +76,47 @@
 
 <script>
 import DocumentLoader from "@/components/DocumentLoader";
-import DocumentError from "@/components/DocumentError";
 import Statement from "@/view/Statement";
 
 export default {
     name: "LoadDocument",
     components: {
-        DocumentLoader, DocumentError, Statement
+        DocumentLoader, Statement
     },
     data() {
         return {
             loadedExample: false,
-            handledErrors: [
-                "не вказано науковий ступінь викладача",
-                "не вказано суму балів ",
-                "не вказано кількість студентів, що не з’явилися",
-                "невідповідність ЄКТС оцінки"
-            ],
-            unhandledErrors: [
-                "неповна\\відсутня дата",
-                "відсутні бали за роботу в семестрі студента",
-                "відсутній номер відомості"
-            ]
+            dataAccepted: false
         };
     },
     methods: {
         onDocumentLoad() {
             this.loadedExample = true;
         },
-        fixErrors() {
-            this.handledErrors = []
-            this.unhandledErrors = []
+        saveData() {
         }
     },
     computed: {
-        errors() {
-            return this.handledErrors.length > 0 || this.unhandledErrors.length > 0
+        isErrors() {
+            for (let statementErrorBlock of
+                [Statement.data().headerErrors, Statement.data().studentErrors, Statement.data().footerErrors]) {
+                console.log(statementErrorBlock)
+                for (let key in statementErrorBlock) {
+                    if (statementErrorBlock[key] !== null)
+                        return true;
+                }
+            }
+            return false
+        },
+        fixErrorsMessage() {
+            return 'Спочатку необхідно виправити всі помилки'
+        },
+        saveButtonTooltipTitle() {
+            if (this.isErrors)
+                return this.fixErrorsMessage
+            else if (!this.dataAccepted)
+                return 'Підтвердіть, що ви перевірили дані'
+            return ''
         }
     }
 }
