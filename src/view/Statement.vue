@@ -1,10 +1,10 @@
 <template>
     <div>
-        <b-row class="p-2 justify-content-center">
-            <b-col class="bg-white shadow rounded-lg" sm="12" lg="10">
+        <b-row class="justify-content-center">
+            <b-col class="bg-white shadow rounded-lg" cols="12" lg="10">
                 <b-row class="mt-4 mb-3">
                     <b-col>
-                        <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{ $route.params.id }}</b></h5>
+                        <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{ id }}</b></h5>
                     </b-col>
                 </b-row>
 
@@ -22,7 +22,9 @@
                             Група <span class="statement-info-uncommon"><b>{{ statementHeader.group }}</b></span>
                         </h6>
                         <h6 class="statement-info-common">
-                            Дисципліна <span class="statement-info-uncommon"><u>{{ statementHeader.subjectName }}</u></span>
+                            Дисципліна <span class="statement-info-uncommon"><u>{{
+                                statementHeader.subjectName
+                            }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Семестр <span class="statement-info-uncommon"><u>{{ statementHeader.semester }}</u></span>
@@ -84,6 +86,12 @@ import StatementStudentsTable from "@/components/tables/StatementStudentsTable";
 export default {
     name: "Statement",
     components: {StatementStudentsTable},
+    props: {
+      id: {
+          type: String,
+          required: true
+      }
+    },
     data() {
         return {
             statementHeader: {
@@ -116,31 +124,26 @@ export default {
                     totalGrade: 90,
                     nationalGrade: "Добре",
                     ectsGrade: 'B'
-                }, {
-                    "studentCode": 3,
-                    "studentSurname": "Євтушенко",
-                    "studentName": "Ігор",
-                    "studentPatronymic": "Олегович",
-                    "studentRecordBook": "83921"
-                }, {
-                    "studentCode": 7,
-                    "studentSurname": "Залізний",
-                    "studentName": "Антон",
-                    "studentPatronymic": "Вячеславович",
-                    "studentRecordBook": "32432"
-                }, {
-                    "studentCode": 8,
-                    "studentSurname": "Іванюк",
-                    "studentName": "Назар",
-                    "studentPatronymic": "Олександрович",
-                    "studentRecordBook": "34123"
-                }, {
-                    "studentCode": 6,
-                    "studentSurname": "Крейдун",
-                    "studentName": "Андрій",
-                    "studentPatronymic": "Миколайович",
-                    "studentRecordBook": "33122"
-                }],
+                },
+                {
+                    studentPIB: "Бойчук Олег Романович",
+                    studentNo: "І 303/10бп",
+                    semesterGrade: 60,
+                    controlGrade: 30,
+                    totalGrade: 90,
+                    nationalGrade: "Добре",
+                    ectsGrade: 'B'
+                },
+                {
+                    studentPIB: "Бойчук Олег Романович",
+                    studentNo: "І 303/10бп",
+                    semesterGrade: 60,
+                    controlGrade: 30,
+                    totalGrade: 90,
+                    nationalGrade: "Добре",
+                    ectsGrade: 'B'
+                },
+            ],
             studentsLoading: false
         }
     },

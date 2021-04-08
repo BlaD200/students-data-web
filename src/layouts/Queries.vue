@@ -36,7 +36,7 @@
                 <hr>
             </div>
 
-            <b-row id="row1">
+            <b-row>
                 <b-col class="mx-md-3 p-md-0 border-top">
                     <b-row>
                         <b-col md="auto" lg="4" class="pr-0">

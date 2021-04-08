@@ -15,7 +15,7 @@
 
             <tbody>
 
-            <tr :key="student.studentCode" v-for="student in students"
+            <tr :key="student.studentRecordBook" v-for="student in students"
                 @click="$router.push({name: 'Student', params: {id: student.studentRecordBook}})" style="cursor: pointer;">
                     <th>{{ student.studentRecordBook }}</th>
                     <td>{{ student.studentSurname }}</td>

@@ -1,28 +1,32 @@
 <template>
     <div>
-        <h2>Document loading</h2>
+        <b-row class="mb-3 justify-content-center">
+            <b-col cols="12" lg="10" class="p-2 bg-white shadow-sm">
+                <h2 class="text-center">Завантажити документ</h2>
+            </b-col>
+        </b-row>
 
-        <br>
-
-        <div>
-            <b-card no-body>
-                <b-tabs justified>
+        <b-row class="justify-content-center">
+            <b-col cols="12" lg="10" class="bg-white shadow rounded-lg p-0">
+                <b-tabs justified card pills class="">
                     <b-tab title="Відомість">
-                        <document-loader v-on:loadedExample="onDocumentLoad"></document-loader>
+                        <document-loader document-name="відомість"
+                                         load-url="statement/load"
+                                         v-on:loadedExample="onDocumentLoad"></document-loader>
                     </b-tab>
-                    <b-tab title="Бігунець" title-link-class="text-warning">
-                        <document-loader v-on:loadedExample="onDocumentLoad"></document-loader>
+                    <b-tab title="Бігунець" title-link-class="">
+                        <document-loader document-name="бігунець"
+                                         load-url="bigunets/load"
+                                         v-on:loadedExample="onDocumentLoad"></document-loader>
                     </b-tab>
                 </b-tabs>
-            </b-card>
-        </div>
+            </b-col>
+        </b-row>
 
-        <br>
+        <statement v-show="false" class="mt-2" id="22222"></statement>
 
         <b-row class="justify-content-center" v-show="loadedExample">
             <b-col cols="12" md="8">
-                <hr>
-
                 <b-row v-show="handledErrors.length > 0">
                     <b-col>
                         <div class="py-2 pl-1 border border-warning rounded">
@@ -72,10 +76,7 @@
                                 Fix automatically
                                 </b-button>
                             </span>
-
                         </div>
-
-
                     </b-col>
                 </b-row>
 
@@ -90,11 +91,12 @@
 <script>
 import DocumentLoader from "@/components/DocumentLoader";
 import DocumentError from "@/components/DocumentError";
+import Statement from "@/view/Statement";
 
 export default {
     name: "LoadDocument",
     components: {
-        DocumentLoader, DocumentError
+        DocumentLoader, DocumentError, Statement
     },
     data() {
         return {

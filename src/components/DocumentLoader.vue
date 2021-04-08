@@ -2,21 +2,32 @@
     <b-row class="justify-content-md-center">
 
         <b-col cols="12" md="8">
-            <hr>
-
             <b-row>
                 <b-col>
                     <!--                    v-on:processfile="handleFilePondLoad"-->
                     <file-pond
                         id="file-upload"
-                        name="file"
                         ref="pond"
+                        name="file"
+                        label-idle='
+
+                            <div class="d-inline-block mr-md-2" style="height: 36px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-file-earmark-arrow-up-fill" viewBox="0 0 16 16">
+                                    <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707L6.354 9.854z"/>
+                                </svg>
+                            </div>
+                            <div class="d-inline-block align-middle" >
+                                Перетягніть сюди файл або <span class="filepond--label-action"> Оберіть </span>
+                            </div>'
+                                                allow-brouse="true"
                         :allow-multiple="false"
                         :max-files="1"
                         accepted-file-types="application/pdf"
                         v-bind:files="myFiles"
                         v-on:addfile="handleFilePondLoad"
-                    />
+                    >
+
+                    </file-pond>
                 </b-col>
             </b-row>
 
@@ -25,7 +36,7 @@
                 <b-col cols="12" md="8" class="text-center my-2">
                     <span class="d-inline-block" tabindex="0"
                           v-b-tooltip.hover.top
-                          :title="myFiles.length === 0 ? 'Upload file/s first' : ''"
+                          :title="myFiles.length === 0 ? 'Спочатку виберіть документ' : ''"
                     >
                         <b-button
                             variant="outline-success"
@@ -33,7 +44,7 @@
                             :disabled="myFiles.length === 0"
                             @click="loadData"
                         >
-                        Load students' data
+                        Завантажити {{ documentName }}
                         </b-button>
                     </span>
                 </b-col>
@@ -62,7 +73,7 @@ const FilePond = vueFilePond(FilePondPluginFileValidateType);
 
 const axios = require('axios');
 const instance = axios.create({
-    baseURL: 'http://localhost:9000/algorithm/'
+    baseURL: 'http://localhost:9000/api/'
 });
 
 // const FileSaver = require('file-saver');
@@ -71,6 +82,16 @@ export default {
     name: "document-loader",
     components: {
         FilePond
+    },
+    props: {
+        documentName: {
+            type: String,
+            required: true
+        },
+        loadUrl: {
+            type: String,
+            required: true
+        }
     },
     data() {
         return {
@@ -95,7 +116,7 @@ export default {
             this.loading = true;
             this.$refs.pond.removeFiles();
             this.myFiles = this.$refs.pond.getFiles();
-            instance.get("/start", {
+            instance.get(`/${this.loadUrl}`, {
                 params: {},
                 responseType: 'blob'
             }).then(response => {
@@ -180,6 +201,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.filepond--panel-root {
+    background-color: #f0f4fe;
+    border: 2px dashed #6e8eda;
+}
+
+/* the text color of the drop label*/
+.filepond--drop-label label {
+    color: #406cd2;
+    font-weight: 500!important;
+}
+
+.filepond--label-action {
+    color: #343a40;
+    text-decoration-color: inherit;
+}
+
+.filepond--label-action:hover {
+    color: #6c757d;
+}
 
 </style>

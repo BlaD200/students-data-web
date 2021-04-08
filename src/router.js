@@ -39,6 +39,7 @@ export default new Router({
         {
             path: '/statement/:id',
             name: 'Statement',
+            props: true,
             component: () => import("@/view/Statement")
         }
     ]
