@@ -22,7 +22,7 @@ export default {
         signOut() {
             localStorage.setItem("currentUser", "")
             localStorage.setItem("authorizationToken", "")
-            console.log()
+            console.log("singed out")
             if (this.$route.path === '/')
                 this.$router.go(0)
             else {

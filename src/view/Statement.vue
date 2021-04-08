@@ -270,13 +270,6 @@ export default {
     },
     methods: {},
     computed: {
-        tutorFullInfo() {
-            return (
-                `${this.statementHeader.tutorFullName}
-                ${this.statementHeader.tutorAcademicStatus ? `${this.statementHeader.tutorAcademicStatus},` : ''}
-                ${this.statementHeader.tutorPosition}`
-            )
-        }
     }
 }
 </script>

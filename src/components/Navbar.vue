@@ -46,7 +46,7 @@
                         <template v-slot:button-content>
                             <b>{{ $root.currentUser.username }}</b>
                         </template>
-                        <b-dropdown-item @click="$emit('sign-out')">Sign Out</b-dropdown-item>
+                        <b-dropdown-item @click="$emit('signOut')">Sign Out</b-dropdown-item>
                     </b-nav-item-dropdown>
                 </b-navbar-nav>
             </b-collapse>
