@@ -24,16 +24,16 @@
             <tbody>
 
             <tr class="text-center"
-                :key="statement.statement_no" v-for="statement in statements"
-                @click="$router.push({name: 'Statement', params: {id: `${statement.statement_no}`}})"
+                :key="statement.statementNo" v-for="statement in statements"
+                @click="$router.push({name: 'Statement', params: {id: `${statement.statementNo}`}})"
                 style="cursor: pointer;">
-                <th>{{ statement.statement_no }}</th>
+                <th>{{ statement.statementNo }}</th>
                 <td>{{ statement.tutor }}</td>
                 <td>{{ statement.subject }}</td>
                 <td>{{ statement.group }}</td>
-                <td>{{ statement.control_type }}</td>
+                <td>{{ statement.controlType }}</td>
                 <td>{{ studentsCount(statement) }}</td>
-                <td>{{ statement.exam_date }}</td>
+                <td>{{ statement.examDate }}</td>
             </tr>
             </tbody>
         </table>
@@ -63,7 +63,7 @@ export default {
     },
     methods: {
         studentsCount(statement) {
-            return `${statement.present_count} / ${statement.absent_count} / ${statement.rejected_count}`
+            return `${statement.presentCount} / ${statement.absentCount} / ${statement.rejectedCount}`
         }
     }
 }

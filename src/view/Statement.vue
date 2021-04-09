@@ -242,10 +242,10 @@ export default {
                 // 23: {
                 //     totalGradeError: 'Не вказано суму балів'
                 // },
-                // 25: {
-                //     studentRecordBookError: 'Відсутній номер залікової книжки',
-                //     totalGradeError: 'Не вказано суму балів'
-                // }
+                25: {
+                    studentRecordBookError: 'Відсутній номер залікової книжки',
+                    totalGradeError: 'Не вказано суму балів'
+                }
             },
             footerErrors: {
                 presentCountErrorText: null, //6,

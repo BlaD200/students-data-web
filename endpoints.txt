@@ -12,9 +12,9 @@
         totalPages: int
     }
 
-/api/statement/?{statement_no}
+/api/statement/?{statementNo}
     => statement
-/api/statement/?{statement_no}/students
+/api/statement/?{statementNo}/students
     => {
        data: [...StatementStudents],
        totalPages: int

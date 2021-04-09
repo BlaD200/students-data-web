@@ -119,15 +119,15 @@ export default {
             loadingStatements: false,
             statements: [
                 {
-                    statement_no: 2222222,
+                    statementNo: 2222222,
                     tutor: "Черкасов Дмитро Іванович",
                     subject: 'Технології сучасних дата - центрів',
                     group: "1",
-                    control_type: "екзамен",
-                    present_count: 30,
-                    absent_count: 2,
-                    rejected_count: 0,
-                    exam_date: "2021-05-25"
+                    controlType: "екзамен",
+                    presentCount: 30,
+                    absentCount: 2,
+                    rejectedCount: 0,
+                    examDate: "2021-05-25"
                 }],
             statementsPagination: {
                 currentPage: 1,
@@ -139,19 +139,19 @@ export default {
             loadingBiguntsi: false,
             biguntsi: [
                 {
-                    statement_no: 2222222,
+                    statementNo: 2222222,
                     tutor: "Черкасов Дмитро Іванович",
-                    control_type: "екзамен",
-                    postp_reason: "хвороба",
-                    exam_date: "2021-05-25",
-                    valid_until: "2021-05-24"
+                    controlType: "екзамен",
+                    postponeReason: "хвороба",
+                    examDate: "2021-05-25",
+                    validUntil: "2021-05-24"
                 }, {
-                    statement_no: 2222222,
+                    statementNo: 2222222,
                     tutor: "Черкасов Дмитро Іванович",
-                    control_type: "екзамен",
-                    postp_reason: "",
-                    exam_date: "2021-05-25",
-                    valid_until: null
+                    controlType: "екзамен",
+                    postponeReason: "",
+                    examDate: "2021-05-25",
+                    validUntil: null
                 }
             ],
             biguntsiPagination: {

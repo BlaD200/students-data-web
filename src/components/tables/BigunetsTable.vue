@@ -19,16 +19,16 @@
             <tbody>
 
             <tr class="text-center"
-                :key="statement.statement_no" v-for="statement in statements"
-                @click="$router.push({name: 'Statement', params: {id: `${statement.statement_no}`}})"
+                :key="statement.statementNo" v-for="statement in statements"
+                @click="$router.push({name: 'Statement', params: {id: `${statement.statementNo}`}})"
                 style="cursor: pointer;">
-                <th>{{ statement.statement_no }}</th>
+                <th>{{ statement.statementNo }}</th>
                 <td>{{ statement.tutor }}</td>
                 <td>{{ statement.subject }}</td>
-                <td>{{ statement.control_type }}</td>
-                <td>{{ statement.postp_reason ? statement.postp_reason : "&#8212;" }}</td>
-                <td>{{ statement.exam_date }}</td>
-                <td>{{ statement.valid_until ? statement.valid_until : "&#8212;" }}</td>
+                <td>{{ statement.controlType }}</td>
+                <td>{{ statement.postponeReason ? statement.postponeReason : "&#8212;" }}</td>
+                <td>{{ statement.examDate }}</td>
+                <td>{{ statement.validUntil ? statement.validUntil : "&#8212;" }}</td>
             </tr>
             </tbody>
         </table>
@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         validUntil(statement) {
-            return statement.valid_until ? statement.valid_until : "&#8212;"
+            return statement.validUntil ? statement.validUntil : "&#8212;"
         }
     }
 }
