@@ -1,102 +1,133 @@
 <template>
     <div class="m-2">
+
         <b-row>
             <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
-                <h2 class="mb-0 m-1">
-                    {{ student.studentSurname }} {{ student.studentName }} {{ student.studentPatronymic }}
-                </h2>
+                <b-row>
+                    <b-col>
+                        <b-form-group
+                            id="fieldset-1"
+                            description="Почніть вводити прізвіще ім`я або по-батькові студента"
+                            label="Пошук студента за ПІБ"
+                            label-for="student-search"
+                            invalid-feedback="Введіть щонайменше 4 символи"
+                            :state="searchValid"
+                        >
+                            <b-input-group class="mb-2">
+                                <b-input-group-prepend is-text>
+                                    <b-icon icon="search"></b-icon>
+                                </b-input-group-prepend>
+                                <b-form-input id="student-search"
+                                              v-model="studentSearchPIB"
+                                              @input="showStudents"
+                                              :state="searchValid"
+                                              placeholder="Введіть ПІБ студента"></b-form-input>
+                            </b-input-group>
+                        </b-form-group>
+                    </b-col>
+                </b-row>
+                <b-row v-show="searchValid" class="my-2">
+                    <b-col>
+                        <studentTable :students="students" :loading="studentsLoading"
+                                      @studentTableRowClicked="studentIdChosen = $event"
+                        ></studentTable>
+                    </b-col>
+                </b-row>
             </b-col>
         </b-row>
 
-<!--        <hr>-->
+        <div v-show="showStudentDetails">
+            <b-row class="mt-3">
+                <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                    <h2 class="mb-0 m-1">
+                        {{ studentFullName }}
+                    </h2>
+                </b-col>
+            </b-row>
 
-        <!--        <div class="px-2 mt-4 ">-->
-        <b-row class="mt-3">
-            <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
-                <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
-                    <h4 class=" align-middle mb-0">
+            <b-row class="mt-3">
+                <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                    <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
+                        <h4 class=" align-middle mb-0">
                                     <span v-b-tooltip.right
                                           title='Всі відомості, в яких є даний студент'>
                                     Відомості
                                     </span>
-                    </h4>
+                        </h4>
 
-                    <div>
-                        <b-button v-if="!loadStatements"
-                                  class=""
-                                  size="sm" variant="outline-secondary"
-                                  @click="onLoadStatements">
-                            Завантажити відомості
-                        </b-button>
+                        <div>
+                            <b-button v-if="!loadStatements"
+                                      class=""
+                                      size="sm" variant="outline-secondary"
+                                      @click="onLoadStatements">
+                                Завантажити відомості
+                            </b-button>
 
-                        <b-button v-else
-                                  @click="loadStatements = false"
-                                  size="sm" class=" mb-n1" variant="outline-secondary">
-                            Сховати
-                        </b-button>
+                            <b-button v-else
+                                      @click="loadStatements = false"
+                                      size="sm" class=" mb-n1" variant="outline-secondary">
+                                Сховати
+                            </b-button>
+                        </div>
                     </div>
-                </div>
 
-                <div v-show="loadStatements" class="py-2">
-                    <statements-table :statements="statements"
-                                      :loading="loadingStatements"></statements-table>
-                    <b-pagination
-                        v-if="loadStatements && !loadingStatements"
-                        v-model="statementsPagination.currentPage"
-                        :total-rows="statementsPagination.totalElements"
-                        :per-page="statementsPagination.perPage"
-                        first-number
-                        last-number
-                        align="center"
-                        @change="(e) => $emit('change', e)"
-                    ></b-pagination>
-                </div>
+                    <div v-show="loadStatements" class="py-2">
+                        <statements-table :statements="statements"
+                                          :loading="loadingStatements"></statements-table>
+                        <b-pagination
+                            v-if="loadStatements && !loadingStatements"
+                            v-model="statementsPagination.currentPage"
+                            :total-rows="statementsPagination.totalElements"
+                            :per-page="statementsPagination.perPage"
+                            first-number
+                            last-number
+                            align="center"
+                            @change="(e) => $emit('change', e)"
+                        ></b-pagination>
+                    </div>
 
-            </b-col>
-        </b-row>
+                </b-col>
+            </b-row>
 
-<!--        <hr>-->
-
-        <b-row class="mt-3">
-            <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
-                <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
-                    <h4 class="d-inline-block align-middle mb-0">
+            <b-row class="mt-3">
+                <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                    <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
+                        <h4 class="d-inline-block align-middle mb-0">
                                     <span v-b-tooltip.right
                                           title='Всі бігунці, в яких є даний студент'>
                                     Бігунці
                                     </span>
-                    </h4>
+                        </h4>
 
-                    <b-button v-if="!loadBiguntsi"
-                              size="sm" variant="outline-secondary"
-                              @click="onLoadBiguntsi">
-                        Завантажити бігунці
-                    </b-button>
-                    <b-button v-else
-                              @click="loadBiguntsi = false"
-                              size="sm" class="float-right" variant="outline-secondary">Сховати
-                    </b-button>
-                </div>
+                        <b-button v-if="!loadBiguntsi"
+                                  size="sm" variant="outline-secondary"
+                                  @click="onLoadBiguntsi">
+                            Завантажити бігунці
+                        </b-button>
+                        <b-button v-else
+                                  @click="loadBiguntsi = false"
+                                  size="sm" class="float-right" variant="outline-secondary">Сховати
+                        </b-button>
+                    </div>
 
-                <div v-show="loadBiguntsi">
-                    <bigunets-table v-show="loadBiguntsi"
-                                    :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
-                    <b-pagination
-                        v-if="loadBiguntsi && !loadingBiguntsi"
-                        v-model="biguntsiPagination.currentPage"
-                        :total-rows="biguntsiPagination.totalElements"
-                        :per-page="biguntsiPagination.perPage"
-                        first-number
-                        last-number
-                        align="center"
-                        @change="(e) => $emit('change', e)"
-                    ></b-pagination>
-                </div>
-            </b-col>
-        </b-row>
+                    <div v-show="loadBiguntsi">
+                        <bigunets-table v-show="loadBiguntsi"
+                                        :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
+                        <b-pagination
+                            v-if="loadBiguntsi && !loadingBiguntsi"
+                            v-model="biguntsiPagination.currentPage"
+                            :total-rows="biguntsiPagination.totalElements"
+                            :per-page="biguntsiPagination.perPage"
+                            first-number
+                            last-number
+                            align="center"
+                            @change="(e) => $emit('change', e)"
+                        ></b-pagination>
+                    </div>
+                </b-col>
+            </b-row>
+        </div>
 
-        <hr>
-        <!--        </div>-->
 
     </div>
 </template>
@@ -104,15 +135,28 @@
 <script>
 import StatementsTable from "/src/components/tables/StatementsTable";
 import BigunetsTable from "../components/tables/BigunetsTable.vue";
+import StudentTable from "@/components/tables/StudentTable";
 
 export default {
     name: "Student",
     components: {
-        StatementsTable, BigunetsTable
+        StudentTable, StatementsTable, BigunetsTable
+    },
+    props: {
+        id: {
+            type: Number,
+            required: false
+        }
     },
     data() {
         return {
             apiURl: 'http://localhost:8000/api',
+
+            students: [],
+            studentsLoading: false,
+            studentSearchPIB: '',
+            studentIdChosen: null,
+
             student: {},
 
             loadStatements: false,
@@ -165,18 +209,43 @@ export default {
         this.getStudentInfo()
     },
     methods: {
+        showStudents() {
+            if (this.searchValid) {
+                console.log("searching...")
+                this.studentsLoading = true
+                setInterval(() => this.studentsLoading = false, 100)
+                this.$http
+                    .get(this.apiURl + '/students')
+                    .then(response => {
+                        this.students = []
+                        response.data.data.forEach(user => this.students.push(user))
+                        this.students = this.students.filter(student => {
+                            console.log(student)
+                            return student.studentSurname.toLowerCase().includes(this.studentSearchPIB.toLowerCase());
+                        })
+                        this.totalElements = response.data.totalElements // TODO Use pageable
+                        this.loading = false
+                    })
+                    .catch(error => {
+                        // this.$root.defaultRequestErrorHandler(error)
+                        console.log(error, "179")
+                        this.loading = false
+                    })
+            }
+        },
         getStudentInfo() {
             const config = {
                 params: {}
             }
             this.$http
-                .get(`${this.apiURl}/student/${this.$route.params.id}`, config)
+                .get(`${this.apiURl}/student/${this.id}`, config)
                 .then(response => {
                     this.student = response.data
                     this.loading = false
                 })
                 .catch(error => {
-                    this.$root.defaultRequestErrorHandler(error)
+                    error
+                    // this.$root.defaultRequestErrorHandler(error)
                     this.loading = false
                 })
         },
@@ -229,6 +298,16 @@ export default {
     computed: {
         config() {
             return {params: {studentRecordBook: this.student.studentRecordBook}}
+        },
+        searchValid() {
+            if (this.studentSearchPIB.length === 0)
+                return null
+            return this.studentSearchPIB.length >= 4
+        },
+        showStudentDetails() {
+            return (this.searchValid && this.studentIdChosen) || this.id
+        }, studentFullName() {
+            return `${this.student.studentSurname} ${this.student.studentName} ${this.student.studentPatronymic}`
         }
     }
 }

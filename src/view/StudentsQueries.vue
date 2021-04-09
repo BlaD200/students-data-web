@@ -13,11 +13,11 @@
             <b-tabs @input="onChangeTab" justified card pills>
                 <b-tab title="Студенти" class="px-2">
                     <student-table :students="students" :loading="loading"
-                                   @showStudentDetails="showStudentDetails"></student-table>
+                                   @studentTableRowClicked="showStudentDetails"></student-table>
                 </b-tab>
                 <b-tab title="Боржники" lazy>
                     <student-table :students="debtors" :loading="loading"
-                                   @showStudentDetails="showStudentDetails"></student-table>
+                                   @studentTableRowClicked="showStudentDetails"></student-table>
                 </b-tab>
             </b-tabs>
         </b-card>
@@ -66,7 +66,18 @@ export default {
             ],
             sortDesc: true,
 
-            students: [],
+            students: [
+                {
+                    studentId: 4,
+                    studentSurname: "Бойко",
+                    studentName: "Данило",
+                    studentPatronymic: "Романович",
+                    studentRecordBook: "37453",
+                    studentRating: 76.3,
+                    studentCourse: 2,
+                    faculty: "Факультет інформатики"
+                }
+            ],
             debtors: [],
             totalElements: -1,
             currentPage: 1,
@@ -167,7 +178,7 @@ export default {
             this.$http
                 .get(this.apiURl + '/students', config)
                 .then(response => {
-                    this.students = []
+                    // this.students = []
                     response.data.data.forEach(user => this.students.push(user))
                     this.totalElements = response.data.totalElements // TODO Use pageable
                     this.loading = false
@@ -197,8 +208,9 @@ export default {
                     console.log(error, "199")
                 })
         },
-        showStudentDetails(student) {
-            console.log(student)
+        showStudentDetails(studentId) {
+            console.log(studentId)
+            this.$router.push({name: 'Student', params: {id: studentId}})
         }
     },
     computed: {

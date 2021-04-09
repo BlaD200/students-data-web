@@ -19,7 +19,7 @@
             <tbody>
 
             <tr class="text-center"
-                :key="statement.statementNo" v-for="statement in statements"
+                :key="statements.indexOf(statement)" v-for="statement in statements"
                 @click="$router.push({name: 'Statement', params: {id: `${statement.statementNo}`}})"
                 style="cursor: pointer;">
                 <th>{{ statement.statementNo }}</th>

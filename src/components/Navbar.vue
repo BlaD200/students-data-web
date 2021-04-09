@@ -22,7 +22,7 @@
 
                     <b-nav-item-dropdown text="Запити">
                         <b-dropdown-item :to="{name: 'StudentsQueries'}">Студенти</b-dropdown-item>
-                        <b-dropdown-item :to="{name: 'StudentQueries'}">Студент</b-dropdown-item>
+                        <b-dropdown-item :to="{name: 'StudentSearchDetails'}">Студент</b-dropdown-item>
                         <b-dropdown-item :to="{name: 'DataQueries'}">Відомості</b-dropdown-item>
                         <b-dropdown-item :to="{name: 'CalculationQueries'}">Обрахунки</b-dropdown-item>
                     </b-nav-item-dropdown>

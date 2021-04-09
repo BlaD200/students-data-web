@@ -3,24 +3,26 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="students.length > 0 & !loading" id="students-table"
-               class="table table-hover table-responsive-sm b-table-no-border-collapse">
+               class="text-center table table-hover table-responsive-sm b-table-no-border-collapse">
             <thead class="thead-light">
             <tr>
                 <th>№</th>
-                <th>Прізвище</th>
-                <th>Ім'я</th>
-                <th>По-батькові</th>
+                <th>ПІБ</th>
+                <th>Факультет</th>
+                <th>Курс</th>
+                <th>Рейтинг</th>
             </tr>
             </thead>
 
             <tbody>
-
             <tr :key="student.studentRecordBook" v-for="student in students"
-                @click="$router.push({name: 'Student', params: {id: student.studentRecordBook}})" style="cursor: pointer;">
-                    <th>{{ student.studentRecordBook }}</th>
-                    <td>{{ student.studentSurname }}</td>
-                    <td>{{ student.studentName }}</td>
-                    <td>{{ student.studentPatronymic }}</td>
+                @click="$emit('studentTableRowClicked', student.studentId)"
+                style="cursor: pointer;">
+                <th>{{ student.studentRecordBook }}</th>
+                <td>{{ studentFullName(student) }}</td>
+                <td>{{ studentFacultyInitials(student)  }}</td>
+                <td>{{ student.studentCourse }}</td>
+                <td>{{ student.studentRating }}</td>
             </tr>
             </tbody>
         </table>
@@ -46,10 +48,27 @@ export default {
             type: Boolean,
             required: true
         }
-    }
+    },
+    methods: {
+        studentFullName(student) {
+            return `${student.studentSurname} ${student.studentName} ${student.studentPatronymic}`
+        },
+        studentFacultyInitials(student) {
+            let string = student.faculty ?
+                student.faculty.split(' ').map(word => word.charAt(0).toUpperCase()).join('') : '';
+            console.log(string)
+            return string
+        }
+    },
+    computed: {}
 }
 </script>
 
 <style scoped>
-
+/* Small devices (landscape phones, 576px and up)*/
+@media (max-width: 992px) {
+    table {
+        word-break: normal!important;
+    }
+}
 </style>

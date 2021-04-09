@@ -22,18 +22,14 @@ export default new Router({
             component: () => import("@/view/StudentsQueries")
         },
         {
-            path: '/queries/student',
-            name: 'StudentQueries',
-            component: () => import("@/view/StudentQueries")
-        },
-        {
-            path: '/queries/student',
-            name: 'StudentQueries',
-            component: () => import("@/layouts/Queries")
+            path: '/student',
+            name: 'StudentSearchDetails',
+            component: () => import("@/view/Student")
         },
         {
             path: '/student/:id',
             name: 'Student',
+            props: true,
             component: () => import("@/view/Student")
         },
         {
