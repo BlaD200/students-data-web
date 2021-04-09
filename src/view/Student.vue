@@ -90,7 +90,7 @@
                                 >
                                     <b-tab v-for="tabSemesterTitle in semesterTabTitles"
                                            :key="semesterTabTitles.indexOf(tabSemesterTitle)"
-                                           :title="tabSemesterTitle" class="p-0"
+                                           :title="tabSemesterTitle" class=""
                                     >
 
 
@@ -422,11 +422,16 @@ export default {
 /*.tab-title-text {*/
 /*    color: #2c3e50;*/
 /*}*/
-.nav-tabs a:not(.active) {
+.nav-tabs a:not(.active):not(.disabled) {
     color: #495057 !important;
 }
 
 .nav-tabs a:not(.active):hover {
     color: #09223b !important;
+}
+
+.nav-tabs .nav-link.disabled {
+    background-color: #e9ecef!important;
+    border: 1px solid #ced4da;
 }
 </style>
