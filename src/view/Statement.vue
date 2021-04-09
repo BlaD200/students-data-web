@@ -114,7 +114,7 @@
                 <b-row class="justify-content-center mt-3">
                     <b-col lg="10">
                         <statement-students-table
-                            :statement-students="students" :loading="studentsLoading" :student-errors="studentErrors">
+                            :statement-students="students" :loading="loadingStudents" :student-errors="studentErrors">
                         </statement-students-table>
                     </b-col>
                 </b-row>
@@ -222,7 +222,7 @@ export default {
                     ectsGrade: 'B'
                 },
             ],
-            studentsLoading: false,
+            loadingStudents: false,
 
             headerErrors: {
                 eduLevelErrorText: null,//'Відсутній освітній рівень',
