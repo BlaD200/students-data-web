@@ -200,7 +200,7 @@
 
                     <div v-show="loadBiguntsi">
                         <bigunets-table v-show="loadBiguntsi"
-                                        biguntsi="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
+                                        :biguntsi="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
                         <b-pagination
                             v-if="loadBiguntsi && !loadingBiguntsi &&
                                     biguntsiPagination.totalElements > biguntsiPagination.perPage"
