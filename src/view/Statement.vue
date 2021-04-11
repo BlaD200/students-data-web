@@ -225,18 +225,18 @@ export default {
             loadingStudents: false,
 
             headerErrors: {
-                eduLevelErrorText: null,//'Відсутній освітній рівень',
-                facultyErrorText: null,//'Факультет інформатики',
-                courseErrorText: null,//0,
-                groupErrorText: null,//0,
-                subjectNameErrorText: null,//'Технології сучасних дата - центрів',
-                semesterErrorText: null,//'6д',
-                creditNumberErrorText: null,//'?',
-                controlTypeErrorText: null,//'екзамен',
-                examDateErrorText: null,//'2021-05-24',
-                tutorFullNameErrorText: null,//'Черкасов Дмитро Іванович',
-                tutorPositionErrorText: null,//'старший викладач',
-                tutorAcademicStatusErrorText: null,//'кандидат технічних наук'
+                eduLevelErrorText: 'Відсутній освітній рівень',
+                facultyErrorText: 'Факультет інформатики',
+                courseErrorText:0,
+                groupErrorText:0,
+                subjectNameErrorText: 'Технології сучасних дата - центрів',
+                semesterErrorText: '6д',
+                creditNumberErrorText: null,
+                controlTypeErrorText: 'екзамен',
+                examDateErrorText: '2021-05-24',
+                tutorFullNameErrorText: 'Черкасов Дмитро Іванович',
+                tutorPositionErrorText: 'старший викладач',
+                tutorAcademicStatusErrorText: 'кандидат технічних наук'
             },
             studentErrors: {
                 // 23: {

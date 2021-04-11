@@ -56,33 +56,48 @@
                         </h4>
 
                         <div>
-                            <b-button v-if="!loadGrades"
+                            <b-button v-if="!loadSubjects"
                                       class=""
                                       size="sm" variant="outline-secondary"
-                                      @click="onLoadGrades">
+                                      @click="onLoadSubjects">
                                 Завантажити оцінки
                             </b-button>
 
                             <b-button v-else
-                                      @click="loadGrades = false"
+                                      @click="loadSubjects = false"
                                       size="sm" class=" mb-n1" variant="outline-secondary">
                                 Сховати
                             </b-button>
                         </div>
                     </div>
 
-                    <div v-show="loadGrades" class="py-2">
-                        <b-tabs v-model="courseTab" justified class="mb-3"
+                    <div v-show="loadSubjects" class="py-2">
+                        <b-row>
+                            <b-col class="mb-2">
+                                <h5 class="py-3 m-0 p-2 text-light rounded-lg average-grade">
+                                    <span  >
+                                        Середній бал:
+                                        <span v-if="averageGrade !== null"
+                                              class="text-white"><b>{{ averageGrade || "&#8212;" }}</b></span>
+                                        <b-spinner v-else class="d-inline-block align-middle" type="border" small></b-spinner>
+                                    </span>
+                                </h5>
+                            </b-col>
+                        </b-row>
+
+                        <b-tabs v-model="courseTab"
+                                @activate-tab="onCourseTabChanged"
+                                justified class="mb-3"
                                 active-nav-item-class="bg-secondary text-light"
                         >
                             <b-tab v-for="tabCourseTitle in courseTabTitles"
                                    :key="courseTabTitles.indexOf(tabCourseTitle)"
+                                   :ref="'course-tab-' + courseTabTitles.indexOf(tabCourseTitle)"
                                    :title="tabCourseTitle" class="p-0"
-                                   :disabled="student.studentCourse-1 < courseTabTitles.indexOf(tabCourseTitle)"
-                                   :title-link-class="student.studentCourse-1 < courseTabTitles.indexOf(tabCourseTitle) ?
-                                                        'bg-light' : ''"
                             >
-                                <b-tabs v-model="courseTab" card pills end class="mb-3" align="center"
+                                <b-tabs v-model="semesterTab"
+                                        @activate-tab="onSemesterTabChanged"
+                                        card pills end class="mb-3" align="center"
                                         active-nav-item-class=" btn-outline-secondary"
                                         nav-class="text-dark"
                                         nav-wrapper-class="bg-light"
@@ -90,19 +105,24 @@
                                 >
                                     <b-tab v-for="tabSemesterTitle in semesterTabTitles"
                                            :key="semesterTabTitles.indexOf(tabSemesterTitle)"
-                                           :title="tabSemesterTitle" class=""
+                                           :ref="'semester-tab-' + courseTabTitles.indexOf(tabCourseTitle) + '-' + semesterTabTitles.indexOf(tabSemesterTitle)"
+                                           :title="tabSemesterTitle" class="p-0"
                                     >
 
+                                        <student-subject-table :subjects="subjects" :loading="loadingSubjects">
+
+                                        </student-subject-table>
 
                                         <b-pagination
-                                            v-if="loadGrades && !loadingGrades"
+                                            v-if="loadSubjects && !loadingSubjects &&
+                                                    subjectsPagination.totalElements > subjectsPagination.perPage"
                                             v-model="subjectsPagination.currentPage"
                                             :total-rows="subjectsPagination.totalElements"
                                             :per-page="subjectsPagination.perPage"
                                             first-number
                                             last-number
                                             align="center"
-                                            @change="(e) => $emit('change', e)"
+                                            @change="onSubjectsPageChanged"
                                         ></b-pagination>
                                     </b-tab>
                                 </b-tabs>
@@ -142,14 +162,15 @@
                         <statements-table :statements="statements"
                                           :loading="loadingStatements"></statements-table>
                         <b-pagination
-                            v-if="loadStatements && !loadingStatements"
+                            v-if="loadStatements && !loadingStatements
+                                    && statementsPagination.totalElements > statementsPagination.perPage"
                             v-model="statementsPagination.currentPage"
                             :total-rows="statementsPagination.totalElements"
                             :per-page="statementsPagination.perPage"
                             first-number
                             last-number
                             align="center"
-                            @change="(e) => $emit('change', e)"
+                            @change="onStatementsPageChanged"
                         ></b-pagination>
                     </div>
 
@@ -181,14 +202,15 @@
                         <bigunets-table v-show="loadBiguntsi"
                                         :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
                         <b-pagination
-                            v-if="loadBiguntsi && !loadingBiguntsi"
+                            v-if="loadBiguntsi && !loadingBiguntsi &&
+                                    biguntsiPagination.totalElements > biguntsiPagination.perPage"
                             v-model="biguntsiPagination.currentPage"
                             :total-rows="biguntsiPagination.totalElements"
                             :per-page="biguntsiPagination.perPage"
                             first-number
                             last-number
                             align="center"
-                            @change="(e) => $emit('change', e)"
+                            @change="onBiguntsiPageChanged"
                         ></b-pagination>
                     </div>
                 </b-col>
@@ -203,11 +225,12 @@
 import StatementsTable from "/src/components/tables/StatementsTable";
 import BigunetsTable from "../components/tables/BigunetsTable.vue";
 import StudentTable from "@/components/tables/StudentTable";
+import StudentSubjectTable from "@/components/tables/StudentSubjectTable";
 
 export default {
     name: "Student",
     components: {
-        StudentTable, StatementsTable, BigunetsTable
+        StudentTable, StudentSubjectTable, StatementsTable, BigunetsTable
     },
     props: {
         id: {
@@ -225,20 +248,26 @@ export default {
             studentIdChosen: null,
 
             student: {
+                studentId: 2,
                 studentCourse: 2
             },
 
-            loadGrades: true,
-            loadingGrades: false,
+            loadSubjects: false,
+            loadingSubjects: false,
             courseTabTitles: ['Курс 1', 'Курс 2', 'Курс 3', 'Курс 4'],
             semesterTabTitles: ['Осінь', 'Весна', 'Літо'],
+            // courseTabDisabled: {
+            //     1: false, 2: false, 3: false, 4: true
+            // },
             courseTab: -1,
             semesterTab: -1,
+            subjects: [],
             subjectsPagination: {
                 currentPage: 1,
-                totalElements: 5,
-                perPage: 4
+                totalElements: 0,
+                perPage: 10
             },
+            averageGrade: null,
 
             loadStatements: false,
             loadingStatements: false,
@@ -256,8 +285,8 @@ export default {
                 }],
             statementsPagination: {
                 currentPage: 1,
-                totalElements: 5,
-                perPage: 4
+                totalElements: 0,
+                perPage: 10
             },
 
             loadBiguntsi: false,
@@ -281,8 +310,8 @@ export default {
             ],
             biguntsiPagination: {
                 currentPage: 1,
-                totalElements: 5,
-                perPage: 4
+                totalElements: 0,
+                perPage: 10
             },
         }
     },
@@ -330,41 +359,121 @@ export default {
                     this.loading = false
                 })
         },
-        onLoadGrades() {
-            this.loadGrades = true
+        onLoadSubjects() {
+            this.loadSubjects = true
             // if (this.statements.length > 0)
             //     return
+            console.log(this.$refs)
+            const courseTabIdx = this.courseTab
+            const semesterTabIdx = this.semesterTab
+            this.loadingSubjects = true
+            this.$http
+                .get(`${this.apiURl}/student/${this.student.studentId}/subjects`, {
+                    params: {
+                        course: this.courseTab,
+                        semester: this.semesterTab,
+                        page: this.subjectsPagination.currentPage,
+                        numberPerPage: this.subjectsPagination.perPage,
+                    }
+                })
+                .then(response => {
+                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
+                        return
 
-            this.loadingGrades = true
+                    response.data.data.forEach(subject => this.subjects.push(subject))
+                    this.subjectsPagination.totalElements = response.data.totalElements // TODO Use pageable
 
-            setTimeout(() => {
-                this.loadingGrades = false
-            }, 500)
+                    // let semesterTab = this.$refs['semester-tab-' + courseTabIdx + semesterTabIdx][0]
+                    // if (this.subjects.length === 0){
+                    //     semesterTab.deactivate()
+                    //     console.log(semesterTab)
+                    //     let courseTabActiveCount = 0;
+                    //     for (let i = 0; i < 3; i++) {
+                    //         if (this.$refs['course-tab-' + i][0].active)
+                    //             courseTabActiveCount++
+                    //     }
+                    //     if (courseTabActiveCount === 0){
+                    //         // console.log("deactivating ", semesterTab)
+                    //         // semesterTab.$el.setAttribute('disabled', true)
+                    //         // console.log(semesterTab)
+                    //         this.courseTabDisabled[courseTabIdx] = true
+                    //     }
+                    // }
+                    this.loadingSubjects = false
+                })
+                .catch(error => {
+                    error
+                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
+                        return
 
-            // this.$http
-            //     .get(`${this.apiURl}/statements`, this.config)
-            //     .then(response => {
-            //         this.statements = []
-            //         response.data.data.forEach(statement => this.statements.push(statement))
-            //         this.statementsPagination.totalElements = response.data.totalElements // TODO Use pageable
-            //         this.loading = false
-            //     })
-            //     .catch(error => {
-            //         this.$root.defaultRequestErrorHandler(error)
-            //         this.loading = false
-            //     })
+                    // TODO remove test data
+                    for (let i = 0; i < 15; i++) {
+                        this.subjects.push({
+                            subjectID: i,
+                            subjectName: 'Технології сучасних дата - центрів',
+                            tutorFullName: "Черкасов Дмитро Іванович",
+                            group: "1",
+                            controlType: "екзамен",
+                            examDate: "2021-05-25",
+                            grade: this.grade++
+                        })
+                    }
+                    let start = (this.subjectsPagination.currentPage - 1) * this.subjectsPagination.perPage;
+                    let end = this.subjectsPagination.currentPage * this.subjectsPagination.perPage;
+                    console.log(start, end)
+                    this.subjects = this.subjects.slice(start, end)
+                    // response.data.data.forEach(statement => this.statements.push(statement))
+                    this.subjectsPagination.totalElements = 15 //response.data.totalElements // TODO Use pageable
+                    // this.$root.defaultRequestErrorHandler(error)
+                    this.averageGrade = ""
+                    this.loadingSubjects = false
+                })
+            this.$http
+                .get(`${this.apiURl}/student/${this.student.studentId}/averageGrade`, {
+                    params: {
+                        course: this.courseTab,
+                        semester: this.semesterTab,
+                    }
+                })
+                .then(response => {
+                    response
+                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
+                        return
+                    this.averageGrade = ""
+                })
+                .catch(error => {
+                    error
+                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
+                        return
+                    this.averageGrade = ""
+                })
+        },
+        onCourseTabChanged(event) {
+            if (this.courseTab === event)
+                return
+            this.courseTab = event
+            this.semesterTab = 0
+            this.subjectsPagination = 1
+            this.onLoadSubjects()
+        },
+        onSemesterTabChanged(event) {
+            if (this.semesterTab === event)
+                return
+            this.semesterTab = event
+            this.subjectsPagination = 1
+            this.onLoadSubjects()
+        },
+        onSubjectsPageChanged(page) {
+            console.log(page)
+            this.subjectsPagination.currentPage = page
+            this.onLoadSubjects()
         },
         onLoadStatements() {
             this.loadStatements = true
-            if (this.statements.length > 0)
-                return
+            // if (this.statements.length > 0)
+            //     return
 
             this.loadingStatements = true
-
-            setTimeout(() => {
-                this.loadingStatements = false
-            }, 500)
-
             this.$http
                 .get(`${this.apiURl}/statements`, this.config)
                 .then(response => {
@@ -375,8 +484,14 @@ export default {
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
-                    this.loading = false
+                    this.statements = []
+                    this.loadingStatements = false
                 })
+        },
+        onStatementsPageChanged(page) {
+            console.log(page)
+            this.statementsPagination.currentPage = page
+            this.onLoadStatements()
         },
         onLoadBiguntsi() {
             this.loadBiguntsi = true
@@ -396,14 +511,16 @@ export default {
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
-                    this.loading = false
+                    this.loadingBiguntsi = false
                 })
+        },
+        onBiguntsiPageChanged(page) {
+            console.log(page)
+            this.biguntsiPagination.currentPage = page
+            this.onLoadBiguntsi()
         }
     },
     computed: {
-        config() {
-            return {params: {studentRecordBook: this.student.studentRecordBook}}
-        },
         searchValid() {
             if (this.searchStudentPIBInput.length === 0)
                 return null
@@ -411,17 +528,19 @@ export default {
         },
         showStudentDetails() {
             return (this.searchValid && this.studentIdChosen) || this.id
-        }, studentFullName() {
+        },
+        studentFullName() {
             return `${this.student.studentSurname} ${this.student.studentName} ${this.student.studentPatronymic}`
-        }
+        },
     }
 }
 </script>
 
 <style>
-/*.tab-title-text {*/
-/*    color: #2c3e50;*/
-/*}*/
+.average-grade {
+    background-color: #6AC4D1!important;
+}
+
 .nav-tabs a:not(.active):not(.disabled) {
     color: #495057 !important;
 }
@@ -431,7 +550,7 @@ export default {
 }
 
 .nav-tabs .nav-link.disabled {
-    background-color: #e9ecef!important;
+    background-color: #e9ecef !important;
     border: 1px solid #ced4da;
 }
 </style>

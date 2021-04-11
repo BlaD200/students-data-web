@@ -1,5 +1,21 @@
-/api/student/?{studentRecordBook}
+/api/student/?{studentId}
     => student
+
+/api/student/?{studentId}/subjects?
+    => {
+       data: [...subjects],
+       totalPages: int
+   }
+params: {
+    course: this.courseTab,
+    semester: this.semesterTab,
+    page: this.subjectsPagination.currentPage,
+    numberPerPage: this.subjectsPagination.perPage,
+}
+
+/api/student/?{studentId}/averageGrade?semester=?{}&course=?{}
+    => double
+
 
 /api/biguntsi?studentRecordBook=?
     => {
@@ -11,6 +27,7 @@
         data: [...statements],
         totalPages: int
     }
+
 
 /api/statement/?{statementNo}
     => statement
