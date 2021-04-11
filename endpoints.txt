@@ -22,9 +22,9 @@ params: {
         data: [...biguntsi],
         totalPages: int
     }
-/api/statements?studentRecordBook=?
+/api/biguntsi?studentRecordBook=?
     => {
-        data: [...statements],
+        data: [...biguntsi],
         totalPages: int
     }
 

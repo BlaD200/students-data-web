@@ -2,8 +2,8 @@
     <div>
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
-        <table v-if="statements.length > 0 & !loading" id="students-table"
-               class="table tab table-hover table-responsive-sm b-table-no-border-collapse">
+        <table v-if="biguntsi.length > 0 & !loading" id="students-table"
+               class="table tab table-hover table-responsive-xl b-table-no-border-collapse">
             <thead class="thead-light">
             <tr class="text-center">
                 <th>№</th>
@@ -19,16 +19,16 @@
             <tbody>
 
             <tr class="text-center"
-                :key="statements.indexOf(statement)" v-for="statement in statements"
-                @click="$router.push({name: 'Statement', params: {id: `${statement.statementNo}`}})"
+                :key="biguntsi.indexOf(bigunets)" v-for="bigunets in biguntsi"
+                @click="$router.push({name: 'Bigunets', params: {id: `${bigunets.statementNo}`}})"
                 style="cursor: pointer;">
-                <th>{{ statement.statementNo }}</th>
-                <td>{{ statement.tutor }}</td>
-                <td>{{ statement.subject }}</td>
-                <td>{{ statement.controlType }}</td>
-                <td>{{ statement.postponeReason ? statement.postponeReason : "&#8212;" }}</td>
-                <td>{{ statement.examDate }}</td>
-                <td>{{ statement.validUntil ? statement.validUntil : "&#8212;" }}</td>
+                <th>{{ bigunets.statementNo }}</th>
+                <td>{{ bigunets.tutor }}</td>
+                <td>{{ bigunets.subject }}</td>
+                <td>{{ bigunets.controlType }}</td>
+                <td>{{ bigunets.postponeReason ? bigunets.postponeReason : "&#8212;" }}</td>
+                <td>{{ bigunets.examDate }}</td>
+                <td>{{ bigunets.validUntil ? bigunets.validUntil : "&#8212;" }}</td>
             </tr>
             </tbody>
         </table>
@@ -48,7 +48,7 @@ export default {
         Loader
     },
     props: {
-        statements: {
+        biguntsi: {
             type: Array,
             required: true
         },

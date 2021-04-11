@@ -200,7 +200,7 @@
 
                     <div v-show="loadBiguntsi">
                         <bigunets-table v-show="loadBiguntsi"
-                                        :statements="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
+                                        biguntsi="biguntsi" :loading="loadingBiguntsi"></bigunets-table>
                         <b-pagination
                             v-if="loadBiguntsi && !loadingBiguntsi &&
                                     biguntsiPagination.totalElements > biguntsiPagination.perPage"
@@ -480,7 +480,7 @@ export default {
                     this.statements = []
                     response.data.data.forEach(statement => this.statements.push(statement))
                     this.statementsPagination.totalElements = response.data.totalElements // TODO Use pageable
-                    this.loading = false
+                    this.loadingStatements = false
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)

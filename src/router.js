@@ -22,6 +22,11 @@ export default new Router({
             component: () => import("@/view/StudentsQueries")
         },
         {
+            path: '/queries/statements',
+            name: 'DataQueries',
+            component: () => import("@/view/DataQueries")
+        },
+        {
             path: '/student',
             name: 'StudentSearchDetails',
             component: () => import("@/view/Student")
@@ -35,6 +40,12 @@ export default new Router({
         {
             path: '/statement/:id',
             name: 'Statement',
+            props: true,
+            component: () => import("@/view/Statement")
+        },
+        {
+            path: '/bigunets/:id',
+            name: 'Bigunets',
             props: true,
             component: () => import("@/view/Statement")
         }

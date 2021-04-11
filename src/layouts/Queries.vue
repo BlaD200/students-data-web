@@ -6,7 +6,7 @@
 
         <div class=" p-2 p-lg-3 mb-3 bg-white shadow">
             <div v-show="isShowSort">
-                <b-row>
+                <b-row class="mb-3">
                     <b-col cols="5" md="6">
                         <b-row>
                             <b-col cols="12" md="10" lg="4">
@@ -24,7 +24,7 @@
 
 
                     </b-col>
-                    <b-col cols="7" md="6">
+                    <b-col v-show="showSort" cols="7" md="6">
                         <b-row class="justify-content-end">
                             <b-col cols="12" md="10" lg="8">
                                 <slot name="sorting"></slot>
@@ -34,7 +34,7 @@
                 </b-row>
             </div>
 
-            <b-row class="mt-3">
+            <b-row class="">
                 <b-col class="mx-md-3 p-md-0">
                     <div class="border-top">
                         <b-row>
@@ -46,7 +46,7 @@
                                 </filter-layout>
                             </b-col>
 
-                            <b-col class="pl-md-0">
+                            <b-col md="12" lg="8" class="pl-lg-0">
                                 <div>
                                     <slot name="content"></slot>
                                 </div>
@@ -103,6 +103,10 @@ export default {
             type: Boolean,
             default: false
         },
+        showSort: {
+            type: Boolean,
+            default: true
+        },
         currentPage: {
             type: Number,
             default: 1
@@ -134,7 +138,7 @@ export default {
             let elem = this.$refs['filterBtn']
             let displayable = window.getComputedStyle(elem, null).display
             // console.log(displayable)
-            return this.showPagination || displayable === 'block'
+            return (this.showPagination && this.showSort) || displayable === 'block'
         }
     },
     created() {

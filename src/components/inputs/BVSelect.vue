@@ -9,7 +9,7 @@
                   v-on:input="$emit('input', $event)">
             <template v-slot:no-options="{ search, searching }">
                 <template v-if="searching">
-                    <span class="text-warning">Нічого не знайдено</span>
+                    <span class="text-warning p-2">Нічого не знайдено</span>
                 </template>
                 <!--                <em style="opacity: 0.5;" v-else>Start typing to search for a country.</em>-->
             </template>
