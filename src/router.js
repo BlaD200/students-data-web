@@ -48,6 +48,17 @@ export default new Router({
             name: 'Bigunets',
             props: true,
             component: () => import("@/view/Statement")
+        },
+        {
+            path: '/subject',
+            name: 'SubjectSearch',
+            component: () => import("@/view/Subject")
+        },
+        {
+            path: '/subject/:id',
+            name: 'Subject',
+            props: true,
+            component: () => import("@/view/Subject")
         }
     ]
 })
