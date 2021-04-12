@@ -37,7 +37,7 @@
                     :title='pibErrorText(student)'
                     :disabled='!pibErrorText(student)'
                 >
-                    {{ student.studentPIB || "&#8212;" }}
+                    {{ (student.studentPI + ' ' + student.studentPatronymic) || "&#8212;" }}
                 </td>
                 <td class="align-middle"
                     :class="studentRecordBookErrorText(student) ? 'text-danger' : ''"
@@ -136,35 +136,37 @@ export default {
     },
     methods: {
         errorsForStudentExists(student) {
+            // console.log(this.studentErrors[student.studentId])
             return Boolean(this.studentErrors[student.studentId])
         },
         pibErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].pibError : ''
+                this.studentErrors[student.studentId].pibErrorText.join(', ') : ''
         },
         studentRecordBookErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].studentRecordBookError : ''
+                this.studentErrors[student.studentId].studentRecordBookErrorText.join(', ') : ''
         },
         semesterGradeErrorText(student) {
+            // console.log(this.studentErrors[student.studentId].semesterGradeError)
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].semesterGradeError : ''
+                this.studentErrors[student.studentId].semesterGradeErrorText.join(', ') : ''
         },
         controlGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].controlGradeError : ''
+                this.studentErrors[student.studentId].controlGradeErrorText.join(', ') : ''
         },
         totalGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].totalGradeError : ''
+                this.studentErrors[student.studentId].totalGradeErrorText.join(', ') : ''
         },
         nationalGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].nationalGradeError : ''
+                this.studentErrors[student.studentId].nationalGradeErrorText.join(', ') : ''
         },
         ectsGradeErrorText(student) {
             return this.errorsForStudentExists(student) ?
-                this.studentErrors[student.studentId].ectsGradeError : ''
+                this.studentErrors[student.studentId].ectsGradeErrorText.join(', ') : ''
         },
     }
 }

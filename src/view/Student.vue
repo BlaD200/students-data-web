@@ -3,36 +3,30 @@
 
         <b-row class="mb-3">
             <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
-                <b-row>
-                    <b-col>
-                        <b-form-group
-                            id="fieldset-1"
-                            description="Почніть вводити прізвіще ім`я або по-батькові студента"
-                            label="Пошук студента за ПІБ"
-                            label-for="student-search"
-                            invalid-feedback="Введіть щонайменше 4 символи"
-                            :state="searchValid"
-                        >
-                            <b-input-group class="mb-2">
-                                <b-input-group-prepend is-text>
-                                    <b-icon icon="search"></b-icon>
-                                </b-input-group-prepend>
-                                <b-form-input id="student-search"
-                                              v-model="searchStudentPIBInput"
-                                              @input="showStudents"
-                                              :state="searchValid"
-                                              placeholder="Введіть ПІБ студента"></b-form-input>
-                            </b-input-group>
-                        </b-form-group>
-                    </b-col>
-                </b-row>
-                <b-row v-show="searchValid" class="my-2">
-                    <b-col>
-                        <studentTable :students="students" :loading="loadStudents"
+                <search-with-table
+                    @input="showStudents"
+                    description="Почніть вводити прізвіще ім`я або по-батькові студента"
+                    label="Пошук студента за ПІБ"
+                    placeholder="Введіть ПІБ студента"
+                >
+                    <div slot="table">
+                        <student-table
+                                      :students="students" :loading="loadingStudents"
                                       @studentTableRowClicked="studentIdChosen = $event"
-                        ></studentTable>
-                    </b-col>
-                </b-row>
+                        ></student-table>
+                        <b-pagination
+                            v-if="!loadingStudents &&
+                                    studentPagination.totalElements > studentPagination.perPage"
+                            v-model="studentPagination.currentPage"
+                            :total-rows="studentPagination.totalElements"
+                            :per-page="studentPagination.perPage"
+                            first-number
+                            last-number
+                            align="center"
+                            @change="onSubjectsPageChanged"
+                        ></b-pagination>
+                    </div>
+                </search-with-table>
             </b-col>
         </b-row>
 
@@ -75,11 +69,12 @@
                         <b-row>
                             <b-col class="mb-2">
                                 <h5 class="py-3 m-0 p-2 text-light rounded-lg average-grade">
-                                    <span  >
+                                    <span>
                                         Середній бал:
                                         <span v-if="averageGrade !== null"
                                               class="text-white"><b>{{ averageGrade || "&#8212;" }}</b></span>
-                                        <b-spinner v-else class="d-inline-block align-middle" type="border" small></b-spinner>
+                                        <b-spinner v-else class="d-inline-block align-middle" type="border"
+                                                   small></b-spinner>
                                     </span>
                                 </h5>
                             </b-col>
@@ -217,7 +212,6 @@
             </b-row>
         </div>
 
-
     </div>
 </template>
 
@@ -226,11 +220,12 @@ import StatementsTable from "/src/components/tables/StatementsTable";
 import BigunetsTable from "../components/tables/BigunetsTable.vue";
 import StudentTable from "@/components/tables/StudentTable";
 import StudentSubjectTable from "@/components/tables/StudentSubjectTable";
+import SearchWithTable from "@/components/inputs/SearchWithTable";
 
 export default {
     name: "Student",
     components: {
-        StudentTable, StudentSubjectTable, StatementsTable, BigunetsTable
+        SearchWithTable, StudentTable, StudentSubjectTable, StatementsTable, BigunetsTable
     },
     props: {
         id: {
@@ -242,9 +237,14 @@ export default {
         return {
             apiURl: 'http://localhost:8000/api',
 
+            loadingStudents: false,
             students: [],
-            loadStudents: false,
             searchStudentPIBInput: '',
+            studentPagination: {
+                currentPage: 1,
+                totalElements: 0,
+                perPage: 10
+            },
             studentIdChosen: null,
 
             student: {
@@ -319,11 +319,11 @@ export default {
         this.getStudentInfo()
     },
     methods: {
-        showStudents() {
+        showStudents(input) {
+            this.searchStudentPIBInput = input
             if (this.searchValid) {
                 console.log("searching...")
-                this.loadStudents = true
-                setInterval(() => this.loadStudents = false, 100)
+                this.loadingStudents = true
                 this.$http
                     .get(this.apiURl + '/students')
                     .then(response => {
@@ -334,12 +334,16 @@ export default {
                             return student.studentSurname.toLowerCase().includes(this.searchStudentPIBInput.toLowerCase());
                         })
                         this.totalElements = response.data.totalElements // TODO Use pageable
-                        this.loading = false
+                        this.loadingStudents = false
                     })
                     .catch(error => {
+                        for (let i = 0; i < 15; i++) {
+                            this.students.push({id: i})
+                        }
+                        this.studentPagination.totalElements = 15
                         // this.$root.defaultRequestErrorHandler(error)
                         console.log(error, "179")
-                        this.loading = false
+                        this.loadingStudents = false
                     })
             }
         },
@@ -360,7 +364,7 @@ export default {
                 })
         },
         onLoadSubjects() {
-            this.loadSubjects = true
+            this.loadingSubjects = true
             // if (this.statements.length > 0)
             //     return
             console.log(this.$refs)
@@ -538,7 +542,7 @@ export default {
 
 <style>
 .average-grade {
-    background-color: #6AC4D1!important;
+    background-color: #6AC4D1 !important;
 }
 
 .nav-tabs a:not(.active):not(.disabled) {

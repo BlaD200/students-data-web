@@ -8,26 +8,38 @@
 
         <b-row class="justify-content-center">
             <b-col cols="12" lg="10" class="bg-white shadow rounded-lg p-0">
-                <b-tabs justified card pills class="">
+                <b-tabs justified card pills class="" @activate-tab="onDocumentUnload">
                     <b-tab title="Відомість">
                         <document-loader document-name="відомість"
-                                         load-url="statement/load"
-                                         v-on:loadedExample="onDocumentLoad"></document-loader>
+                                         load-url="statement/process"
+                                         v-on:loadedExample="onStatementLoad"
+                                         @fileRemoved="onDocumentUnload"
+                        ></document-loader>
                     </b-tab>
-                    <b-tab title="Бігунець" title-link-class="">
+                    <b-tab title="Бігунець" title-link-class="" lazy>
                         <document-loader document-name="бігунець"
-                                         load-url="bigunets/load"
-                                         v-on:loadedExample="onDocumentLoad"></document-loader>
+                                         load-url="bigunets/process"
+                                         v-on:loadedExample="onBigunetsLoad"
+                                         @fileRemoved="onDocumentUnload"
+                        ></document-loader>
                     </b-tab>
                 </b-tabs>
             </b-col>
         </b-row>
 
-        <statement v-show="loadedExample" class="mt-2" id="22222"></statement>
+        <statement
+            v-show="loadedStatement"
+            :statement-report="statementReport"
+            class="mt-2"></statement>
 
-        <b-row class="mt-2 mb-5 justify-content-center" v-show="loadedExample">
+        <statement
+            v-show="loadedBigunets"
+            :statement-report="bigunetsReport"
+            class="mt-2"></statement>
+
+        <b-row class="mt-2 mb-5 justify-content-center" v-show="loadedStatement || loadedBigunets">
             <b-col cols="12" lg="10" class="bg-white shadow rounded-lg">
-                <b-row class="text-center" v-show="loadedExample">
+                <b-row class="text-center" v-show="loadedStatement || loadedBigunets">
                     <b-col class="p-2 mt-2">
                         <div>
                             <span tabindex="0"
@@ -47,7 +59,7 @@
                     </b-col>
                 </b-row>
 
-                <b-row class="justify-content-center" v-show="loadedExample">
+                <b-row class="justify-content-center" v-show="loadedStatement || loadedBigunets">
                     <b-col lg="10" class="px-2 pt-0 mb-2">
                         <div class="text-center">
                             <b-form-checkbox
@@ -85,25 +97,90 @@ export default {
     },
     data() {
         return {
-            loadedExample: false,
-            dataAccepted: false
+            apiURl:'http://localhost:8000/api',
+
+            loadedStatement: false,
+            loadedBigunets: false,
+            dataAccepted: false,
+
+            statementReport: null,
+            bigunetsReport: null
         };
     },
     methods: {
-        onDocumentLoad() {
-            this.loadedExample = true;
+        onStatementLoad(statementReport) {
+            this.statementReport = statementReport
+            this.loadedStatement = true;
+        },
+        onBigunetsLoad(bigunetsReport) {
+            this.bigunetsReport = bigunetsReport
+            this.loadedBigunets = true
+        },
+        onDocumentUnload() {
+            this.loadedStatement = false;
+            this.loadedBigunets = false
+            this.statementReport = null
+            this.bigunetsReport = null
+            this.dataAccepted = false
         },
         saveData() {
+            let apiUrl;
+            let data;
+            let redirectUrl;
+            if (this.loadedStatement){
+                apiUrl = this.apiURl + '/statement/save'
+                data = {statementReport: this.statementReport}
+                redirectUrl = '/statement/'
+            } else if (this.loadBiguntsi){
+                apiUrl = this.apiURl + '/bigunets/save'
+                data = {bigunetsReport: this.bigunetsReport}
+                redirectUrl = '/bigunets/'
+            }
+            this.$http
+                .post(apiUrl, data )
+                .then(response => {
+                    console.log(response)
+                    this.$router.push(redirectUrl + response.data)
+                    // this.students = []
+                    // response.data.data.forEach(user => this.students.push(user))
+                    // this.students = this.students.filter(student => {
+                    //     console.log(student)
+                    //     return student.studentSurname.toLowerCase().includes(this.searchStudentPIBInput.toLowerCase());
+                    // })
+                    // this.totalElements = response.data.totalElements // TODO Use pageable
+                    // this.loadingStudents = false
+                })
+                .catch(error => {
+                    this.$root.defaultRequestErrorHandler(error)
+                    console.log(error, "179")
+                    this.loadingStudents = false
+                })
         }
     },
     computed: {
         isErrors() {
+            // console.log(this.statementReport)
+            if (!this.statementReport)
+                return true
             for (let statementErrorBlock of
-                [Statement.data().headerErrors, Statement.data().studentErrors, Statement.data().footerErrors]) {
+                [this.statementReport.statementErrors.headerErrors, this.statementReport.statementErrors.footerErrors]) {
                 console.log(statementErrorBlock)
                 for (let key in statementErrorBlock) {
-                    if (statementErrorBlock[key] !== null)
+                    if (statementErrorBlock[key].length !== 0) {
+                        // console.log("error", statementErrorBlock, statementErrorBlock[key])
                         return true;
+                    }
+                }
+            }
+            let statementStudentsErrorsMap = this.statementReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap;
+            // console.log(statementStudentsErrorsMap)
+            for (let key in statementStudentsErrorsMap) {
+                // console.log(key)
+                for (let statementErrorBlock in statementStudentsErrorsMap[key]) {
+                    if (statementStudentsErrorsMap[key][statementErrorBlock].length !== 0) {
+                        // console.log("error stud", statementErrorBlock, statementStudentsErrorsMap[key][statementErrorBlock])
+                        return true;
+                    }
                 }
             }
             return false

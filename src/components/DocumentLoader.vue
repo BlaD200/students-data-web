@@ -19,50 +19,50 @@
                             <div class="d-inline-block align-middle" >
                                 Перетягніть сюди файл або <span class="filepond--label-action"> Оберіть </span>
                             </div>'
-                                                allow-brouse="true"
+                        allow-brouse="true"
                         :allow-multiple="false"
                         :max-files="1"
                         accepted-file-types="application/pdf"
                         v-bind:files="myFiles"
-                        v-on:addfile="handleFilePondLoad"
+                        @updatefiles="handleFilePondLoad"
                     >
 
                     </file-pond>
                 </b-col>
             </b-row>
 
-            <b-row v-if="!loading">
-                <b-col></b-col>
-                <b-col cols="12" md="8" class="text-center my-2">
-                    <span class="d-inline-block" tabindex="0"
-                          v-b-tooltip.hover.top
-                          :title="myFiles.length === 0 ? 'Спочатку виберіть документ' : ''"
-                    >
-                        <b-button
-                            variant="outline-success"
-                            :disabled="myFiles.length === 0"
-                            @click="loadData"
-                        >
-                        Завантажити {{ documentName }}
-                        </b-button>
-                    </span>
-                </b-col>
-                <b-col></b-col>
-            </b-row>
-            <b-row v-else>
-                <b-col></b-col>
-                <b-col cols="6" class="text-center mx-5 my-2">
-                    <b-spinner style="width: 3rem; height: 3rem;" label="Large Spinner"></b-spinner>
-                </b-col>
-                <b-col></b-col>
-            </b-row>
+            <!--            <b-row v-if="!loading">-->
+            <!--                <b-col></b-col>-->
+            <!--                <b-col cols="12" md="8" class="text-center my-2">-->
+            <!--                    <span class="d-inline-block" tabindex="0"-->
+            <!--                          v-b-tooltip.hover.top-->
+            <!--                          :title="myFiles.length === 0 ? 'Спочатку виберіть документ' : ''"-->
+            <!--                    >-->
+            <!--                        <b-button-->
+            <!--                            variant="outline-success"-->
+            <!--                            :disabled="myFiles.length === 0"-->
+            <!--                            @click="loadData"-->
+            <!--                        >-->
+            <!--                        Завантажити {{ documentName }}-->
+            <!--                        </b-button>-->
+            <!--                    </span>-->
+            <!--                </b-col>-->
+            <!--                <b-col></b-col>-->
+            <!--            </b-row>-->
+            <!--            <b-row v-else>-->
+            <!--                <b-col></b-col>-->
+            <!--                <b-col cols="6" class="text-center mx-5 my-2">-->
+            <!--                    <b-spinner style="width: 3rem; height: 3rem;" label="Large Spinner"></b-spinner>-->
+            <!--                </b-col>-->
+            <!--                <b-col></b-col>-->
+            <!--            </b-row>-->
         </b-col>
     </b-row>
 </template>
 
 <script>
 // Import Vue FilePond
-import vueFilePond from 'vue-filepond';
+import vueFilePond, {setOptions} from 'vue-filepond';
 // Import FilePond styles
 import 'filepond/dist/filepond.min.css';
 // Import image preview and file type validation plugins
@@ -72,10 +72,8 @@ const FilePond = vueFilePond(FilePondPluginFileValidateType);
 
 const axios = require('axios');
 const instance = axios.create({
-    baseURL: 'http://localhost:9000/api/'
+    baseURL: 'http://localhost:8000/api/'
 });
-
-// const FileSaver = require('file-saver');
 
 export default {
     name: "document-loader",
@@ -94,30 +92,125 @@ export default {
     },
     data() {
         return {
+            statementUploadUrl: "statement/process",
             myFiles: [],
             loading: false,
             loadedExample: false
         }
     },
+    created() {
+        setOptions({
+            server: {
+                url: '',
+                process: this.processUpload
+            }
+        });
+    },
     methods: {
         handleFilePondLoad(data) {
-            if (data) {
-                console.log(data.error);
-                console.log(data.code);
-                if (data.code === 200) {
-                    this.myFiles = this.$refs.pond.getFiles();
+            if (!data || data.length === 0)
+                this.$emit('fileRemoved')
+            // if (data) {
+            //     console.log(data.error);
+            //     console.log(data.code);
+            //     if (data.code === 200) {
+            //         this.myFiles = this.$refs.pond.getFiles();
+            //     }
+            // } else {
+            //     this.myFiles = this.$refs.pond.getFiles();
+            // }
+        },
+        processUpload(fieldName, file, metadata, load, error, progress, abort) {
+            this.loading = true;
+            // this.$refs.pond.removeFiles();
+            // this.myFiles = this.$refs.pond.getFiles();
+
+            // set data
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // console.log(formData)
+
+            // related to aborting the request
+            const CancelToken = axios.CancelToken;
+            const source = CancelToken.source();
+
+            // the request itself
+
+            console.log(`http://localhost:8000/api/${this.loadUrl}`)
+
+            axios({
+                method: 'post',
+                url: this.uploadUrl,
+                data: formData,
+                cancelToken: source.token,
+                onUploadProgress: (e) => {
+                    // updating progress indicator
+                    progress(e.lengthComputable, e.loaded, e.total);
                 }
-            } else {
-                this.myFiles = this.$refs.pond.getFiles();
-            }
+            }).then(response => {
+                // console.log(response)
+                this.loading = false
+                this.$emit('loadedExample', response.data)
+                this.loadedExample = true
+                // passing the file id to FilePond
+                // load(response.data.data.id)
+                load(12345)
+            }).catch((thrown) => {
+                if (axios.isCancel(thrown)) {
+                    console.log('Request canceled', thrown.message);
+                } else {
+                    error("File already exists")
+                }
+
+                if (thrown.response) {
+                    this.$bvModal.msgBoxOk(
+                        "Response code: " + error.response.status +
+                        " Message: " + error.response.data, {
+                            title: "Error when processing request",
+                            size: 'md',
+                            buttonSize: 'sm',
+                            okVariant: 'outline-info',
+                            cancelVariant: 'outline-secondary',
+                            headerClass: 'border-bottom-0',
+                            footerClass: 'p-2 border-top-0',
+                            centered: true,
+                            autoFocusButton: 'ok'
+                        })
+                } else {
+                    this.$bvModal.msgBoxOk(
+                        "Cannot establish connection with the server. Try to check your internet connection." +
+                        "\nIf this error won't gone, please contact administrator.", {
+                            title: "Cannot connect to the server",
+                            size: 'md',
+                            buttonSize: 'sm',
+                            okVariant: 'outline-info',
+                            cancelVariant: 'outline-secondary',
+                            headerClass: 'border-bottom-0',
+                            footerClass: 'p-2 border-top-0',
+                            centered: true,
+                            autoFocusButton: 'ok'
+                        })
+                }
+                this.loading = false
+                this.loadedExample = true
+            });
+
+            // Setup abort interface
+            return {
+                abort: () => {
+                    source.cancel('Operation canceled by the user.');
+                    axios.Cancel
+                    abort();
+                }
+            };
         },
         loadData() {
             this.loading = true;
             this.$refs.pond.removeFiles();
             this.myFiles = this.$refs.pond.getFiles();
-            instance.get(`/${this.loadUrl}`, {
-                params: {},
-                responseType: 'blob'
+            instance.post(`/${this.statementUploadUrl}`, {
+                params: {}
             }).then(response => {
                 if (response.headers['correct'] === "true")
                     this.downloadTimetable(response.data)
@@ -186,15 +279,20 @@ export default {
                         })
                 }
                 this.loading = false
-
                 this.$emit('loadedExample')
-
                 this.loadedExample = true
             })
-        },
-        downloadTimetable(data) {
-            data
-            // FileSaver.saveAs(data, "TimeTable.xlsx");
+        }
+    },
+    computed: {
+        uploadUrl() {
+            console.log(this.loadUrl)
+            return `http://localhost:8000/api/${this.loadUrl}`
+        }
+    },
+    watch: {
+        loadUrl(){
+            console.log(this.loadUrl)
         }
     }
 }
@@ -209,7 +307,7 @@ export default {
 /* the text color of the drop label*/
 .filepond--drop-label label {
     color: #406cd2;
-    font-weight: 500!important;
+    font-weight: 500 !important;
 }
 
 .filepond--label-action {

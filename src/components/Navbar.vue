@@ -24,7 +24,7 @@
                         <b-dropdown-item :to="{name: 'StudentsQueries'}">Студенти</b-dropdown-item>
                         <b-dropdown-item :to="{name: 'StudentSearchDetails'}">Студент</b-dropdown-item>
                         <b-dropdown-item :to="{name: 'DataQueries'}">Відомості</b-dropdown-item>
-                        <b-dropdown-item :to="{name: 'CalculationQueries'}">Обрахунки</b-dropdown-item>
+                        <b-dropdown-item :to="{name: 'SubjectSearch'}">Предмети</b-dropdown-item>
                     </b-nav-item-dropdown>
 
                     <!--                    <router-link :to="{name: 'Producers'}"-->

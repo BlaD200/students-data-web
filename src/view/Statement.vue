@@ -4,7 +4,7 @@
             <b-col class="bg-white shadow rounded-lg" cols="12" lg="10">
                 <b-row class="mt-4 mb-3">
                     <b-col>
-                        <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{ id }}</b></h5>
+                        <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{ statementHeader.statementNo }}</b></h5>
                     </b-col>
                 </b-row>
 
@@ -13,74 +13,74 @@
                         <h6 class="statement-info-common">
                             Освітній рівень
                             <span class="statement-info-uncommon"
-                                  :class="headerErrors.eduLevelErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.eduLevelErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='headerErrors.eduLevelErrorText'
-                                  :disabled='!headerErrors.eduLevelErrorText'
+                                  :title='headerErrors.eduLevelErrorText.join(",")'
+                                  :disabled='!headerErrors.eduLevelErrorText.join(",")'
                             ><u>{{ statementHeader.eduLevel || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.facultyErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.facultyErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.top
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.facultyErrorText'
-                                  :disabled='!headerErrors.facultyErrorText'
+                                  :title='headerErrors.facultyErrorText.join(",")'
+                                  :disabled='!headerErrors.facultyErrorText.join(",")'
                             ><u>{{ statementHeader.faculty || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Рік навчання
                             <span class="statement-info-uncommon"
-                                  :class="headerErrors.courseErrorText  ? 'text-danger' : ''"
+                                  :class="headerErrors.courseErrorText.length  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.courseErrorText'
+                                  :title='headerErrors.courseErrorText.join(",")'
                                   :disabled='(headerErrors.courseErrorText === null)'
                             ><u>{{ statementHeader.course || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Група
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.groupErrorText  ? 'text-danger' : ''"
+                                  :class="headerErrors.groupErrorText.length  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.groupErrorText'
+                                  :title='headerErrors.groupErrorText.join(",")'
                                   :disabled='headerErrors.groupErrorText === null'
                             ><b>{{ statementHeader.group || "&#95;&#95;&#95;&#95;" }}</b></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Дисципліна
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.subjectNameErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.subjectNameErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='headerErrors.subjectNameErrorText'
-                                  :disabled='!headerErrors.subjectNameErrorText'
+                                  :title='headerErrors.subjectNameErrorText.join(",")'
+                                  :disabled='!headerErrors.subjectNameErrorText.join(",")'
                             ><u>{{ statementHeader.subjectName || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Семестр
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.semesterErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.semesterErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.semesterErrorText'
-                                  :disabled='!headerErrors.semesterErrorText'
+                                  :title='headerErrors.semesterErrorText.join(",")'
+                                  :disabled='!headerErrors.semesterErrorText.join(",")'
                             ><u>{{ statementHeader.semester || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Залікові бали
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.creditNumberErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.creditNumberErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='headerErrors.creditNumberErrorText'
-                                  :disabled='!headerErrors.creditNumberErrorText'
+                                  :title='headerErrors.creditNumberErrorText.join(",")'
+                                  :disabled='!headerErrors.creditNumberErrorText.join(",")'
                             ><u>{{ statementHeader.creditNumber || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Форма контролю:
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.controlTypeErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.controlTypeErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.top
-                                  :title='headerErrors.controlTypeErrorText'
-                                  :disabled='!headerErrors.controlTypeErrorText'
+                                  :title='headerErrors.controlTypeErrorText.join(",")'
+                                  :disabled='!headerErrors.controlTypeErrorText.join(",")'
                             ><u>{{ statementHeader.controlType || "&#95;&#95;&#95;&#95;" }}</u></span>.
                             Дата
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.examDateErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.examDateErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='headerErrors.examDateErrorText'
-                                  :disabled='!headerErrors.examDateErrorText'
+                                  :title='headerErrors.examDateErrorText.join(",")'
+                                  :disabled='!headerErrors.examDateErrorText.join(",")'
                             ><u>{{ statementHeader.examDate || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                     </b-col>
@@ -90,22 +90,22 @@
                     <b-col>
                         <h6 class=" text-center">
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.tutorFullNameErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.tutorFullNameErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.tutorFullNameErrorText'
-                                  :disabled='!headerErrors.tutorFullNameErrorText'
-                            ><u>{{statementHeader.tutorFullName || "&#95;&#95;&#95;&#95;" }}, </u></span>
+                                  :title='headerErrors.tutorFullNameErrorText.join(",")'
+                                  :disabled='!headerErrors.tutorFullNameErrorText.join(",")'
+                            ><u>{{ statementHeader.tutorFullName || "&#95;&#95;&#95;&#95;" }}, </u></span>
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.tutorAcademicStatusErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.tutorAcademicStatusErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.tutorAcademicStatusErrorText'
-                                  :disabled='!headerErrors.tutorAcademicStatusErrorText'
+                                  :title='headerErrors.tutorAcademicStatusErrorText.join(",")'
+                                  :disabled='!headerErrors.tutorAcademicStatusErrorText.join(",")'
                             ><u>{{ statementHeader.tutorAcademicStatus || "&#95;&#95;&#95;&#95;" }}, </u></span>
                             <span class="statement-info-uncommon font"
-                                  :class="headerErrors.tutorPositionErrorText ? 'text-danger' : ''"
+                                  :class="headerErrors.tutorPositionErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
-                                  :title='headerErrors.tutorPositionErrorText'
-                                  :disabled='!headerErrors.tutorPositionErrorText'
+                                  :title='headerErrors.tutorPositionErrorText.join(",")'
+                                  :disabled='!headerErrors.tutorPositionErrorText.join(",")'
                             ><u>{{ statementHeader.tutorPosition || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                     </b-col>
@@ -124,29 +124,32 @@
                         <h6 class="statement-info-common">
                             Кількість студентів на екзамені / тезі / заліку
                             <span class="statement-info-uncommon font"
-                                  :class="footerErrors.presentCountErrorText  ? 'text-danger' : ''"
+                                  :class="footerErrors.presentCountErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='footerErrors.presentCountErrorText'
-                                  :disabled='footerErrors.presentCountErrorText === null'
-                            ><u>{{ statementFooter.presentCount || "&#95;&#95;&#95;&#95;" }}</u></span>
+                                  :title='footerErrors.presentCountErrorText.join(",")'
+                                  :disabled='!footerErrors.presentCountErrorText.join(",")'
+                            ><u>{{ statementFooter.presentCount === null ?
+                                    "&#95;&#95;&#95;&#95;" : statementFooter.presentCount}}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Кількість студентів, які не з’явились на екзамен / тезу / залік
                             <span class="statement-info-uncommon font"
-                                  :class="footerErrors.absentCountErrorText  ? 'text-danger' : ''"
+                                  :class="footerErrors.absentCountErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='footerErrors.absentCountErrorText'
-                                  :disabled='footerErrors.absentCountErrorText === null'
-                            ><u>{{ statementFooter.absentCount || "&#95;&#95;&#95;&#95;" }}</u></span>
+                                  :title='footerErrors.absentCountErrorText.join(",")'
+                                  :disabled='!footerErrors.absentCountErrorText.join(",")'
+                            ><u>{{ statementFooter.absentCount === null ?
+                                    "&#95;&#95;&#95;&#95;" : statementFooter.absentCount }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Кількість студентів, недопущених до екзамену / тези / заліку
                             <span class="statement-info-uncommon font"
-                                  :class="footerErrors.rejectedCountErrorText  ? 'text-danger' : ''"
+                                  :class="footerErrors.rejectedCountErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
-                                  :title='footerErrors.rejectedCountErrorText'
-                                  :disabled='footerErrors.rejectedCountErrorText === null'
-                            ><u>{{ statementFooter.rejectedCount || "&#95;&#95;&#95;&#95;" }}</u></span>
+                                  :title='footerErrors.rejectedCountErrorText.join(",")'
+                                  :disabled='!footerErrors.rejectedCountErrorText.join(",")'
+                            ><u>{{ statementFooter.rejectedCount === null ?
+                                    "&#95;&#95;&#95;&#95;" : statementFooter.rejectedCount }}</u></span>
                         </h6>
                     </b-col>
                 </b-row>
@@ -164,8 +167,9 @@ export default {
     props: {
         id: {
             type: String,
-            required: true
-        }
+            required: false
+        },
+        statementReport: Object
     },
     data() {
         return {
@@ -193,7 +197,8 @@ export default {
             students: [
                 {
                     studentId: 23,
-                    studentPIB: "Бойчук Олег Романович",
+                    studentPI: "Бойчук Олег",
+                    studentPatronymic: "Романович",
                     studentRecordBook: "І 303/10 бп",
                     semesterGrade: 60,
                     controlGrade: 30,
@@ -225,38 +230,52 @@ export default {
             loadingStudents: false,
 
             headerErrors: {
-                eduLevelErrorText: 'Відсутній освітній рівень',
-                facultyErrorText: 'Факультет інформатики',
-                courseErrorText:0,
-                groupErrorText:0,
-                subjectNameErrorText: 'Технології сучасних дата - центрів',
-                semesterErrorText: '6д',
-                creditNumberErrorText: null,
-                controlTypeErrorText: 'екзамен',
-                examDateErrorText: '2021-05-24',
-                tutorFullNameErrorText: 'Черкасов Дмитро Іванович',
-                tutorPositionErrorText: 'старший викладач',
-                tutorAcademicStatusErrorText: 'кандидат технічних наук'
+                eduLevelErrorText: ['Відсутній освітній рівень'],
+                facultyErrorText: ['Факультет інформатики'],
+                courseErrorText: [0],
+                groupErrorText: [0],
+                subjectNameErrorText: ['Технології сучасних дата - центрів'],
+                semesterErrorText: ['6д'],
+                creditNumberErrorText: ['null'],
+                controlTypeErrorText: ['екзамен'],
+                examDateErrorText: ['2021-05-24'],
+                tutorFullNameErrorText: ['Черкасов Дмитро Іванович'],
+                tutorPositionErrorText: ['старший викладач'],
+                tutorAcademicStatusErrorText: ['кандидат технічних наук']
             },
             studentErrors: {
                 // 23: {
                 //     totalGradeError: 'Не вказано суму балів'
                 // },
-                25: {
-                    studentRecordBookError: 'Відсутній номер залікової книжки',
-                    totalGradeError: 'Не вказано суму балів'
-                }
+                // 25: {
+                //     studentRecordBookError: ['Відсутній номер залікової книжки'],
+                //     totalGradeError: ['Не вказано суму балів']
+                // }
             },
             footerErrors: {
-                presentCountErrorText: null, //6,
-                absentCountErrorText: null, //0,
-                rejectedCountErrorText: null, //0
+                presentCountErrorText: [null], //6],
+                absentCountErrorText: [null], //0],
+                rejectedCountErrorText: [null], //]0
             }
         }
     },
+    watch: {
+        statementReport() {
+            console.log(this.statementReport)
+            if (this.statementReport) {
+                this.statementHeader = this.statementReport.statementInfo.statementHeader
+                this.statementFooter = this.statementReport.statementInfo.statementFooter
+                this.students = this.statementReport.statementInfo.statementStudents
+
+                this.headerErrors = this.statementReport.statementErrors.headerErrors
+                this.footerErrors = this.statementReport.statementErrors.footerErrors
+                this.studentErrors = this.statementReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap
+            }
+            this.$emit('statementDataChanged')
+        }
+    },
     methods: {},
-    computed: {
-    }
+    computed: {}
 }
 </script>
 
