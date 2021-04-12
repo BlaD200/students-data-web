@@ -23,8 +23,8 @@
                 @click="$router.push({name: 'Bigunets', params: {id: `${bigunets.statementNo}`}})"
                 style="cursor: pointer;">
                 <th>{{ bigunets.statementNo }}</th>
-                <td>{{ bigunets.tutor }}</td>
-                <td>{{ bigunets.subject }}</td>
+                <td>{{ bigunets.tutorFullName }}</td>
+                <td>{{ bigunets.subjectName }}</td>
                 <td>{{ bigunets.controlType }}</td>
                 <td>{{ bigunets.postponeReason ? bigunets.postponeReason : "&#8212;" }}</td>
                 <td>{{ bigunets.examDate }}</td>

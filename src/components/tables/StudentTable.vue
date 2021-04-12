@@ -23,7 +23,7 @@
                 <td>{{ studentFullName(student) }}</td>
                 <td>{{ student.studentRecordBook  }}</td>
                 <td>{{ student.studentCourse }}</td>
-                <td>{{ semester(student.studentTrim) }}</td>
+                <td>{{ student.studentTrim }}</td>
                 <td>{{ student.studentRating }}</td>
             </tr>
             </tbody>

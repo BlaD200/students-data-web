@@ -173,6 +173,8 @@ export default {
     },
     data() {
         return {
+            apiUrl: 'http://localhost:8000/api',
+
             statementHeader: {
                 statementNo: '',
                 eduLevel: 'Бакалавр',
@@ -230,18 +232,18 @@ export default {
             loadingStudents: false,
 
             headerErrors: {
-                eduLevelErrorText: ['Відсутній освітній рівень'],
-                facultyErrorText: ['Факультет інформатики'],
-                courseErrorText: [0],
-                groupErrorText: [0],
-                subjectNameErrorText: ['Технології сучасних дата - центрів'],
-                semesterErrorText: ['6д'],
-                creditNumberErrorText: ['null'],
-                controlTypeErrorText: ['екзамен'],
-                examDateErrorText: ['2021-05-24'],
-                tutorFullNameErrorText: ['Черкасов Дмитро Іванович'],
-                tutorPositionErrorText: ['старший викладач'],
-                tutorAcademicStatusErrorText: ['кандидат технічних наук']
+                eduLevelErrorText: [],
+                facultyErrorText: [],
+                courseErrorText: [],
+                groupErrorText: [],
+                subjectNameErrorText: [],
+                semesterErrorText: [],
+                creditNumberErrorText: [],
+                controlTypeErrorText: [],
+                examDateErrorText: [],
+                tutorFullNameErrorText: [],
+                tutorPositionErrorText: [],
+                tutorAcademicStatusErrorText: []
             },
             studentErrors: {
                 // 23: {
@@ -253,9 +255,37 @@ export default {
                 // }
             },
             footerErrors: {
-                presentCountErrorText: [null], //6],
-                absentCountErrorText: [null], //0],
-                rejectedCountErrorText: [null], //]0
+                presentCountErrorText: [], //6],
+                absentCountErrorText: [], //0],
+                rejectedCountErrorText: [], //]0
+            }
+        }
+    },
+    created() {
+        this.getStatementInfo()
+    },
+    methods: {
+        getStatementInfo(){
+            if (this.id) {
+                this.loadingStudents = true
+                this.$http
+                    .get(this.apiUrl + '/statement/' + this.id)
+                    .then(response => {
+                        console.log(response)
+
+                        this.statementFooter = response.data.statementFooter
+                        this.statementHeader = response.data.statementHeader
+
+                        this.students = []
+                        response.data.statementStudents.forEach(user => this.students.push(user))
+                        this.totalElements = response.data.totalElements
+                        this.loadingStudents = false
+                    })
+                    .catch(error => {
+                        this.$root.defaultRequestErrorHandler(error)
+                        console.log(error, "179")
+                        this.loadingStudents = false
+                    })
             }
         }
     },
@@ -274,8 +304,6 @@ export default {
             this.$emit('statementDataChanged')
         }
     },
-    methods: {},
-    computed: {}
 }
 </script>
 

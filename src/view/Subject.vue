@@ -110,21 +110,6 @@ export default {
                     })
                     .catch(error => {
                         error
-                        // TODO remove test data
-                        for (let i = 0; i < 10; i++) {
-                            this.subjects.push({
-                                subjectID: i,
-                                subjectName: 'Технології сучасних дата - центрів ' + i,
-                                tutorFullName: "Черкасов Дмитро Іванович",
-                                averageGrade: 86.68
-                            })
-                        }
-                        let start = (this.currentPage - 1) * this.perPage;
-                        let end = this.currentPage * this.perPage;
-                        console.log(start, end)
-                        this.subjects = this.subjects.slice(start, end)
-                        // response.data.data.forEach(statement => this.statements.push(statement))
-                        this.totalElements = 10 //response.data.totalElements // TODO Use pageable
                         // this.$root.defaultRequestErrorHandler(error)
                         this.averageGrade = ""
                         this.loadingSubjects = false

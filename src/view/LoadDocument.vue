@@ -129,7 +129,7 @@ export default {
             let redirectUrl;
             if (this.loadedStatement){
                 apiUrl = this.apiURl + '/statement/save'
-                data = {statementReport: this.statementReport}
+                data = {statementInfo: this.statementReport.statementInfo}
                 redirectUrl = '/statement/'
             } else if (this.loadBiguntsi){
                 apiUrl = this.apiURl + '/bigunets/save'
@@ -137,7 +137,7 @@ export default {
                 redirectUrl = '/bigunets/'
             }
             this.$http
-                .post(apiUrl, data )
+                .post(apiUrl, data)
                 .then(response => {
                     console.log(response)
                     this.$router.push(redirectUrl + response.data)

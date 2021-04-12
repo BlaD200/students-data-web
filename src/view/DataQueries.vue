@@ -104,10 +104,34 @@ export default {
             ],
         }
     },
+    created() {
+        this.$http
+            .get(this.apiURl + '/subjectNames')
+            .then(response => {
+                this.subjectOptions = response.data
+            })
+            .catch(error => {
+                // this.$root.defaultRequestErrorHandler(error)
+                console.log(error)
+            })
+
+        this.$http
+            .get(this.apiURl + '/tutorNames')
+            .then(response => {
+                this.tutorOptions = response.data//.flatmap(tutor => tutor.fullname)
+            })
+            .catch(error => {
+                // this.$root.defaultRequestErrorHandler(error)
+                console.log(error)
+            })
+    },
     methods: {
         onChangePage(page) {
             this.currentPage = page
-            this.getStudents()
+            if (this.tabIndex === 0) {
+                this.getStatements()
+            } else
+                this.getBiguntsi()
         },
         onChangeTab(tabIndex) {
             this.tabIndex = tabIndex
@@ -127,12 +151,39 @@ export default {
                 this.getBiguntsi()
         },
         getStatements() {
+            // const config = {
+            //     params: {
+            //         tutorName: this.tutorName,
+            //         subjectName: this.subjectName,
+            //         group: this.group
+            //     }
+            // }
+            // this.$http
+                // .get(this.apiURl + '/students', config)
+                // .then(response => {
+                //     this.students = []
+                //     response.data.content.forEach(user => this.students.push(user))
+                //     this.totalElements = response.data.totalElements // TODO Use pageable
+                //     this.loading = false
+                // })
+                // .catch(error => {
+                //     // this.$root.defaultRequestErrorHandler(error)
+                //     console.log(error, "179")
+                //     this.loading = false
+                // })
+            const config = {
+                params: {
+                    tutorName: this.tutorName,
+                    subjectName: this.subjectName,
+                    group: this.group
+                }
+            }
             this.loadingStatements = true
             this.$http
-                .get(`${this.apiURl}/statements`, this.config)
+                .get(`${this.apiURl}/statements`, config)
                 .then(response => {
                     this.statements = []
-                    response.data.data.forEach(statement => this.statements.push(statement))
+                    response.data.content.forEach(statement => this.statements.push(statement))
                     this.totalElements = response.data.totalElements // TODO Use pageable
                     this.loadingStatements = false
                 })
@@ -143,9 +194,16 @@ export default {
                 })
         },
         getBiguntsi(){
+            const config = {
+                params: {
+                    tutorName: this.tutorName,
+                    subjectName: this.subjectName,
+                    group: this.group
+                }
+            }
             this.loadingBiguntsi = true
             this.$http
-                .get(`${this.apiURl}/statements`, this.config)
+                .get(`${this.apiURl}/statements`, config)
                 .then(response => {
                     this.biguntsi = []
                     response.data.data.forEach(statement => this.biguntsi.push(statement))

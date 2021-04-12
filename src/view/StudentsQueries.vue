@@ -59,12 +59,13 @@ export default {
             tabIndex: 0,
             loading: false,
 
-            sortBy: 'student_surname',
+            sortBy: 'studentSurname',
             sortByOptions: [
-                {value: "complete_mark", text: 'За рейтингом'},
-                {value: "student_surname", text: 'За прізвищем'}
+                {value: "completeMark", text: 'За рейтингом'},
+                {value: "studentSurname", text: 'За прізвищем'},
+                {value: "course", text: 'За курсом'},
             ],
-            sortDesc: true,
+            sortDesc: false,
 
             students: [
                 {
@@ -114,9 +115,9 @@ export default {
             })
 
         this.$http
-            .get(this.apiURl + '/subjects')
+            .get(this.apiURl + '/subjectNames')
             .then(response => {
-                this.subjectOptions = response.data.flatmap(subject => subject.name)
+                this.subjectOptions = response.data
             })
             .catch(error => {
                 // this.$root.defaultRequestErrorHandler(error)

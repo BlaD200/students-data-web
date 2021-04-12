@@ -28,8 +28,8 @@
                 @click="$router.push({name: 'Statement', params: {id: `${statement.statementNo}`}})"
                 style="cursor: pointer;">
                 <th>{{ statement.statementNo }}</th>
-                <td>{{ statement.tutor }}</td>
-                <td>{{ statement.subject }}</td>
+                <td>{{ statement.tutorFullName }}</td>
+                <td>{{ statement.subjectName }}</td>
                 <td>{{ statement.group }}</td>
                 <td>{{ statement.controlType }}</td>
                 <td>{{ studentsCount(statement) }}</td>
@@ -63,7 +63,9 @@ export default {
     },
     methods: {
         studentsCount(statement) {
-            return `${statement.presentCount} / ${statement.absentCount} / ${statement.rejectedCount}`
+            return statement.studentsCount ?
+                `${statement.studentsCount.presentCount} / ${statement.studentsCount.absentCount} / ${statement.studentsCount.rejectedCount}`
+                : ''
         }
     }
 }

@@ -12,7 +12,7 @@
                     <div slot="table">
                         <student-table
                                       :students="students" :loading="loadingStudents"
-                                      @studentTableRowClicked="studentIdChosen = $event"
+                                      @studentTableRowClicked="onStudentChosen"
                         ></student-table>
                         <b-pagination
                             v-if="!loadingStudents &&
@@ -229,7 +229,7 @@ export default {
     },
     props: {
         id: {
-            type: String,
+            type: Number,
             required: false
         }
     },
@@ -328,12 +328,12 @@ export default {
                     .get(this.apiURl + '/students')
                     .then(response => {
                         this.students = []
-                        response.data.data.forEach(user => this.students.push(user))
+                        response.data.content.forEach(user => this.students.push(user))
                         this.students = this.students.filter(student => {
                             console.log(student)
                             return student.studentSurname.toLowerCase().includes(this.searchStudentPIBInput.toLowerCase());
                         })
-                        this.totalElements = response.data.totalElements // TODO Use pageable
+                        this.totalElements = response.data.totalElements
                         this.loadingStudents = false
                     })
                     .catch(error => {
@@ -347,12 +347,19 @@ export default {
                     })
             }
         },
-        getStudentInfo() {
+        onStudentChosen(event){
+            this.studentIdChosen = event
+            this.getStudentInfo(this.studentIdChosen)
+            this.loadSubjects = false
+            this.loadBiguntsi = false
+            this.loadingStatements = false
+        },
+        getStudentInfo(id) {
             const config = {
                 params: {}
             }
             this.$http
-                .get(`${this.apiURl}/student/${this.id}`, config)
+                .get(`${this.apiURl}/student/${id ? id : this.id}`, config)
                 .then(response => {
                     this.student = response.data
                     this.loading = false
@@ -364,18 +371,19 @@ export default {
                 })
         },
         onLoadSubjects() {
-            this.loadingSubjects = true
+            this.loadSubjects = true
             // if (this.statements.length > 0)
             //     return
-            console.log(this.$refs)
+            const url = `${this.apiURl}/student/${this.studentId}/subjects`;
+            console.log(this.studentId, url)
             const courseTabIdx = this.courseTab
             const semesterTabIdx = this.semesterTab
             this.loadingSubjects = true
             this.$http
-                .get(`${this.apiURl}/student/${this.student.studentId}/subjects`, {
+                .get(url, {
                     params: {
-                        course: this.courseTab,
-                        semester: this.semesterTab,
+                        course: this.courseTab + 1,
+                        semester: this.semesterTab + 1,
                         page: this.subjectsPagination.currentPage,
                         numberPerPage: this.subjectsPagination.perPage,
                     }
@@ -383,8 +391,8 @@ export default {
                 .then(response => {
                     if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
                         return
-
-                    response.data.data.forEach(subject => this.subjects.push(subject))
+                    this.subjects = []
+                    response.data.content.forEach(subject => this.subjects.push(subject))
                     this.subjectsPagination.totalElements = response.data.totalElements // TODO Use pageable
 
                     // let semesterTab = this.$refs['semester-tab-' + courseTabIdx + semesterTabIdx][0]
@@ -410,40 +418,21 @@ export default {
                     if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
                         return
 
-                    // TODO remove test data
-                    for (let i = 0; i < 15; i++) {
-                        this.subjects.push({
-                            subjectID: i,
-                            subjectName: 'Технології сучасних дата - центрів',
-                            tutorFullName: "Черкасов Дмитро Іванович",
-                            group: "1",
-                            controlType: "екзамен",
-                            examDate: "2021-05-25",
-                            grade: this.grade++
-                        })
-                    }
-                    let start = (this.subjectsPagination.currentPage - 1) * this.subjectsPagination.perPage;
-                    let end = this.subjectsPagination.currentPage * this.subjectsPagination.perPage;
-                    console.log(start, end)
-                    this.subjects = this.subjects.slice(start, end)
-                    // response.data.data.forEach(statement => this.statements.push(statement))
-                    this.subjectsPagination.totalElements = 15 //response.data.totalElements // TODO Use pageable
-                    // this.$root.defaultRequestErrorHandler(error)
                     this.averageGrade = ""
                     this.loadingSubjects = false
                 })
+
             this.$http
-                .get(`${this.apiURl}/student/${this.student.studentId}/averageGrade`, {
+                .get(`${this.apiURl}/student/${this.studentId}/averageGrade`, {
                     params: {
-                        course: this.courseTab,
-                        semester: this.semesterTab,
+                        course: this.courseTab + 1,
+                        semester: this.semesterTab + 1,
                     }
                 })
                 .then(response => {
-                    response
                     if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
                         return
-                    this.averageGrade = ""
+                    this.averageGrade = response.data
                 })
                 .catch(error => {
                     error
@@ -477,13 +466,20 @@ export default {
             // if (this.statements.length > 0)
             //     return
 
+            const config = {
+                params: {
+                    page: this.statementsPagination.currentPage,
+                    numberPerPage: this.statementsPagination.perPage
+                }
+            }
+
             this.loadingStatements = true
             this.$http
-                .get(`${this.apiURl}/statements`, this.config)
+                .get(`${this.apiURl}/student/${this.studentId}/statements`, config)
                 .then(response => {
                     this.statements = []
-                    response.data.data.forEach(statement => this.statements.push(statement))
-                    this.statementsPagination.totalElements = response.data.totalElements // TODO Use pageable
+                    response.data.content.forEach(statement => this.statements.push(statement))
+                    this.statementsPagination.totalElements = response.data.totalElements
                     this.loadingStatements = false
                 })
                 .catch(error => {
@@ -499,22 +495,27 @@ export default {
         },
         onLoadBiguntsi() {
             this.loadBiguntsi = true
-            if (this.biguntsi.length > 0)
-                return
+            // if (this.biguntsi.length > 0)
+            //     return
 
+            const config = {
+                params: {
+                    page: this.statementsPagination.currentPage,
+                    numberPerPage: this.statementsPagination.perPage
+                }
+            }
             this.loadingBiguntsi = true
-            setTimeout(() => this.loadingBiguntsi = false, 500)
-
             this.$http
-                .get(`${this.apiURl}/biguntsi`, this.config)
+                .get(`${this.apiURl}/student/${this.studentId}/biguntsi`, config)
                 .then(response => {
                     this.biguntsi = []
-                    response.data.data.forEach(bigunets => this.biguntsi.push(bigunets))
-                    this.biguntsiPagination.totalElements = response.data.totalElements // TODO Use pageable
-                    this.loading = false
+                    response.data.content.forEach(bigunets => this.biguntsi.push(bigunets))
+                    this.biguntsiPagination.totalElements = response.data.totalElements
+                    this.loadingBiguntsi = false
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
+                    this.statements = []
                     this.loadingBiguntsi = false
                 })
         },
@@ -536,6 +537,11 @@ export default {
         studentFullName() {
             return `${this.student.studentSurname} ${this.student.studentName} ${this.student.studentPatronymic}`
         },
+        studentId(){
+            console.log(this.student.studentCode)
+            let id = this.studentIdChosen ? this.studentIdChosen : this.id
+            return Number(id)
+        }
     }
 }
 </script>
