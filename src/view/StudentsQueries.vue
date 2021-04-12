@@ -178,8 +178,8 @@ export default {
             this.$http
                 .get(this.apiURl + '/students', config)
                 .then(response => {
-                    // this.students = []
-                    response.data.data.forEach(user => this.students.push(user))
+                    this.students = []
+                    response.data.content.forEach(user => this.students.push(user))
                     this.totalElements = response.data.totalElements // TODO Use pageable
                     this.loading = false
                 })

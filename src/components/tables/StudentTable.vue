@@ -8,20 +8,22 @@
             <tr>
                 <th>№</th>
                 <th>ПІБ</th>
-                <th>Факультет</th>
+                <th>Заліковка</th>
                 <th>Курс</th>
+                <th>Семестер</th>
                 <th>Рейтинг</th>
             </tr>
             </thead>
 
             <tbody>
-            <tr :key="student.studentRecordBook" v-for="student in students"
+            <tr :key="student.studentId" v-for="student in students"
                 @click="$emit('studentTableRowClicked', student.studentId)"
                 style="cursor: pointer;">
                 <th>{{ student.studentRecordBook }}</th>
                 <td>{{ studentFullName(student) }}</td>
-                <td>{{ studentFacultyInitials(student)  }}</td>
+                <td>{{ student.studentRecordBook  }}</td>
                 <td>{{ student.studentCourse }}</td>
+                <td>{{ semester(student.studentTrim) }}</td>
                 <td>{{ student.studentRating }}</td>
             </tr>
             </tbody>
@@ -53,11 +55,15 @@ export default {
         studentFullName(student) {
             return `${student.studentSurname} ${student.studentName} ${student.studentPatronymic}`
         },
-        studentFacultyInitials(student) {
-            let string = student.faculty ?
-                student.faculty.split(' ').map(word => word.charAt(0).toUpperCase()).join('') : '';
-            console.log(string)
-            return string
+        semester(semesterInt) {
+            switch (semesterInt) {
+                case "1 ":
+                    return "Осінь"
+                case "2 ":
+                    return "Весна"
+                case "3 ":
+                    return "Літо"
+            }
         }
     },
     computed: {}
