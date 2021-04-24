@@ -21,8 +21,8 @@
             <tbody>
 
             <tr class="text-center"
-                :key="subject.subjectID" v-for="subject in subjects"
-                @click="$emit('subjectTableRowClicked', subject.subjectID)"
+                :key="subject.subjectId" v-for="subject in subjects"
+                @click="$emit('subjectTableRowClicked', subject.subjectId)"
                 style="cursor: pointer;">
                 <th>{{ subjects.indexOf(subject) + 1 }}</th>
                 <td>{{ subject.subjectName }}</td>
@@ -59,7 +59,7 @@ export default {
     data() {
         return {
             subject: {
-                subjectID: 1,
+                subjectId: 1,
                 subjectName: 'Технології сучасних дата - центрів',
                 tutorFullName: "Черкасов Дмитро Іванович",
                 averageGrade: 86.68

@@ -48,23 +48,75 @@
                 </search-with-table>
             </b-col>
         </b-row>
+
+        <div v-show="showSubjectDetails" class="mb-3">
+            <b-row class="mt-3">
+                <b-col class="p-2 p-lg-3 bg-white rounded-lg shadow">
+                    <div class="mb-2 m-1 d-flex justify-content-between align-items-center">
+                        <h4 class=" align-middle mb-0">
+                                    <span v-b-tooltip.right
+                                          title='Всі відомості, в яких є даний студент'>
+                                    Відомості
+                                    </span>
+                        </h4>
+
+                        <div>
+                            <b-button v-if="!loadStatements"
+                                      class=""
+                                      size="sm" variant="outline-secondary"
+                                      @click="onLoadStatements">
+                                Завантажити відомості
+                            </b-button>
+
+                            <b-button v-else
+                                      @click="loadStatements = false"
+                                      size="sm" class=" mb-n1" variant="outline-secondary">
+                                Сховати
+                            </b-button>
+                        </div>
+                    </div>
+
+                    <div v-show="loadStatements" class="py-2">
+                        <statements-table :statements="statements"
+                                          :loading="loadingStatements"></statements-table>
+                        <b-pagination
+                            v-if="loadStatements && !loadingStatements
+                                    && statementsPagination.totalElements > statementsPagination.perPage"
+                            v-model="statementsPagination.currentPage"
+                            :total-rows="statementsPagination.totalElements"
+                            :per-page="statementsPagination.perPage"
+                            first-number
+                            last-number
+                            align="center"
+                            @change="onStatementsPageChanged"
+                        ></b-pagination>
+                    </div>
+
+                </b-col>
+            </b-row>
+
+        </div>
+
     </div>
 </template>
 
 <script>
 import SearchWithTable from "@/components/inputs/SearchWithTable";
 import SubjectsTable from "@/components/tables/SubjectsTable";
+import StatementsTable from "@/components/tables/StatementsTable";
 
 export default {
     name: "Subject",
     components: {
-        SearchWithTable, SubjectsTable
+        SearchWithTable, SubjectsTable, StatementsTable
     },
     props: {
         id: String
     },
     data() {
         return {
+            apiUrl: 'http://localhost:8000/api',
+
             loadingSubjects: false,
             subjects: [],
             subjectSearchInput: '',
@@ -78,12 +130,32 @@ export default {
                 subjectName: 'Технології сучасних дата - центрів',
                 tutorFullName: 'Черкасов Дмитро Іванович',
                 averageGrade: 87.33,
-            }
+            },
+
+            loadStatements: false,
+            loadingStatements: false,
+            statements: [
+                {
+                    statementNo: 2222222,
+                    tutor: "Черкасов Дмитро Іванович",
+                    subject: 'Технології сучасних дата - центрів',
+                    group: "1",
+                    controlType: "екзамен",
+                    presentCount: 30,
+                    absentCount: 2,
+                    rejectedCount: 0,
+                    examDate: "2021-05-25"
+                }],
+            statementsPagination: {
+                currentPage: 1,
+                totalElements: 0,
+                perPage: 10
+            },
         }
     },
     methods: {
-        getSubjectInfo(){
-            this.subject = this.subjects[this.subjectIdChosen]
+        getSubjectInfo() {
+            this.subject = this.subjects.find(subject => subject.subjectId === this.subjectIdChosen)
         },
         onLoadSubjects(input) {
             this.subjectSearchInput = input
@@ -92,18 +164,25 @@ export default {
                 // if (this.statements.length > 0)
                 //     return
 
+                this.subjects.push({
+                    subjectId: 1,
+                    subjectName: 'Технології сучасних дата - центрів',
+                    tutorFullName: "Черкасов Дмитро Іванович",
+                    averageGrade: 86.68
+                })
+
                 this.loadingSubjects = true
                 this.$http
-                    .get(`${this.apiURl}/subjects`, {
+                    .get(`${this.apiUrl}/subjects`, {
                         params: {
-                            subjectName: this.courseTab,
+                            subjectName: this.subjectSearchInput,
                             page: this.currentPage,
                             numberPerPage: this.perPage,
                         }
                     })
                     .then(response => {
 
-                        response.data.data.forEach(subject => this.subjects.push(subject))
+                        // response.data.data.forEach(subject => this.subjects.push(subject))
                         this.totalElements = response.data.totalElements // TODO Use pageable
 
                         this.loadingSubjects = false
@@ -121,10 +200,38 @@ export default {
             this.currentPage = page
             this.onLoadSubjects()
         },
-        onSubjectChosen(event){
+        onSubjectChosen(event) {
             this.subjectIdChosen = event
             this.getSubjectInfo()
-        }
+        },
+        onLoadStatements() {
+            this.loadStatements = true
+            // if (this.statements.length > 0)
+            //     return
+
+            const config = {
+                params: {
+                    subjectName: this.subject.subjectName,
+                    page: this.statementsPagination.currentPage,
+                    numberPerPage: this.statementsPagination.perPage
+                }
+            }
+
+            this.loadingStatements = true
+            this.$http
+                .get(`${this.apiUrl}/statements`, config)
+                .then(response => {
+                    this.statements = []
+                    response.data.content.forEach(statement => this.statements.push(statement))
+                    this.statementsPagination.totalElements = response.data.totalElements
+                    this.loadingStatements = false
+                })
+                .catch(error => {
+                    this.$root.defaultRequestErrorHandler(error)
+                    this.statements = []
+                    this.loadingStatements = false
+                })
+        },
     },
     computed: {
         searchValid() {

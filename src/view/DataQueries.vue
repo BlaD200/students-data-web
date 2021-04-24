@@ -198,12 +198,12 @@ export default {
                 params: {
                     tutorName: this.tutorName,
                     subjectName: this.subjectName,
-                    group: this.group
+                    group: this.group // TODO pages
                 }
             }
             this.loadingBiguntsi = true
             this.$http
-                .get(`${this.apiURl}/statements`, config)
+                .get(`${this.apiURl}/biguntsi`, config)
                 .then(response => {
                     this.biguntsi = []
                     response.data.data.forEach(statement => this.biguntsi.push(statement))

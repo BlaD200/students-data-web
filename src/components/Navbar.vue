@@ -19,7 +19,6 @@
                     >
                         Завантажити
                     </router-link>
-
                     <b-nav-item-dropdown text="Запити">
                         <b-dropdown-item :to="{name: 'StudentsQueries'}">Студенти</b-dropdown-item>
                         <b-dropdown-item :to="{name: 'StudentSearchDetails'}">Студент</b-dropdown-item>
