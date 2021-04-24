@@ -35,10 +35,10 @@
                         ></subjects-table>
                         <b-pagination
                             v-if="!loadingSubjects &&
-                                    totalElements > perPage"
-                            v-model="currentPage"
-                            :total-rows="totalElements"
-                            :per-page="perPage"
+                                    subjectsPagination.totalElements > subjectsPagination.perPage"
+                            v-model="subjectsPagination.currentPage"
+                            :total-rows="subjectsPagination.totalElements"
+                            :per-page="subjectsPagination.perPage"
                             first-number
                             last-number
                             align="center"
@@ -121,9 +121,11 @@ export default {
             subjects: [],
             subjectSearchInput: '',
             subjectIdChosen: null,
-            currentPage: 1,
-            totalElements: 0,
-            perPage: 10,
+            subjectsPagination: {
+                currentPage: 1,
+                totalElements: 0,
+                perPage: 10,
+            },
 
             subject: {
                 subjectID: 1,
@@ -154,6 +156,27 @@ export default {
         }
     },
     methods: {
+        getSubjects(){
+            this.loadingSubjects = true
+            this.$http
+                .get(`${this.apiUrl}/subjects`, {
+                    params: {
+                        subjectName: this.subjectSearchInput,
+                        page: this.subjectsPagination.currentPage,
+                        numberPerPage: this.subjectsPagination.perPage,
+                    }
+                })
+                .then(response => {
+                    response.data.content.forEach(subject => this.subjects.push(subject))
+                    this.subjectsPagination.totalElements = response.data.totalElements
+
+                    this.loadingSubjects = false
+                })
+                .catch(error => {
+                    this.$root.defaultRequestErrorHandler(error)
+                    this.loadingSubjects = false
+                })
+        },
         getSubjectInfo() {
             this.subject = this.subjects.find(subject => subject.subjectId === this.subjectIdChosen)
         },
@@ -163,42 +186,13 @@ export default {
                 this.loadingSubjects = true
                 // if (this.statements.length > 0)
                 //     return
-
-                this.subjects.push({
-                    subjectId: 1,
-                    subjectName: 'Технології сучасних дата - центрів',
-                    tutorFullName: "Черкасов Дмитро Іванович",
-                    averageGrade: 86.68
-                })
-
-                this.loadingSubjects = true
-                this.$http
-                    .get(`${this.apiUrl}/subjects`, {
-                        params: {
-                            subjectName: this.subjectSearchInput,
-                            page: this.currentPage,
-                            numberPerPage: this.perPage,
-                        }
-                    })
-                    .then(response => {
-
-                        // response.data.data.forEach(subject => this.subjects.push(subject))
-                        this.totalElements = response.data.totalElements // TODO Use pageable
-
-                        this.loadingSubjects = false
-                    })
-                    .catch(error => {
-                        error
-                        // this.$root.defaultRequestErrorHandler(error)
-                        this.averageGrade = ""
-                        this.loadingSubjects = false
-                    })
+                this.getSubjects()
             }
         },
         onSubjectsPageChanged(page) {
             console.log(page)
-            this.currentPage = page
-            this.onLoadSubjects()
+            this.subjectsPagination.currentPage = page
+            this.getSubjects()
         },
         onSubjectChosen(event) {
             this.subjectIdChosen = event
@@ -224,6 +218,18 @@ export default {
                     this.statements = []
                     response.data.content.forEach(statement => this.statements.push(statement))
                     this.statementsPagination.totalElements = response.data.totalElements
+
+                    // const statement = this.statements[0]
+                    // this.statements = []
+                    // for (let i = (this.statementsPagination.currentPage - 1) * this.statementsPagination.perPage;
+                    //      i < this.statementsPagination.perPage * this.statementsPagination.currentPage; i++) {
+                    //     console.log(i)
+                    //     statement.statementNo = i
+                    //     console.log(statement)
+                    //     this.statements.push({...statement})
+                    // }
+                    // this.statementsPagination.totalElements = 25
+
                     this.loadingStatements = false
                 })
                 .catch(error => {
@@ -231,6 +237,11 @@ export default {
                     this.statements = []
                     this.loadingStatements = false
                 })
+        },
+        onStatementsPageChanged(page) {
+            console.log(page)
+            this.statementsPagination.currentPage = page
+            this.onLoadStatements()
         },
     },
     computed: {
