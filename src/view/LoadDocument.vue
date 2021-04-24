@@ -8,7 +8,8 @@
 
         <b-row class="justify-content-center">
             <b-col cols="12" lg="10" class="bg-white shadow rounded-lg p-0">
-                <b-tabs justified card pills class="" @activate-tab="onDocumentUnload">
+                <b-tabs v-model="selectedTab" @activate-tab="onDocumentUnload"
+                        justified card pills class="">
                     <b-tab title="Відомість">
                         <document-loader document-name="відомість"
                                          load-url="statement/process"
@@ -29,12 +30,12 @@
 
         <statement
             v-show="loadedStatement"
-            :statement-report="statementReport"
+            :document-report="statementReport" type="statement"
             class="mt-2"></statement>
 
         <statement
             v-show="loadedBigunets"
-            :statement-report="bigunetsReport"
+            :document-report="bigunetsReport" type="bigunets"
             class="mt-2"></statement>
 
         <b-row class="mt-2 mb-5 justify-content-center" v-show="loadedStatement || loadedBigunets">
@@ -99,6 +100,7 @@ export default {
         return {
             apiURl: 'http://localhost:8000/api',
 
+            selectedTab: 0,
             loadedStatement: false,
             loadedBigunets: false,
             dataAccepted: false,
@@ -151,21 +153,21 @@ export default {
         saveData() {
             let apiUrl;
             let data;
-            let redirectUrl;
+            let redirectUrl = '';
             if (this.loadedStatement) {
                 apiUrl = this.apiURl + '/statement/save'
                 data = {statementInfo: this.statementReport.statementInfo}
-                redirectUrl = '/statement/'
+                redirectUrl = '/document/%s?type=statement'
             } else if (this.loadedBigunets) {
                 apiUrl = this.apiURl + '/bigunets/save'
-                data = {bigunetsReport: this.bigunetsReport}
-                redirectUrl = '/bigunets/'
+                data = {bigunetsInfo: this.bigunetsReport.bigunetsInfo}
+                redirectUrl = '/document/%s?type=bigunets'
             }
 
             this.$http
                 .post(apiUrl, data)
                 .then(response => {
-                    this.$router.push(redirectUrl + response.data)
+                    this.$router.push(redirectUrl.replace('%s', response.data))
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
@@ -173,9 +175,12 @@ export default {
                 })
         },
         checkForErrors() {
-            for (let statementErrorBlock of
-                [this.statementReport.statementErrors.footerErrors,
-                    this.statementReport.statementErrors.headerErrors]) {
+            let documentErrors = this.statementReport ? [
+                this.statementReport.statementErrors.footerErrors,
+                this.statementReport.statementErrors.headerErrors
+            ] : [this.bigunetsReport.bigunetsErrors.headerErrors]
+
+            for (let statementErrorBlock of documentErrors) {
                 console.log(statementErrorBlock)
 
                 for (let key in statementErrorBlock) {
@@ -183,7 +188,10 @@ export default {
                         console.log(key)
                         if (statementErrorBlock[key].length !== 0) {
                             if (key === 'tutorPositionErrorText' ||
-                                key === 'tutorAcademicStatusErrorText') {
+                                key === 'tutorAcademicStatusErrorText' ||
+                                key === 'dueToErrorText' ||
+                                key === 'postponeReasonErrorText'
+                            ) {
                                 this.isMinorErrors = true
                                 continue
                             }
@@ -193,19 +201,11 @@ export default {
                     }
                 }
             }
-        }
-    },
-    computed: {
-        isErrors() {
-            // console.log(this.statementReport)
-            if (!this.statementReport)
-                return true
 
-            if (this.checkForErrors())
-                return true
+            let statementStudentsErrorsMap = this.statementReport ?
+                this.statementReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap
+                : this.bigunetsReport.bigunetsErrors.studentErrorsMap.bigunStudentErrorsMap
 
-            let statementStudentsErrorsMap = this.statementReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap;
-            // console.log(statementStudentsErrorsMap)
             for (let key in statementStudentsErrorsMap) {
                 // console.log(key)
                 for (let statementErrorBlock in statementStudentsErrorsMap[key]) {
@@ -215,7 +215,20 @@ export default {
                     }
                 }
             }
+
             return false
+        }
+    },
+    computed: {
+        isErrors() {
+            // console.log(this.statementReport)
+            if ((!this.statementReport && this.selectedTab === 0) ||
+                (!this.bigunetsReport && this.selectedTab === 1)) {
+                console.log("Default true value")
+                return true
+            }
+
+            return this.checkForErrors();
         },
         fixErrorsMessage() {
             return 'Спочатку необхідно виправити всі помилки'

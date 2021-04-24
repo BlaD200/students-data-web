@@ -4,7 +4,9 @@
             <b-col class="bg-white shadow rounded-lg" cols="12" lg="10">
                 <b-row class="mt-4 mb-3">
                     <b-col>
-                        <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{ statementHeader.statementNo }}</b></h5>
+                        <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{
+                                documentHeader.statementNo || documentHeader.bigunNo
+                            }}</b></h5>
                     </b-col>
                 </b-row>
 
@@ -17,7 +19,7 @@
                                   v-b-tooltip.v-danger.right
                                   :title='headerErrors.eduLevelErrorText.join(",")'
                                   :disabled='!headerErrors.eduLevelErrorText.join(",")'
-                            ><u>{{ statementHeader.eduLevel || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.eduLevel || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             <span class="statement-info-uncommon font"
@@ -26,21 +28,21 @@
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.facultyErrorText.join(",")'
                                   :disabled='!headerErrors.facultyErrorText.join(",")'
-                            ><u>{{ statementHeader.faculty || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.faculty || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Рік навчання
                             <span class="statement-info-uncommon"
                                   :class="headerErrors.courseErrorText.length  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.courseErrorText.join(",")'
                                   :disabled='(headerErrors.courseErrorText === null)'
-                            ><u>{{ statementHeader.course || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.course || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Група
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.groupErrorText.length  ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.groupErrorText.join(",")'
                                   :disabled='headerErrors.groupErrorText === null'
-                            ><b>{{ statementHeader.group || "&#95;&#95;&#95;&#95;" }}</b></span>
+                            ><b>{{ documentHeader.group || "&#95;&#95;&#95;&#95;" }}</b></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Дисципліна
@@ -49,7 +51,7 @@
                                   v-b-tooltip.v-danger.right
                                   :title='headerErrors.subjectNameErrorText.join(",")'
                                   :disabled='!headerErrors.subjectNameErrorText.join(",")'
-                            ><u>{{ statementHeader.subjectName || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.subjectName || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Семестр
@@ -58,14 +60,34 @@
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.semesterErrorText.join(",")'
                                   :disabled='!headerErrors.semesterErrorText.join(",")'
-                            ><u>{{ statementHeader.semester || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.semester || "&#95;&#95;&#95;&#95;" }}</u></span>
                             Залікові бали
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.creditNumberErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
                                   :title='headerErrors.creditNumberErrorText.join(",")'
                                   :disabled='!headerErrors.creditNumberErrorText.join(",")'
-                            ><u>{{ statementHeader.creditNumber || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.creditNumber || "&#95;&#95;&#95;&#95;" }}</u></span>
+
+                            <span v-if="isBigunets" class="pl-5">
+                            Направлення дійсне до
+                                <span class="statement-info-uncommon font"
+                                      :class="headerErrors.dueToErrorText.length ? 'text-danger' : ''"
+                                      v-b-tooltip.v-danger.right
+                                      :title='headerErrors.dueToErrorText.join(",")'
+                                      :disabled='!headerErrors.dueToErrorText.join(",")'
+                                ><u>{{ documentHeader.dueTo || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            </span>
+
+                        </h6>
+                        <h6 v-if="isBigunets" class="statement-info-common">
+                            Причина перенесення:
+                            <span class="statement-info-uncommon font"
+                                  :class="headerErrors.postponeReasonErrorText.length ? 'text-danger' : ''"
+                                  v-b-tooltip.v-danger.top
+                                  :title='headerErrors.postponeReasonErrorText.join(",")'
+                                  :disabled='!headerErrors.postponeReasonErrorText.join(",")'
+                            ><u>{{ documentHeader.postponeReason || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Форма контролю:
@@ -74,14 +96,14 @@
                                   v-b-tooltip.v-danger.top
                                   :title='headerErrors.controlTypeErrorText.join(",")'
                                   :disabled='!headerErrors.controlTypeErrorText.join(",")'
-                            ><u>{{ statementHeader.controlType || "&#95;&#95;&#95;&#95;" }}</u></span>.
+                            ><u>{{ documentHeader.controlType || "&#95;&#95;&#95;&#95;" }}</u></span>.
                             Дата
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.examDateErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger.right
                                   :title='headerErrors.examDateErrorText.join(",")'
                                   :disabled='!headerErrors.examDateErrorText.join(",")'
-                            ><u>{{ statementHeader.examDate || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.examDate || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                     </b-col>
                 </b-row>
@@ -94,19 +116,19 @@
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.tutorFullNameErrorText.join(",")'
                                   :disabled='!headerErrors.tutorFullNameErrorText.join(",")'
-                            ><u>{{ statementHeader.tutorFullName || "&#95;&#95;&#95;&#95;" }}, </u></span>
+                            ><u>{{ documentHeader.tutorFullName || "&#95;&#95;&#95;&#95;" }}, </u></span>
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.tutorAcademicStatusErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.tutorAcademicStatusErrorText.join(",")'
                                   :disabled='!headerErrors.tutorAcademicStatusErrorText.join(",")'
-                            ><u>{{ statementHeader.tutorAcademicStatus || "&#95;&#95;&#95;&#95;" }}, </u></span>
+                            ><u>{{ documentHeader.tutorAcademicStatus || "&#95;&#95;&#95;&#95;" }}, </u></span>
                             <span class="statement-info-uncommon font"
                                   :class="headerErrors.tutorPositionErrorText.length ? 'text-danger' : ''"
                                   v-b-tooltip.v-danger
                                   :title='headerErrors.tutorPositionErrorText.join(",")'
                                   :disabled='!headerErrors.tutorPositionErrorText.join(",")'
-                            ><u>{{ statementHeader.tutorPosition || "&#95;&#95;&#95;&#95;" }}</u></span>
+                            ><u>{{ documentHeader.tutorPosition || "&#95;&#95;&#95;&#95;" }}</u></span>
                         </h6>
                     </b-col>
                 </b-row>
@@ -119,7 +141,7 @@
                     </b-col>
                 </b-row>
 
-                <b-row class="justify-content-center mt-3 mb-5">
+                <b-row v-if="isFooterPresent" class="justify-content-center mt-3 mb-5">
                     <b-col lg="10">
                         <h6 class="statement-info-common">
                             Кількість студентів на екзамені / тезі / заліку
@@ -128,8 +150,10 @@
                                   v-b-tooltip.v-danger.right
                                   :title='footerErrors.presentCountErrorText.join(",")'
                                   :disabled='!footerErrors.presentCountErrorText.join(",")'
-                            ><u>{{ statementFooter.presentCount === null ?
-                                    "&#95;&#95;&#95;&#95;" : statementFooter.presentCount}}</u></span>
+                            ><u>{{
+                                    documentFooter.presentCount === null ?
+                                        "&#95;&#95;&#95;&#95;" : documentFooter.presentCount
+                                }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Кількість студентів, які не з’явились на екзамен / тезу / залік
@@ -138,8 +162,10 @@
                                   v-b-tooltip.v-danger.right
                                   :title='footerErrors.absentCountErrorText.join(",")'
                                   :disabled='!footerErrors.absentCountErrorText.join(",")'
-                            ><u>{{ statementFooter.absentCount === null ?
-                                    "&#95;&#95;&#95;&#95;" : statementFooter.absentCount }}</u></span>
+                            ><u>{{
+                                    documentFooter.absentCount === null ?
+                                        "&#95;&#95;&#95;&#95;" : documentFooter.absentCount
+                                }}</u></span>
                         </h6>
                         <h6 class="statement-info-common">
                             Кількість студентів, недопущених до екзамену / тези / заліку
@@ -148,8 +174,10 @@
                                   v-b-tooltip.v-danger.right
                                   :title='footerErrors.rejectedCountErrorText.join(",")'
                                   :disabled='!footerErrors.rejectedCountErrorText.join(",")'
-                            ><u>{{ statementFooter.rejectedCount === null ?
-                                    "&#95;&#95;&#95;&#95;" : statementFooter.rejectedCount }}</u></span>
+                            ><u>{{
+                                    documentFooter.rejectedCount === null ?
+                                        "&#95;&#95;&#95;&#95;" : documentFooter.rejectedCount
+                                }}</u></span>
                         </h6>
                     </b-col>
                 </b-row>
@@ -169,13 +197,14 @@ export default {
             type: String,
             required: false
         },
-        statementReport: Object
+        documentReport: Object,
+        type: String
     },
     data() {
         return {
             apiUrl: 'http://localhost:8000/api',
 
-            statementHeader: {
+            documentHeader: {
                 statementNo: '',
                 eduLevel: 'Бакалавр',
                 faculty: 'Факультет інформатики',
@@ -190,7 +219,7 @@ export default {
                 tutorPosition: 'старший викладач',
                 tutorAcademicStatus: 'кандидат технічних наук'
             },
-            statementFooter: {
+            documentFooter: {
                 presentCount: 6,
                 absentCount: 0,
                 rejectedCount: 0
@@ -243,7 +272,10 @@ export default {
                 examDateErrorText: [],
                 tutorFullNameErrorText: [],
                 tutorPositionErrorText: [],
-                tutorAcademicStatusErrorText: []
+                tutorAcademicStatusErrorText: [],
+
+                dueToErrorText: [],
+                postponeReasonErrorText: []
             },
             studentErrors: {
                 // 23: {
@@ -262,10 +294,13 @@ export default {
         }
     },
     created() {
-        this.getStatementInfo()
+        this.getDocumentInfo()
+    },
+    mounted() {
+        console.log("i'm called when element's have mounted")
     },
     methods: {
-        getStatementInfo(){
+        getDocumentInfo() {
             if (this.id) {
                 this.loadingStudents = true
                 this.$http
@@ -273,8 +308,8 @@ export default {
                     .then(response => {
                         console.log(response)
 
-                        this.statementFooter = response.data.statementFooter
-                        this.statementHeader = response.data.statementHeader
+                        this.documentFooter = response.data.statementFooter
+                        this.documentHeader = response.data.statementHeader
 
                         this.students = []
                         response.data.statementStudents.forEach(user => this.students.push(user))
@@ -289,17 +324,46 @@ export default {
             }
         }
     },
+    computed: {
+        isBigunets() {
+            return this.type === 'bigunets'
+        },
+        isFooterPresent() {
+            console.log("i'm computting 'isFooterPresent'. footer: ", this.documentFooter)
+            return this.documentFooter !== null &&
+                this.documentFooter.presentCount !== null && this.documentFooter.absentCount !== null
+                && this.documentFooter.rejectedCount !== null
+        }
+    },
     watch: {
-        statementReport() {
-            console.log(this.statementReport)
-            if (this.statementReport) {
-                this.statementHeader = this.statementReport.statementInfo.statementHeader
-                this.statementFooter = this.statementReport.statementInfo.statementFooter
-                this.students = this.statementReport.statementInfo.statementStudents
+        documentReport() {
+            console.log("i'm watching documentReport. report: ", this.documentReport)
+            if (this.documentReport) {
+                if (this.type === 'statement') {
+                    this.documentHeader = this.documentReport.statementInfo.statementHeader
+                    this.documentFooter = this.documentReport.statementInfo.statementFooter
+                    this.students = this.documentReport.statementInfo.statementStudents
 
-                this.headerErrors = this.statementReport.statementErrors.headerErrors
-                this.footerErrors = this.statementReport.statementErrors.footerErrors
-                this.studentErrors = this.statementReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap
+                    this.headerErrors = this.documentReport.statementErrors.headerErrors
+                    this.footerErrors = this.documentReport.statementErrors.footerErrors
+                    this.studentErrors = this.documentReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap
+                } else if (this.type === 'bigunets') {
+                    this.documentHeader = this.documentReport.bigunetsInfo.bigunetsHeader
+                    this.students = this.documentReport.bigunetsInfo.bigunetsStudents
+                    this.documentFooter = null/*{
+                        presentCount: null,
+                        absentCount: null,
+                        rejectedCount: null
+                    }*/
+
+                    this.headerErrors = this.documentReport.bigunetsErrors.headerErrors
+                    this.studentErrors = this.documentReport.bigunetsErrors.studentErrorsMap.bigunStudentErrorsMap
+                    this.footerErrors = {
+                        presentCountErrorText: [], //6],
+                        absentCountErrorText: [], //0],
+                        rejectedCountErrorText: [], //]0
+                    }
+                }
             }
             this.$emit('statementDataChanged')
         }

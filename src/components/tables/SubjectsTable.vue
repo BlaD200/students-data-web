@@ -24,10 +24,10 @@
                 :key="subject.subjectId" v-for="subject in subjects"
                 @click="$emit('subjectTableRowClicked', subject.subjectId)"
                 style="cursor: pointer;">
-                <th>{{ subject.subjectId }}</th>
+                <th>{{ subject.subjectID }}</th>
                 <td>{{ subject.subjectName }}</td>
                 <td>{{ subject.tutorFullName }}</td>
-                <td>{{ subject.averageGrade }}</td>
+                <td>{{ subject.grade }}</td>
             </tr>
             </tbody>
         </table>

@@ -38,17 +38,17 @@ export default new Router({
             component: () => import("@/view/Student")
         },
         {
-            path: '/statement/:id',
+            path: '/document/:id',
             name: 'Statement',
-            props: true,
+            props: route => ({id: route.params.id, type: route.query.type}),
             component: () => import("@/view/Statement")
         },
-        {
-            path: '/bigunets/:id',
-            name: 'Bigunets',
-            props: true,
-            component: () => import("@/view/Statement")
-        },
+        // {
+        //     path: '/document/:id/?type=bigunets',
+        //     name: 'Bigunets',
+        //     props: true,
+        //     component: () => import("@/view/Statement")
+        // },
         {
             path: '/subject',
             name: 'SubjectSearch',
