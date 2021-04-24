@@ -82,7 +82,7 @@ export default {
             debtors: [],
             totalElements: -1,
             currentPage: 1,
-            perPage: 5,
+            perPage: 10,
 
             yearOptions: [],
             courseOptions: [1, 2, 3, 4],

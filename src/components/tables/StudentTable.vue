@@ -9,8 +9,6 @@
                 <th>№</th>
                 <th>ПІБ</th>
                 <th>Заліковка</th>
-                <th>Курс</th>
-                <th>Семестер</th>
                 <th>Рейтинг</th>
             </tr>
             </thead>
@@ -22,8 +20,6 @@
                 <th>{{ student.studentRecordBook }}</th>
                 <td>{{ studentFullName(student) }}</td>
                 <td>{{ student.studentRecordBook  }}</td>
-                <td>{{ student.studentCourse }}</td>
-                <td>{{ student.studentTrim }}</td>
                 <td>{{ student.studentRating }}</td>
             </tr>
             </tbody>

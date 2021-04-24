@@ -320,6 +320,7 @@ export default {
     },
     methods: {
         showStudents(input) {
+            // TODO зкидати вибрані предмети/відомості/...
             this.searchStudentPIBInput = input
             if (this.searchValid) {
                 console.log("searching...")
