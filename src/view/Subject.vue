@@ -167,6 +167,7 @@ export default {
                     }
                 })
                 .then(response => {
+                    this.subjects = []
                     response.data.content.forEach(subject => this.subjects.push(subject))
                     this.subjectsPagination.totalElements = response.data.totalElements
 
@@ -184,6 +185,8 @@ export default {
             this.subjectSearchInput = input
             if (this.searchValid) {
                 this.loadingSubjects = true
+                this.subjectIdChosen = null
+                this.loadStatements = false
                 // if (this.statements.length > 0)
                 //     return
                 this.getSubjects()
