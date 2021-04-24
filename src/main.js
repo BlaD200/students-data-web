@@ -28,6 +28,17 @@ new Vue({
         apiURL: 'http://localhost:8080/api/'
     },
     methods: {
+        messageBoxConfirm(title, bodyText, okBtnStyle){
+            return this.$bvModal.msgBoxConfirm(bodyText, {
+                title: title,
+                buttonSize: 'sm',
+                okVariant: okBtnStyle ? okBtnStyle : 'success',
+                headerClass: 'p-3',
+                footerClass: 'p-2',
+                centered: true,
+                autoFocusButton: 'cancel'
+            })
+        },
         messageBoxOk(title, bodyText, okBtnStyle) {
             this.$bvModal.msgBoxOk(bodyText, {
                 title: title,

@@ -50,7 +50,7 @@
                                     size="lg"
                                     variant="success"
                                     :disabled="isErrors || !dataAccepted"
-                                    @click="saveData"
+                                    @click="tryToSaveData"
                                 >
                                 Зберегти відомість
                                 </b-button>
@@ -97,15 +97,27 @@ export default {
     },
     data() {
         return {
-            apiURl:'http://localhost:8000/api',
+            apiURl: 'http://localhost:8000/api',
 
             loadedStatement: false,
             loadedBigunets: false,
             dataAccepted: false,
 
-            statementReport: null,
-            bigunetsReport: null
+            statementReport: {
+                statementErrors: {
+                    headerErrors: null,
+                    footerErrors: null,
+                    studentErrorsMap: null
+                },
+                statementInfo: null
+            },
+            bigunetsReport: null,
+
+            isMinorErrors: false
         };
+    },
+    created() {
+        this.onDocumentUnload()
     },
     methods: {
         onStatementLoad(statementReport) {
@@ -123,38 +135,64 @@ export default {
             this.bigunetsReport = null
             this.dataAccepted = false
         },
+        tryToSaveData() {
+            if (this.isMinorErrors)
+                this.$root.messageBoxConfirm('Підтвердіть збереження документу',
+                    "У документі все ще наявні помилки. Ви впевнені, що хочете його зберегти?",
+                    'warning'
+                ).then(res => {
+                    if (res) {
+                        this.saveData()
+                    }
+                })
+            else
+                this.saveData()
+        },
         saveData() {
             let apiUrl;
             let data;
             let redirectUrl;
-            if (this.loadedStatement){
+            if (this.loadedStatement) {
                 apiUrl = this.apiURl + '/statement/save'
                 data = {statementInfo: this.statementReport.statementInfo}
                 redirectUrl = '/statement/'
-            } else if (this.loadBiguntsi){
+            } else if (this.loadedBigunets) {
                 apiUrl = this.apiURl + '/bigunets/save'
                 data = {bigunetsReport: this.bigunetsReport}
                 redirectUrl = '/bigunets/'
             }
+
             this.$http
                 .post(apiUrl, data)
                 .then(response => {
-                    console.log(response)
                     this.$router.push(redirectUrl + response.data)
-                    // this.students = []
-                    // response.data.data.forEach(user => this.students.push(user))
-                    // this.students = this.students.filter(student => {
-                    //     console.log(student)
-                    //     return student.studentSurname.toLowerCase().includes(this.searchStudentPIBInput.toLowerCase());
-                    // })
-                    // this.totalElements = response.data.totalElements // TODO Use pageable
-                    // this.loadingStudents = false
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
-                    console.log(error, "179")
                     this.loadingStudents = false
                 })
+        },
+        checkForErrors() {
+            for (let statementErrorBlock of
+                [this.statementReport.statementErrors.footerErrors,
+                    this.statementReport.statementErrors.headerErrors]) {
+                console.log(statementErrorBlock)
+
+                for (let key in statementErrorBlock) {
+                    if (Object.prototype.hasOwnProperty.call(statementErrorBlock, key)) {
+                        console.log(key)
+                        if (statementErrorBlock[key].length !== 0) {
+                            if (key === 'tutorPositionErrorText' ||
+                                key === 'tutorAcademicStatusErrorText') {
+                                this.isMinorErrors = true
+                                continue
+                            }
+                            // console.log("error", statementErrorBlock, statementErrorBlock[key])
+                            return true;
+                        }
+                    }
+                }
+            }
         }
     },
     computed: {
@@ -162,16 +200,10 @@ export default {
             // console.log(this.statementReport)
             if (!this.statementReport)
                 return true
-            for (let statementErrorBlock of
-                [this.statementReport.statementErrors.headerErrors, this.statementReport.statementErrors.footerErrors]) {
-                console.log(statementErrorBlock)
-                for (let key in statementErrorBlock) {
-                    if (statementErrorBlock[key].length !== 0) {
-                        // console.log("error", statementErrorBlock, statementErrorBlock[key])
-                        return true;
-                    }
-                }
-            }
+
+            if (this.checkForErrors())
+                return true
+
             let statementStudentsErrorsMap = this.statementReport.statementErrors.studentErrorsMap.statementStudentsErrorsMap;
             // console.log(statementStudentsErrorsMap)
             for (let key in statementStudentsErrorsMap) {
