@@ -33,8 +33,8 @@
                                 @yearChanged="yearSelected = $event"
                                 @semesterChanged="semesterSelected = $event"
                                 @courseChanged="courseSelected = $event"
-                                @subjectInput="subjectInput = $event"
-                                @tutorInput="tutorInput = $event"
+                                @subjectInput="onSubjectInput"
+                                @tutorInput="onTutorInput"
                                 @groupInput="groupInput = $event"
         ></students-filter-fields>
         <sort-by slot="sorting"
@@ -162,6 +162,22 @@ export default {
             } else
                 this.getDebtors()
         },
+        onSubjectInput(input) {
+            this.subjectInput = input
+            if (!input){
+                this.groupInput = null
+                return
+            }
+            this.getGroups()
+        },
+        onTutorInput(input) {
+            this.tutorInput = input
+            if (!input){
+                this.groupInput = null
+                return
+            }
+            this.getGroups()
+        },
         onRefresh() {
             this.onChangeTab(this.tabIndex)
         },
@@ -170,6 +186,22 @@ export default {
                 this.getStudents()
             } else
                 this.getDebtors()
+        },
+        getGroups() {
+            this.$http
+                .get(this.apiURl + '/info/groups', {
+                    params: {
+                        tutorName: this.tutorInput,
+                        subjectName: this.subjectInput
+                    }
+                })
+                .then(response => {
+                    this.groupOptions = response.data
+                })
+                .catch(error => {
+                    // this.$root.defaultRequestErrorHandler(error)
+                    console.log(error)
+                })
         },
         getStudents() {
             this.loading = true
@@ -182,14 +214,13 @@ export default {
                     this.students = []
                     response.data.content.forEach((user, idx) => {
                         user.idx = idx + (this.currentPage - 1) * this.perPage + 1
-                        console.log(user)
                         return this.students.push(user);
                     })
-                    this.totalElements = response.data.totalElements // TODO Use pageable
+                    this.totalElements = response.data.totalElements
                     this.loading = false
                 })
                 .catch(error => {
-                    // this.$root.defaultRequestErrorHandler(error)
+                    this.$root.defaultRequestErrorHandler(error)
                     console.log(error, "179")
                     this.loading = false
                 })

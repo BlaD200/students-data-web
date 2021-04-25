@@ -15,22 +15,22 @@
             <b-tabs @input="onChangeTab" justified card pills>
                 <b-tab title="Відомості" class="px-2">
                     <statements-table :statements="statements" :loading="loadingStatements"
-                                   @studentTableRowClicked="showStatementDetails"></statements-table>
+                                      @studentTableRowClicked="showStatementDetails"></statements-table>
                 </b-tab>
                 <b-tab title="Бігунці" lazy>
                     <bigunets-table :biguntsi="biguntsi" :loading="loadingBiguntsi"
-                                   @studentTableRowClicked="showBigunetsDetails"></bigunets-table>
+                                    @studentTableRowClicked="showBigunetsDetails"></bigunets-table>
                 </b-tab>
             </b-tabs>
         </b-card>
 
         <data-filter-fields slot="filters"
-                                :subject-options="subjectOptions"
-                                :tutor-options="tutorOptions"
-                                :group-options="groupOptions"
-                                @subjectInput="subjectInput = $event"
-                                @tutorInput="tutorInput = $event"
-                                @groupInput="groupInput = $event"
+                            :subject-options="subjectOptions"
+                            :tutor-options="tutorOptions"
+                            :group-options="groupOptions"
+                            @subjectInput="onSubjectInput"
+                            @tutorInput="onTutorInput"
+                            @groupInput="groupInput = $event"
         ></data-filter-fields>
     </queries>
 </template>
@@ -48,7 +48,7 @@ export default {
     components: {
         Queries, StatementsTable, BigunetsTable, DataFilterFields
     },
-    data(){
+    data() {
         return {
             apiURl: 'http://localhost:8000/api',
             tabIndex: 0,
@@ -114,6 +114,22 @@ export default {
             } else
                 this.getBiguntsi()
         },
+        onSubjectInput(input) {
+            this.subjectInput = input
+            if (!input){
+                this.groupInput = null
+                return
+            }
+            this.getGroups()
+        },
+        onTutorInput(input) {
+            this.tutorInput = input
+            if (!input){
+                this.groupInput = null
+                return
+            }
+            this.getGroups()
+        },
         onRefresh() {
             this.onChangeTab(this.tabIndex)
         },
@@ -124,6 +140,22 @@ export default {
             } else
                 this.getBiguntsi()
         },
+        getGroups() {
+            this.$http
+                .get(this.apiURl + '/info/groups', {
+                    params: {
+                        tutorName: this.tutorInput,
+                        subjectName: this.subjectInput
+                    }
+                })
+                .then(response => {
+                    this.groupOptions = response.data
+                })
+                .catch(error => {
+                    // this.$root.defaultRequestErrorHandler(error)
+                    console.log(error)
+                })
+        },
         getStatements() {
             // const config = {
             //     params: {
@@ -133,18 +165,18 @@ export default {
             //     }
             // }
             // this.$http
-                // .get(this.apiURl + '/students', config)
-                // .then(response => {
-                //     this.students = []
-                //     response.data.content.forEach(user => this.students.push(user))
-                //     this.totalElements = response.data.totalElements // TODO Use pageable
-                //     this.loading = false
-                // })
-                // .catch(error => {
-                //     // this.$root.defaultRequestErrorHandler(error)
-                //     console.log(error, "179")
-                //     this.loading = false
-                // })
+            // .get(this.apiURl + '/students', config)
+            // .then(response => {
+            //     this.students = []
+            //     response.data.content.forEach(user => this.students.push(user))
+            //     this.totalElements = response.data.totalElements // TODO Use pageable
+            //     this.loading = false
+            // })
+            // .catch(error => {
+            //     // this.$root.defaultRequestErrorHandler(error)
+            //     console.log(error, "179")
+            //     this.loading = false
+            // })
             const config = {
                 params: {
                     tutorName: this.tutorInput,
@@ -167,7 +199,7 @@ export default {
                     this.loadingStatements = false
                 })
         },
-        getBiguntsi(){
+        getBiguntsi() {
             const config = {
                 params: {
                     tutorName: this.tutorName,
@@ -198,7 +230,7 @@ export default {
         }
     },
     computed: {
-        isAnyFilters(){
+        isAnyFilters() {
             return (Boolean)(this.subjectInput || this.tutorInput || this.groupInput)
         }
     }

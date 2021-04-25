@@ -15,7 +15,7 @@
             :placeholder="'Предмет'"
             :append="'Предмет'"
             v-model="subjectInput" :options="subjectOptions"
-            v-on:input="$emit('subjectInput', subjectInput)"
+            v-on:input="onSubjectInput"
         ></b-v-select>
 
         <b-v-select
@@ -24,7 +24,7 @@
             :placeholder="'Викладач'"
             :append="'Викладач'"
             v-model="tutorInput"
-            v-on:input="$emit('tutorInput', tutorInput)"
+            v-on:input="onTutorInput"
         ></b-v-select>
 
         <div class="mt-2"
@@ -131,6 +131,14 @@ export default {
         isInputValid(input) {
             return input.length >= 3
         },
+        onSubjectInput(subjectInput){
+            this.$emit('subjectInput', subjectInput)
+            this.groupInput = null
+        },
+        onTutorInput(tutorInput){
+            this.$emit('tutorInput', tutorInput)
+            this.groupInput = null
+        }
     }
 }
 </script>
