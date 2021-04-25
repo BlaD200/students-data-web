@@ -1,6 +1,6 @@
 <template>
     <queries title="Відомості"
-             :show-pagination="true"
+             :show-pagination="isShowPagination"
              :show-sort="false"
              :current-page="currentPage"
              :rows="totalElements"
@@ -109,6 +109,8 @@ export default {
         },
         onChangeTab(tabIndex) {
             this.tabIndex = tabIndex
+            this.currentPage = 1
+            this.totalElements = 0
             if (this.tabIndex === 0) {
                 this.getStatements()
             } else
@@ -134,7 +136,6 @@ export default {
             this.onChangeTab(this.tabIndex)
         },
         applyFilters() {
-            // TODO make button disabled if nothing entered
             if (this.tabIndex === 0) {
                 this.getStatements()
             } else
@@ -157,31 +158,13 @@ export default {
                 })
         },
         getStatements() {
-            // const config = {
-            //     params: {
-            //         tutorName: this.tutorName,
-            //         subjectName: this.subjectName,
-            //         group: this.group
-            //     }
-            // }
-            // this.$http
-            // .get(this.apiURl + '/students', config)
-            // .then(response => {
-            //     this.students = []
-            //     response.data.content.forEach(user => this.students.push(user))
-            //     this.totalElements = response.data.totalElements // TODO Use pageable
-            //     this.loading = false
-            // })
-            // .catch(error => {
-            //     // this.$root.defaultRequestErrorHandler(error)
-            //     console.log(error, "179")
-            //     this.loading = false
-            // })
             const config = {
                 params: {
                     tutorName: this.tutorInput,
                     subjectName: this.subjectInput,
-                    group: this.groupInput
+                    group: this.groupInput,
+                    page: this.currentPage,
+                    numberPerPage: this.perPage
                 }
             }
             this.loadingStatements = true
@@ -190,12 +173,11 @@ export default {
                 .then(response => {
                     this.statements = []
                     response.data.content.forEach(statement => this.statements.push(statement))
-                    this.totalElements = response.data.totalElements // TODO Use pageable
+                    this.totalElements = response.data.totalElements
                     this.loadingStatements = false
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
-                    // this.statements = []
                     this.loadingStatements = false
                 })
         },
@@ -204,7 +186,9 @@ export default {
                 params: {
                     tutorName: this.tutorName,
                     subjectName: this.subjectName,
-                    group: this.group // TODO pages
+                    group: this.group,
+                    page: this.currentPage,
+                    numberPerPage: this.perPage
                 }
             }
             this.loadingBiguntsi = true
@@ -218,7 +202,6 @@ export default {
                 })
                 .catch(error => {
                     this.$root.defaultRequestErrorHandler(error)
-                    // this.biguntsi = []
                     this.loadingBiguntsi = false
                 })
         },
@@ -232,6 +215,9 @@ export default {
     computed: {
         isAnyFilters() {
             return (Boolean)(this.subjectInput || this.tutorInput || this.groupInput)
+        },
+        isShowPagination() {
+            return this.totalElements > this.perPage
         }
     }
 }
