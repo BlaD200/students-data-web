@@ -39,7 +39,8 @@
                     <div class="border-top">
                         <b-row>
                             <b-col md="auto" lg="4" class="pr-0">
-                                <filter-layout class="" @applyFilters="$emit('applyFilters')">
+                                <filter-layout :is-any-filters-applied="isAnyFiltersApplied"
+                                               @applyFilters="$emit('applyFilters')">
                                     <div slot="filters">
                                         <slot name="filters"></slot>
                                     </div>
@@ -121,6 +122,10 @@ export default {
         },
         controls: {
             type: String,
+            required: true
+        },
+        isAnyFiltersApplied: {
+            type: Boolean,
             required: true
         }
     },

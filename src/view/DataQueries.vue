@@ -5,6 +5,7 @@
              :current-page="currentPage"
              :rows="totalElements"
              :per-page="perPage"
+             :is-any-filters-applied="isAnyFilters"
              controls="my-table"
              @change="onChangePage"
              @applyFilters="applyFilters"
@@ -27,9 +28,6 @@
                                 :subject-options="subjectOptions"
                                 :tutor-options="tutorOptions"
                                 :group-options="groupOptions"
-                                @yearChanged="yearSelected = $event"
-                                @semesterChanged="semesterSelected = $event"
-                                @courseChanged="courseSelected = $event"
                                 @subjectInput="subjectInput = $event"
                                 @tutorInput="tutorInput = $event"
                                 @groupInput="groupInput = $event"
@@ -65,43 +63,19 @@ export default {
             subjectOptions: [],
             tutorOptions: [],
             groupOptions: [],
+            subjectInput: '',
+            tutorInput: '',
+            groupInput: '',
 
             currentPage: 1,
             totalElements: 0,
             perPage: 10,
 
             loadingStatements: false,
-            statements: [
-                {
-                    statementNo: 2222222,
-                    tutor: "Черкасов Дмитро Іванович",
-                    subject: 'Технології сучасних дата - центрів',
-                    group: "1",
-                    controlType: "екзамен",
-                    presentCount: 30,
-                    absentCount: 2,
-                    rejectedCount: 0,
-                    examDate: "2021-05-25"
-                }],
+            statements: [],
 
             loadingBiguntsi: false,
-            biguntsi: [
-                {
-                    statementNo: 2222222,
-                    tutor: "Черкасов Дмитро Іванович",
-                    controlType: "екзамен",
-                    postponeReason: "хвороба",
-                    examDate: "2021-05-25",
-                    validUntil: "2021-05-24"
-                }, {
-                    statementNo: 2222222,
-                    tutor: "Черкасов Дмитро Іванович",
-                    controlType: "екзамен",
-                    postponeReason: "",
-                    examDate: "2021-05-25",
-                    validUntil: null
-                }
-            ],
+            biguntsi: [],
         }
     },
     created() {
@@ -173,9 +147,9 @@ export default {
                 // })
             const config = {
                 params: {
-                    tutorName: this.tutorName,
-                    subjectName: this.subjectName,
-                    group: this.group
+                    tutorName: this.tutorInput,
+                    subjectName: this.subjectInput,
+                    group: this.groupInput
                 }
             }
             this.loadingStatements = true
@@ -221,6 +195,11 @@ export default {
         },
         showBigunetsDetails(bigunets) {
             this.$router.push({name: 'Bigunets', params: {id: bigunets}})
+        }
+    },
+    computed: {
+        isAnyFilters(){
+            return (Boolean)(this.subjectInput || this.tutorInput || this.groupInput)
         }
     }
 }

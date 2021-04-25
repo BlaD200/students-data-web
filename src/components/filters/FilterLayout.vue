@@ -12,7 +12,9 @@
 
                 <slot name="filters"></slot>
 
-                <apply-filters-button @applyFilters="onApplyFilters" class="mt-4"></apply-filters-button>
+                <apply-filters-button @applyFilters="onApplyFilters"
+                                      :disabled="!isAnyFiltersApplied"
+                                      class="mt-4"></apply-filters-button>
             </div>
         </b-sidebar>
 
@@ -22,6 +24,7 @@
             </div>
 
             <apply-filters-button class="mt-2 mr-2 p-2"
+                                  :disabled="!isAnyFiltersApplied"
                                   @applyFilters="onApplyFilters"></apply-filters-button>
 
         </div>
@@ -33,6 +36,9 @@ import ApplyFiltersButton from "@/components/inputs/ApplyFiltersButton";
 
 export default {
     name: "filter-layout",
+    props: {
+        isAnyFiltersApplied: Boolean
+    },
     components: {
         ApplyFiltersButton
     },

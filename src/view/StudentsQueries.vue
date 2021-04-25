@@ -5,6 +5,7 @@
              :rows="totalElements"
              :per-page="perPage"
              controls="my-table"
+             :is-any-filters-applied="isAnyFiltersApplied"
              @change="onChangePage"
              @applyFilters="applyFilters"
              @refresh="onRefresh">
@@ -232,6 +233,12 @@ export default {
                 semester: this.semesterSelected,
                 course: this.courseSelected
             }
+        },
+        isAnyFiltersApplied() {
+            return (Boolean)(
+                this.yearSelected || this.subjectInput || this.tutorInput || this.groupInput
+                || this.semesterSelected || this.courseSelected
+            )
         }
     }
 }
