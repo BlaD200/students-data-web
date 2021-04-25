@@ -303,8 +303,12 @@ export default {
         getDocumentInfo() {
             if (this.id) {
                 this.loadingStudents = true
+
+                let apiUrl = this.apiUrl + (this.type === 'statement' ? '/statement/' : '/bigunets/') + this.id
+                console.log(apiUrl)
+
                 this.$http
-                    .get(this.apiUrl + '/statement/' + this.id)
+                    .get(apiUrl)
                     .then(response => {
                         console.log(response)
 

@@ -25,7 +25,7 @@
 
             <tr class="text-center"
                 :key="statement.statementNo" v-for="statement in statements"
-                @click="$router.push({name: 'Statement', params: {id: `${statement.statementNo}`}})"
+                @click="onStatementClicked(statement.statementNo)"
                 style="cursor: pointer;">
                 <th>{{ statement.statementNo }}</th>
                 <td>{{ statement.tutorFullName }}</td>
@@ -66,6 +66,10 @@ export default {
             return statement.studentsCount ?
                 `${statement.studentsCount.presentCount} / ${statement.studentsCount.absentCount} / ${statement.studentsCount.rejectedCount}`
                 : ''
+        },
+        onStatementClicked(statementNo) {
+            console.log(statementNo)
+            this.$router.push({name: 'Statement', params: {id: `${statementNo}`}, query: {type: 'statement'}})
         }
     }
 }

@@ -3,7 +3,7 @@
         <loader v-if="loading" class="text-center mb-0 p-2" size="sm"/>
 
         <table v-if="biguntsi.length > 0 & !loading" id="students-table"
-               class="table tab table-hover table-responsive-xl b-table-no-border-collapse">
+               class="table table-sm tab table-hover table-responsive-xl b-table-no-border-collapse">
             <thead class="thead-light">
             <tr class="text-center">
                 <th>№</th>
@@ -20,7 +20,7 @@
 
             <tr class="text-center"
                 :key="biguntsi.indexOf(bigunets)" v-for="bigunets in biguntsi"
-                @click="$router.push({name: 'Bigunets', params: {id: `${bigunets.statementNo}`}})"
+                @click="$router.push({name: 'Statement', params: {id: `${bigunets.statementNo}`, type: 'bigunets'}})"
                 style="cursor: pointer;">
                 <th>{{ bigunets.statementNo }}</th>
                 <td>{{ bigunets.tutorFullName }}</td>

@@ -206,8 +206,8 @@ export default {
                 .get(`${this.apiURl}/biguntsi`, config)
                 .then(response => {
                     this.biguntsi = []
-                    response.data.data.forEach(statement => this.biguntsi.push(statement))
-                    this.totalElements = response.data.totalElements // TODO Use pageable
+                    response.data.content.forEach(statement => this.biguntsi.push(statement))
+                    this.totalElements = response.data.totalElements
                     this.loadingBiguntsi = false
                 })
                 .catch(error => {

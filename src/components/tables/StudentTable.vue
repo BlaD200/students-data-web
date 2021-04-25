@@ -17,7 +17,7 @@
             <tr :key="student.studentId" v-for="student in students"
                 @click="$emit('studentTableRowClicked', student.studentId)"
                 style="cursor: pointer;">
-                <th>{{ student.studentRecordBook }}</th>
+                <th>{{ student.idx }}</th>
                 <td>{{ studentFullName(student) }}</td>
                 <td>{{ student.studentRecordBook  }}</td>
                 <td>{{ student.studentRating }}</td>

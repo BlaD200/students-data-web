@@ -21,8 +21,8 @@
             <tbody>
 
             <tr class="text-center"
-                :key="subject.subjectId" v-for="subject in subjects"
-                @click="$emit('subjectTableRowClicked', subject.subjectId)"
+                :key="subject.subjectID" v-for="subject in subjects"
+                @click="$emit('subjectTableRowClicked', subject.subjectID)"
                 style="cursor: pointer;">
                 <th>{{ subject.subjectID }}</th>
                 <td>{{ subject.subjectName }}</td>

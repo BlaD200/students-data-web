@@ -61,9 +61,8 @@ export default {
 
             sortBy: 'studentSurname',
             sortByOptions: [
-                {value: "completeMark", text: 'За рейтингом'},
                 {value: "studentSurname", text: 'За прізвищем'},
-                {value: "course", text: 'За курсом'},
+                {value: "complete_mark", text: 'За рейтингом'},
             ],
             sortDesc: false,
 
@@ -180,7 +179,11 @@ export default {
                 .get(this.apiURl + '/students', config)
                 .then(response => {
                     this.students = []
-                    response.data.content.forEach(user => this.students.push(user))
+                    response.data.content.forEach((user, idx) => {
+                        user.idx = idx + (this.currentPage - 1) * this.perPage + 1
+                        console.log(user)
+                        return this.students.push(user);
+                    })
                     this.totalElements = response.data.totalElements // TODO Use pageable
                     this.loading = false
                 })
@@ -211,7 +214,7 @@ export default {
         },
         showStudentDetails(studentId) {
             console.log(studentId)
-            this.$router.push({name: 'Student', params: {id: studentId}})
+            this.$router.push({name: 'Student', params: {id: `${studentId}`}})
         }
     },
     computed: {

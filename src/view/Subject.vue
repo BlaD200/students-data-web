@@ -179,7 +179,7 @@ export default {
                 })
         },
         getSubjectInfo() {
-            this.subject = this.subjects.find(subject => subject.subjectId === this.subjectIdChosen)
+            this.subject = this.subjects.find(subject => subject.subjectID === this.subjectIdChosen)
         },
         onLoadSubjects(input) {
             this.subjectSearchInput = input

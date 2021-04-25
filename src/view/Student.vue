@@ -229,7 +229,7 @@ export default {
     },
     props: {
         id: {
-            type: Number,
+            type: String,
             required: false
         }
     },
@@ -320,19 +320,29 @@ export default {
     },
     methods: {
         showStudents(input) {
-            // TODO зкидати вибрані предмети/відомості/...
             this.searchStudentPIBInput = input
+            this.studentIdChosen = null
+            this.loadStatements = false
+            this.loadBiguntsi = false
+            this.loadSubjects = false
+
             if (this.searchValid) {
                 console.log("searching...")
                 this.loadingStudents = true
                 this.$http
-                    .get(this.apiURl + '/students')
+                    .get(this.apiURl + '/student', {
+                        params: {
+                            pib: this.searchStudentPIBInput,
+                            page: this.studentPagination.currentPage,
+                            numberPerPage: this.studentPagination.perPage
+                        }
+                    })
                     .then(response => {
                         this.students = []
-                        response.data.content.forEach(user => this.students.push(user))
-                        this.students = this.students.filter(student => {
-                            console.log(student)
-                            return student.studentSurname.toLowerCase().includes(this.searchStudentPIBInput.toLowerCase());
+                        response.data.content.forEach((user, idx) => {
+                            user.idx = idx + (this.studentPagination.currentPage - 1) * this.studentPagination.perPage + 1
+                            console.log(user)
+                            return this.students.push(user);
                         })
                         this.totalElements = response.data.totalElements
                         this.loadingStudents = false
@@ -342,8 +352,7 @@ export default {
                             this.students.push({id: i})
                         }
                         this.studentPagination.totalElements = 15
-                        // this.$root.defaultRequestErrorHandler(error)
-                        console.log(error, "179")
+                        this.$root.defaultRequestErrorHandler(error)
                         this.loadingStudents = false
                     })
             }
@@ -360,7 +369,7 @@ export default {
                 params: {}
             }
             this.$http
-                .get(`${this.apiURl}/student/${id ? id : this.id}`, config)
+                .get(`${this.apiURl}/student/${id ? id : this.studentId}`, config)
                 .then(response => {
                     this.student = response.data
                     this.loading = false
@@ -431,14 +440,17 @@ export default {
                     }
                 })
                 .then(response => {
-                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
+                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx){
+                        console.log("skipping average")
                         return
+                    }
+                    console.log("average grade request response: ", response.data)
                     this.averageGrade = response.data
                 })
                 .catch(error => {
-                    error
                     if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
                         return
+                    this.$root.defaultRequestErrorHandler(error)
                     this.averageGrade = ""
                 })
         },
@@ -533,14 +545,14 @@ export default {
             return this.searchStudentPIBInput.length >= 4
         },
         showStudentDetails() {
-            return (this.searchValid && this.studentIdChosen) || this.id
+            return (this.searchValid && this.studentIdChosen) || (this.studentId && this.searchStudentPIBInput.length === 0)
         },
         studentFullName() {
             return `${this.student.studentSurname} ${this.student.studentName} ${this.student.studentPatronymic}`
         },
         studentId(){
             console.log(this.student.studentCode)
-            let id = this.studentIdChosen ? this.studentIdChosen : this.id
+            let id = this.studentIdChosen ? this.studentIdChosen : Number.parseInt(this.id)
             return Number(id)
         }
     }

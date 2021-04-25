@@ -19,11 +19,11 @@
                     >
                         Завантажити
                     </router-link>
-                    <b-nav-item-dropdown text="Запити">
-                        <b-dropdown-item :to="{name: 'StudentsQueries'}">Студенти</b-dropdown-item>
-                        <b-dropdown-item :to="{name: 'StudentSearchDetails'}">Студент</b-dropdown-item>
-                        <b-dropdown-item :to="{name: 'DataQueries'}">Відомості</b-dropdown-item>
-                        <b-dropdown-item :to="{name: 'SubjectSearch'}">Предмети</b-dropdown-item>
+                    <b-nav-item-dropdown text="Пошук">
+                        <b-dropdown-item :to="{name: 'StudentsQueries'}">Студентів</b-dropdown-item>
+                        <b-dropdown-item :to="{name: 'StudentSearchDetails'}">Студента</b-dropdown-item>
+                        <b-dropdown-item :to="{name: 'DataQueries'}">Відомостей</b-dropdown-item>
+                        <b-dropdown-item :to="{name: 'SubjectSearch'}">Предмета</b-dropdown-item>
                     </b-nav-item-dropdown>
 
                     <!--                    <router-link :to="{name: 'Producers'}"-->
