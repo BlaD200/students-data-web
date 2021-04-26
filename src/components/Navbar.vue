@@ -6,13 +6,12 @@
             <b-navbar-nav class="ml-auto float-right" v-if="!$root.currentUser.username">
                 <b-nav-item class="ml-auto"
                             v-b-modal.loginModal
-                ><em>Log in</em></b-nav-item>
+                ><em>Увійти</em></b-nav-item>
             </b-navbar-nav>
 
             <b-navbar-toggle target="nav-collapse" v-else></b-navbar-toggle>
 
             <b-collapse id="nav-collapse" is-nav v-if="$root.currentUser.username">
-                <!--            <b-collapse id="nav-collapse" is-nav>-->
                 <b-navbar-nav>
                     <router-link :to="{name: 'LoadDocument'}"
                                  class="nav-link"
@@ -26,16 +25,6 @@
                         <b-dropdown-item :to="{name: 'SubjectSearch'}">Предмета</b-dropdown-item>
                     </b-nav-item-dropdown>
 
-                    <!--                    <router-link :to="{name: 'Producers'}"-->
-                    <!--                                 class="nav-link"-->
-                    <!--                    >Producers-->
-                    <!--                    </router-link>-->
-
-                    <!--                    <router-link :to="{name: 'Users'}"-->
-                    <!--                                 class="nav-link"-->
-                    <!--&lt;!&ndash;                                 v-if="$root.currentUser.userAuthorities.includes('GET_USER')"&ndash;&gt;-->
-                    <!--                    >Users-->
-                    <!--                    </router-link>-->
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->
