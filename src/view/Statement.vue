@@ -205,58 +205,58 @@ export default {
             apiUrl: 'http://localhost:8000/api',
 
             documentHeader: {
-                statementNo: '',
-                eduLevel: 'Бакалавр',
-                faculty: 'Факультет інформатики',
-                course: 3,
-                group: 1,
-                subjectName: 'Технології сучасних дата - центрів',
-                semester: '6д',
-                creditNumber: '?',
-                controlType: 'екзамен',
-                examDate: '2021-05-24',
-                tutorFullName: 'Черкасов Дмитро Іванович',
-                tutorPosition: 'старший викладач',
-                tutorAcademicStatus: 'кандидат технічних наук'
+                statementNo: '',//'',
+                eduLevel: '',//'Бакалавр',
+                faculty: '',//'Факультет інформатики',
+                course: '',//3,
+                group: '',//1,
+                subjectName: '',//'Технології сучасних дата - центрів',
+                semester: '',//'6д',
+                creditNumber: '',//'?',
+                controlType: '',//'екзамен',
+                examDate: '',//'2021-05-24',
+                tutorFullName: '',//'Черкасов Дмитро Іванович',
+                tutorPosition: '',//'старший викладач',
+                tutorAcademicStatus: '',//'кандидат технічних наук'
             },
             documentFooter: {
-                presentCount: 6,
-                absentCount: 0,
-                rejectedCount: 0
+                presentCount: null,
+                absentCount: null,
+                rejectedCount: null
             },
 
             students: [
-                {
-                    studentId: 23,
-                    studentPI: "Бойчук Олег",
-                    studentPatronymic: "Романович",
-                    studentRecordBook: "І 303/10 бп",
-                    semesterGrade: 60,
-                    controlGrade: 30,
-                    totalGrade: null,
-                    nationalGrade: "Добре",
-                    ectsGrade: 'B'
-                },
-                {
-                    studentId: 24,
-                    studentPIB: "Бойчук Олег Романович",
-                    studentRecordBook: "І 303/10бп",
-                    semesterGrade: 60,
-                    controlGrade: 30,
-                    totalGrade: 90,
-                    nationalGrade: "Добре",
-                    ectsGrade: 'B'
-                },
-                {
-                    studentId: 25,
-                    studentPIB: "Бойчук Олег Романович",
-                    studentRecordBook: null,
-                    semesterGrade: 60,
-                    controlGrade: 30,
-                    totalGrade: null,
-                    nationalGrade: "Добре",
-                    ectsGrade: 'B'
-                },
+                // {
+                //     studentId: 23,
+                //     studentPI: "Бойчук Олег",
+                //     studentPatronymic: "Романович",
+                //     studentRecordBook: "І 303/10 бп",
+                //     semesterGrade: 60,
+                //     controlGrade: 30,
+                //     totalGrade: null,
+                //     nationalGrade: "Добре",
+                //     ectsGrade: 'B'
+                // },
+                // {
+                //     studentId: 24,
+                //     studentPIB: "Бойчук Олег Романович",
+                //     studentRecordBook: "І 303/10бп",
+                //     semesterGrade: 60,
+                //     controlGrade: 30,
+                //     totalGrade: 90,
+                //     nationalGrade: "Добре",
+                //     ectsGrade: 'B'
+                // },
+                // {
+                //     studentId: 25,
+                //     studentPIB: "Бойчук Олег Романович",
+                //     studentRecordBook: null,
+                //     semesterGrade: 60,
+                //     controlGrade: 30,
+                //     totalGrade: null,
+                //     nationalGrade: "Добре",
+                //     ectsGrade: 'B'
+                // },
             ],
             loadingStudents: false,
 
@@ -320,6 +320,10 @@ export default {
                         this.loadingStudents = false
                     })
                     .catch(error => {
+                        if (error.response.status === 404){
+                            this.$root.messageBoxOk('Неіснуючий номер відомості', 'Відомість з таким номером не існує', 'secondary')
+                            return
+                        }
                         this.$root.defaultRequestErrorHandler(error)
                         this.loadingStudents = false
                     })

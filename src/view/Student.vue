@@ -347,9 +347,6 @@ export default {
                         this.loadingStudents = false
                     })
                     .catch(error => {
-                        for (let i = 0; i < 15; i++) {
-                            this.students.push({id: i})
-                        }
                         this.studentPagination.totalElements = 15
                         this.$root.defaultRequestErrorHandler(error)
                         this.loadingStudents = false
