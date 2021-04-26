@@ -20,7 +20,7 @@
 
             <tr class="text-center"
                 :key="biguntsi.indexOf(bigunets)" v-for="bigunets in biguntsi"
-                @click="$router.push({name: 'Statement', params: {id: `${bigunets.statementNo}`, type: 'bigunets'}})"
+                @click="$router.push({name: 'Statement', params: {id: `${bigunets.statementNo}`}, query: {type: 'bigunets'}})"
                 style="cursor: pointer;">
                 <th>{{ bigunets.statementNo }}</th>
                 <td>{{ bigunets.tutorFullName }}</td>

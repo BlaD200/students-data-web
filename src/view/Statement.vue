@@ -5,7 +5,7 @@
                 <b-row class="mt-4 mb-3">
                     <b-col>
                         <h5 class="text-center"><b>ЗАЛІКОВО-ЕКЗАМЕНАЦІЙНА ВІДОМІСТЬ № {{
-                                documentHeader.statementNo || documentHeader.bigunNo
+                                documentNo
                             }}</b></h5>
                     </b-col>
                 </b-row>
@@ -312,11 +312,16 @@ export default {
                     .then(response => {
                         console.log(response)
 
-                        this.documentFooter = response.data.statementFooter
-                        this.documentHeader = response.data.statementHeader
-
                         this.students = []
-                        response.data.statementStudents.forEach(user => this.students.push(user))
+                        if (this.type === 'statement') {
+                            this.documentFooter = response.data.statementFooter
+                            this.documentHeader = response.data.statementHeader
+                            response.data.statementStudents.forEach(user => this.students.push(user))
+                        } else if (this.type === 'bigunets') {
+                            this.documentHeader = response.data.bigunetsHeader
+                            this.documentFooter = null
+                            response.data.bigunetsStudents.forEach(user => this.students.push(user))
+                        }
                         this.totalElements = response.data.totalElements
                         this.loadingStudents = false
                     })
@@ -329,6 +334,10 @@ export default {
         }
     },
     computed: {
+        documentNo() {
+            console.log("header: ", this.documentHeader)
+            return this.documentHeader.statementNo || this.documentHeader.bigunNo
+        },
         isBigunets() {
             return this.type === 'bigunets'
         },
