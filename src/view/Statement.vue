@@ -320,12 +320,13 @@ export default {
                         this.loadingStudents = false
                     })
                     .catch(error => {
+                        this.loadingStudents = false
                         if (error.response.status === 404){
                             this.$root.messageBoxOk('Неіснуючий номер відомості', 'Відомість з таким номером не існує', 'secondary')
                             return
                         }
                         this.$root.defaultRequestErrorHandler(error)
-                        this.loadingStudents = false
+
                     })
             }
         }
