@@ -170,6 +170,11 @@ export default {
                     this.$router.push(redirectUrl.replace('%s', response.data))
                 })
                 .catch(error => {
+                    console.log(error)
+                    if (error.response.status === 409){
+                        this.$root.messageBoxOk('Помилка збереження', 'Немає відомості, якій би відповідав бігунець', 'secondary')
+                        return
+                    }
                     this.$root.defaultRequestErrorHandler(error)
                     this.loadingStudents = false
                 })

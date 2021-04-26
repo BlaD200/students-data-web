@@ -15,7 +15,6 @@
                 <b-row class="mb-2 mt-4">
                     <b-col>
                         <h3><router-link to="LoadDocument" class="text-info">Завантажити документ</router-link></h3>
-
                     </b-col>
                 </b-row>
 

@@ -1,6 +1,6 @@
 <template>
     <queries title="Студенти"
-             :show-pagination="true"
+             :show-pagination="isShowPagination"
              :current-page="currentPage"
              :rows="totalElements"
              :per-page="perPage"
@@ -63,7 +63,7 @@ export default {
             sortBy: 'studentSurname',
             sortByOptions: [
                 {value: "studentSurname", text: 'За прізвищем'},
-                {value: "complete_mark", text: 'За рейтингом'},
+                {value: "rating", text: 'За рейтингом'},
             ],
             sortDesc: false,
 
@@ -270,6 +270,9 @@ export default {
                 this.yearSelected || this.subjectInput || this.tutorInput || this.groupInput
                 || this.semesterSelected || this.courseSelected
             )
+        },
+        isShowPagination() {
+            return this.totalElements > this.perPage
         }
     }
 }
