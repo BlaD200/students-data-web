@@ -31,8 +31,38 @@ export default {
             }
         },
     },
-    updated() {
+    beforeCreate() {
+
+        console.log("Before created")
+    },
+    created() {
+        if (!localStorage.getItem('currentUser')){
+            if (this.$route.path !== '/') {
+                this.$router.push('/')
+                this.$root.messageBoxOk('Ви не ввійшли в систему', 'Увійдіть, щоб отримати доступ до вмісту.')
+            }
+        }
         console.log(this.$route)
+        console.log("created")
+    },
+    beforeMount() {
+        console.log("beforeMount")
+    },
+    mounted() {
+        console.log("mounted")
+    },
+    beforeUpdate() {
+        if (!localStorage.getItem('currentUser')){
+            if (this.$route.path !== '/') {
+                this.$router.push('/')
+                this.$root.messageBoxOk('Ви не ввійшли в систему', 'Увійдіть, щоб отримати доступ до вмісту.')
+            }
+        }
+        console.log(this.$route)
+        console.log("Before update")
+    },
+    updated() {
+
     }
 }
 </script>
