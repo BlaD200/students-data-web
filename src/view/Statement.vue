@@ -296,22 +296,16 @@ export default {
     created() {
         this.getDocumentInfo()
     },
-    mounted() {
-        console.log("i'm called when element's have mounted")
-    },
     methods: {
         getDocumentInfo() {
             if (this.id) {
                 this.loadingStudents = true
 
                 let apiUrl = this.apiUrl + (this.type === 'statement' ? '/statement/' : '/bigunets/') + this.id
-                console.log(apiUrl)
 
                 this.$http
                     .get(apiUrl)
                     .then(response => {
-                        console.log(response)
-
                         this.students = []
                         if (this.type === 'statement') {
                             this.documentFooter = response.data.statementFooter
@@ -327,7 +321,6 @@ export default {
                     })
                     .catch(error => {
                         this.$root.defaultRequestErrorHandler(error)
-                        console.log(error, "179")
                         this.loadingStudents = false
                     })
             }
@@ -335,14 +328,12 @@ export default {
     },
     computed: {
         documentNo() {
-            console.log("header: ", this.documentHeader)
             return this.documentHeader.statementNo || this.documentHeader.bigunNo
         },
         isBigunets() {
             return this.type === 'bigunets'
         },
         isFooterPresent() {
-            console.log("i'm computting 'isFooterPresent'. footer: ", this.documentFooter)
             return this.documentFooter !== null &&
                 this.documentFooter.presentCount !== null && this.documentFooter.absentCount !== null
                 && this.documentFooter.rejectedCount !== null
@@ -350,7 +341,6 @@ export default {
     },
     watch: {
         documentReport() {
-            console.log("i'm watching documentReport. report: ", this.documentReport)
             if (this.documentReport) {
                 if (this.type === 'statement') {
                     this.documentHeader = this.documentReport.statementInfo.statementHeader

@@ -30,6 +30,9 @@ export default {
                 this.$router.go(0)
             }
         },
+    },
+    updated() {
+        console.log(this.$route)
     }
 }
 </script>
