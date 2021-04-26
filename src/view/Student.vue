@@ -341,7 +341,6 @@ export default {
                         this.students = []
                         response.data.content.forEach((user, idx) => {
                             user.idx = idx + (this.studentPagination.currentPage - 1) * this.studentPagination.perPage + 1
-                            console.log(user)
                             return this.students.push(user);
                         })
                         this.totalElements = response.data.totalElements
@@ -385,7 +384,6 @@ export default {
             // if (this.statements.length > 0)
             //     return
             const url = `${this.apiURl}/student/${this.studentId}/subjects`;
-            console.log(this.studentId, url)
             const courseTabIdx = this.courseTab
             const semesterTabIdx = this.semesterTab
             this.loadingSubjects = true
@@ -399,34 +397,21 @@ export default {
                     }
                 })
                 .then(response => {
-                    if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
-                        return
-                    this.subjects = []
-                    response.data.content.forEach(subject => this.subjects.push(subject))
-                    this.subjectsPagination.totalElements = response.data.totalElements // TODO Use pageable
+                    console.log(response.data)
+                    if (response.data) {
+                        if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
+                            return
+                        this.subjects = []
+                        response.data.content.forEach(subject => this.subjects.push(subject))
+                        this.subjectsPagination.totalElements = response.data.totalElements
+                    }
 
-                    // let semesterTab = this.$refs['semester-tab-' + courseTabIdx + semesterTabIdx][0]
-                    // if (this.subjects.length === 0){
-                    //     semesterTab.deactivate()
-                    //     console.log(semesterTab)
-                    //     let courseTabActiveCount = 0;
-                    //     for (let i = 0; i < 3; i++) {
-                    //         if (this.$refs['course-tab-' + i][0].active)
-                    //             courseTabActiveCount++
-                    //     }
-                    //     if (courseTabActiveCount === 0){
-                    //         // console.log("deactivating ", semesterTab)
-                    //         // semesterTab.$el.setAttribute('disabled', true)
-                    //         // console.log(semesterTab)
-                    //         this.courseTabDisabled[courseTabIdx] = true
-                    //     }
-                    // }
                     this.loadingSubjects = false
                 })
                 .catch(error => {
-                    error
                     if (this.courseTab !== courseTabIdx || this.semesterTab !== semesterTabIdx)
                         return
+                    this.$root.defaultRequestErrorHandler(error)
 
                     this.averageGrade = ""
                     this.loadingSubjects = false
@@ -459,14 +444,14 @@ export default {
                 return
             this.courseTab = event
             this.semesterTab = 0
-            this.subjectsPagination = 1
+            this.subjectsPagination.currentPage = 1
             this.onLoadSubjects()
         },
         onSemesterTabChanged(event) {
             if (this.semesterTab === event)
                 return
             this.semesterTab = event
-            this.subjectsPagination = 1
+            this.subjectsPagination.currentPage = 1
             this.onLoadSubjects()
         },
         onSubjectsPageChanged(page) {
